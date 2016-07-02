@@ -1,0 +1,42 @@
+Ideas:
+* Create database for tape archives
+* Be able to create, update, delete people list
+* Create Add, Delete and Update for every database
+	= Tape Database
+	= Master List Database
+	= People Database
+* REWORK CHECKING DB's FOR INFO, USE SCALERS FOR CHECKING
+
+
+- Create Layout for Input, Search, Edit, Stats (possibly in tabs or upper bar)
+- Create way to select Master from dropdown and display all projects on media
+- Be able to create a new listing for a master archive
+- Dropdown for person that entered in new listings
+- Status updated at the bottom of the window as interface
+- Add a backup feature that backs everything up every month or so
+- Add export and import feature for database
+- Change functions from database to return an array or list or hash
+- Be able to save the old databases and recall them if needed
+
+
+
+Database:
+id - int pk autoInc
+tape_name - text
+project_id - text
+project_name - text
+camera - int  (1 for XDCam, 2 for Canon, add others for past projects?)
+tape_tags - text
+tape_number - text
+date_shot - text
+master_archive - text
+person_entered
+
+Master List Database:
+id - int pk autoInc
+master_archive - text
+master_media - int (1 for XDCAM, 2 for canon, add others for past projects?)
+
+People List Database:
+id - int pk autoInc
+person_name - text
