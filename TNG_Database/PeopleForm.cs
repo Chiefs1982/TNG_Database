@@ -11,14 +11,13 @@ using System.Data.SQLite;
 
 namespace TNG_Database
 {
-    public partial class PeopleForm : Form, IUpdateApplicationStatus
+    public partial class PeopleForm : Form
     {
         private Point groupboxPoint = new Point(345, 94);
         private TNG_Database.MainForm mainform;
 
+        UpdateStatus updateStatus = UpdateStatus.Instance();
         
-        
-
         //Initialize People Form
         public PeopleForm()
         {
@@ -47,20 +46,6 @@ namespace TNG_Database
             deleteUserPeopleButton.Enabled = false;
             defaultEditGroupBox.Location = groupboxPoint;
             defaultEditGroupBox.Visible = true;
-        }
-
-        //------------------------------------
-        //--------------Interface Methods-----
-        //------------------------------------
-
-        //Interface Method to add mainform variable
-        MainForm IUpdateApplicationStatus.mainform
-        { get { return mainform; } set { mainform = value; } }
-
-        //Interface Method, update application status
-        public void UpdateApplicationStatus(string update)
-        {
-            mainform.applicationStatusLabel.Text = update;
         }
 
         //------------------------------------------------
@@ -239,12 +224,12 @@ namespace TNG_Database
                     AddToDatabase editDB = new AddToDatabase();
                     if (editDB.EditPerson(editUserOldPersonName.Text, editUserPeopleTB.Text))
                     {
-                        UpdateApplicationStatus("User " + editUserOldPersonName.Text + " updated successfully!");
+                        updateStatus.UpdateStatusBar("User " + editUserOldPersonName.Text + " updated successfully!",mainform);
                         CloseOpenGroupBox("edit");
                         UpdateListBox();
                     }else
                     {
-                        UpdateApplicationStatus("User " + editUserOldPersonName.Text + " not updated");
+                        updateStatus.UpdateStatusBar("User " + editUserOldPersonName.Text + " not updated", mainform);
                         CloseOpenGroupBox("edit");
                     }
                 }
@@ -308,13 +293,13 @@ namespace TNG_Database
                 if (addUser.AddPerson(addUserNameTextbox.Text))
                 {
                     //user added successfully
-                    UpdateApplicationStatus(addUserNameTextbox.Text + " added successfully");
+                    updateStatus.UpdateStatusBar(addUserNameTextbox.Text + " added successfully", mainform);
                     CloseOpenGroupBox("add");
                     UpdateListBox();
                 }else
                 {
                     //user not added
-                    UpdateApplicationStatus(addUserNameTextbox.Text + " not added");
+                    updateStatus.UpdateStatusBar(addUserNameTextbox.Text + " not added", mainform);
                 }
             }
         }
@@ -372,25 +357,22 @@ namespace TNG_Database
             if(deleteMessage == DialogResult.Yes)
             {
                 //Yes Pressed, delete user from DB
-                Console.WriteLine("Yes Pressed for deletion");
-
                 AddToDatabase deleteDB = new AddToDatabase();
 
                 //Delete user from database
                 if (deleteDB.DeletePerson(deleteUserNameLabel.Text))
                 {
                     //deleteion success
-                    UpdateApplicationStatus(deleteUserNameLabel.Text + " deleted!");
+                    updateStatus.UpdateStatusBar(deleteUserNameLabel.Text + " deleted!", mainform);
                     CloseOpenGroupBox("delete");
                     UpdateListBox();
                 }else
                 {
-                    UpdateApplicationStatus("There was an error deleting " + deleteUserNameLabel.Text);
+                    updateStatus.UpdateStatusBar("There was an error deleting " + deleteUserNameLabel.Text, mainform);
                     CloseOpenGroupBox("delete");
                 }
             }else if(deleteMessage == DialogResult.No){
                 //No Pressed, nothing will be done
-                Console.WriteLine("No Pressed for deletion");
             }
         }
 

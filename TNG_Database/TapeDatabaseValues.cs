@@ -43,6 +43,20 @@ namespace TNG_Database
             person_entered = personEntered;
         }
 
+        public void Clear()
+        {
+            id = 0;
+            tape_name = null;
+            tape_number = null;
+            project_id = null;
+            project_name = null;
+            camera = 0;
+            tape_tags = null;
+            date_shot = null;
+            master_archive = null;
+            person_entered = null;
+        }
+
         //Getters & Setters
         public int ID
         {

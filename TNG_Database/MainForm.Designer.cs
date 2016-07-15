@@ -39,6 +39,8 @@
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.preferencesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.textFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -52,7 +54,8 @@
             this.searchTapeDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.applicationStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
+            this.mainFormProgressBar = new System.Windows.Forms.ToolStripProgressBar();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -79,7 +82,8 @@
             this.addNewItemsToolStripMenuItem,
             this.toolStripSeparator3,
             this.preferencesToolStripMenuItem,
-            this.exitToolStripMenuItem});
+            this.exitToolStripMenuItem,
+            this.importToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
@@ -141,6 +145,21 @@
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
+            // importToolStripMenuItem
+            // 
+            this.importToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.textFileToolStripMenuItem});
+            this.importToolStripMenuItem.Name = "importToolStripMenuItem";
+            this.importToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.importToolStripMenuItem.Text = "Import";
+            // 
+            // textFileToolStripMenuItem
+            // 
+            this.textFileToolStripMenuItem.Name = "textFileToolStripMenuItem";
+            this.textFileToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.textFileToolStripMenuItem.Text = "Projects";
+            this.textFileToolStripMenuItem.Click += new System.EventHandler(this.textFileToolStripMenuItem_Click);
             // 
             // editToolStripMenuItem
             // 
@@ -225,7 +244,7 @@
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.applicationStatusLabel,
-            this.toolStripProgressBar1});
+            this.mainFormProgressBar});
             this.statusStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
             this.statusStrip1.Location = new System.Drawing.Point(0, 581);
             this.statusStrip1.Name = "statusStrip1";
@@ -240,13 +259,22 @@
             this.applicationStatusLabel.Size = new System.Drawing.Size(120, 17);
             this.applicationStatusLabel.Text = "TNG Database Online";
             // 
-            // toolStripProgressBar1
+            // mainFormProgressBar
             // 
-            this.toolStripProgressBar1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.toolStripProgressBar1.MergeAction = System.Windows.Forms.MergeAction.Insert;
-            this.toolStripProgressBar1.MergeIndex = 2;
-            this.toolStripProgressBar1.Name = "toolStripProgressBar1";
-            this.toolStripProgressBar1.Size = new System.Drawing.Size(100, 16);
+            this.mainFormProgressBar.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.mainFormProgressBar.AutoSize = false;
+            this.mainFormProgressBar.MarqueeAnimationSpeed = 1000;
+            this.mainFormProgressBar.MergeAction = System.Windows.Forms.MergeAction.Insert;
+            this.mainFormProgressBar.MergeIndex = 2;
+            this.mainFormProgressBar.Name = "mainFormProgressBar";
+            this.mainFormProgressBar.Size = new System.Drawing.Size(100, 16);
+            this.mainFormProgressBar.Step = 1;
+            // 
+            // backgroundWorker1
+            // 
+            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+            this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
+            this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
             // 
             // MainForm
             // 
@@ -258,6 +286,7 @@
             this.IsMdiContainer = true;
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(853, 642);
             this.Name = "MainForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -288,7 +317,7 @@
         private System.Windows.Forms.ToolStripMenuItem usersToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem windowsToolStripMenuItem;
         public System.Windows.Forms.ToolStripStatusLabel applicationStatusLabel;
-        public System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
+        public System.Windows.Forms.ToolStripProgressBar mainFormProgressBar;
         private System.Windows.Forms.ToolStripMenuItem searchTapeDatabaseToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem addNewItemsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newTapeEntryToolStripMenuItem;
@@ -297,6 +326,9 @@
         private System.Windows.Forms.ToolStripMenuItem preferencesToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         public System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripMenuItem importToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem textFileToolStripMenuItem;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
     }
 }
 

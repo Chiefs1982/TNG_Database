@@ -9,8 +9,13 @@ namespace TNG_Database
 {
     class AddToDatabase
     {
-        private static string tngDatabaseConnectString = "Data Source=TNG_TapeDatabase.sqlite;Version=3;";
 
+        UpdateStatus updateStatus = UpdateStatus.Instance();
+
+        //private string tngDatabaseConnectString = "Data Source=TNG_TapeDatabase.sqlite;Version=3;";
+        //gets string for database connection from DatabaseControls
+        private string tngDatabaseConnectString = DataBaseControls.GetDBName();
+        //-------------------------------------------------
         /// <summary>
         /// Close connection and command variables, and collects Garbage
         /// </summary>
@@ -26,7 +31,7 @@ namespace TNG_Database
         //----------------------------------------------
         //--TAPE DATABASE ADD, DELETE, UPDATE DATABASE--
         //----------------------------------------------
-
+        #region Tape Database
         /// <summary>
         /// Adds single tape entry to tape database
         /// </summary>
@@ -34,53 +39,66 @@ namespace TNG_Database
         /// <returns>Boolean of success of database operation</returns>
         public bool AddTapeDatabase(TapeDatabaseValues tapeDBValues)
         {
-            //Gets and opens up connection with TNG_TapeDatabase.sqlite
-            SQLiteConnection tapeDBConnection = new SQLiteConnection(tngDatabaseConnectString);
-            tapeDBConnection.Open();
-
-            //create sqlite query to check to see if Tape Database project and tape number is already in database
-            string sql = "select count(*) from TapeDatabase where project_id = @t_pID and lower(project_name) = @t_pName and tape_number = @t_tNumber";
-            SQLiteCommand command = new SQLiteCommand(sql, tapeDBConnection);
-            command.Parameters.AddWithValue("@t_pID", tapeDBValues.ProjectId);
-            command.Parameters.AddWithValue("@t_pName", tapeDBValues.ProjectName.ToLower());
-            command.Parameters.AddWithValue("@t_tNumber", tapeDBValues.TapeNumber);
-            Int32 check = Convert.ToInt32(command.ExecuteScalar());
-
-            //If query returned has any rows of data then Master List is already in database
-            if (check == 0)
+            try
             {
-                //There is not an entry go ahead and insert new row
-                command.CommandText = "insert into TapeDatabase (tape_name, tape_number, project_id, project_name, camera, tape_tags, date_shot, master_archive, person_entered) values (@tapeName, @tapeNumber, @projectID, @projectNumber, @camera, @tapeTags, @dateShot, @masterArchive, @personEntered)";
-                command.Parameters.Clear();
-                command.Parameters.AddWithValue("@tapeName", tapeDBValues.TapeName);
-                command.Parameters.AddWithValue("@tapeNumber", tapeDBValues.TapeNumber);
-                command.Parameters.AddWithValue("@projectID", tapeDBValues.ProjectId);
-                command.Parameters.AddWithValue("@projectNumber", tapeDBValues.ProjectName);
-                command.Parameters.AddWithValue("@camera", tapeDBValues.Camera);
-                command.Parameters.AddWithValue("@tapeTags", tapeDBValues.TapeTags);
-                command.Parameters.AddWithValue("@dateShot", tapeDBValues.DateShot);
-                command.Parameters.AddWithValue("@masterArchive", tapeDBValues.MasterArchive);
-                command.Parameters.AddWithValue("@personEntered", tapeDBValues.PersonEntered);
+                //Gets and opens up connection with TNG_TapeDatabase.sqlite
+                SQLiteConnection tapeDBConnection = new SQLiteConnection(tngDatabaseConnectString);
+                tapeDBConnection.Open();
 
-                if (command.ExecuteNonQuery() == 1)
+                //create sqlite query to check to see if Tape Database project and tape number is already in database
+                string sql = "select count(*) from TapeDatabase where project_id = @t_pID and lower(project_name) = @t_pName and tape_number = @t_tNumber";
+                SQLiteCommand command = new SQLiteCommand(sql, tapeDBConnection);
+                command.Parameters.AddWithValue("@t_pID", tapeDBValues.ProjectId);
+                command.Parameters.AddWithValue("@t_pName", tapeDBValues.ProjectName.ToLower());
+                command.Parameters.AddWithValue("@t_tNumber", tapeDBValues.TapeNumber);
+                Int32 check = Convert.ToInt32(command.ExecuteScalar());
+
+                //If query returned has any rows of data then Master List is already in database
+                if (check == 0)
                 {
-                    //Entry inserts successfully
-                    CloseConnections(command, tapeDBConnection);
-                    return true;
+                    //There is not an entry go ahead and insert new row
+                    command.CommandText = "insert into TapeDatabase (tape_name, tape_number, project_id, project_name, camera, tape_tags, date_shot, master_archive, person_entered) values (@tapeName, @tapeNumber, @projectID, @projectNumber, @camera, @tapeTags, @dateShot, @masterArchive, @personEntered)";
+                    command.Parameters.Clear();
+                    command.Parameters.AddWithValue("@tapeName", tapeDBValues.TapeName);
+                    command.Parameters.AddWithValue("@tapeNumber", tapeDBValues.TapeNumber);
+                    command.Parameters.AddWithValue("@projectID", tapeDBValues.ProjectId);
+                    command.Parameters.AddWithValue("@projectNumber", tapeDBValues.ProjectName);
+                    command.Parameters.AddWithValue("@camera", tapeDBValues.Camera);
+                    command.Parameters.AddWithValue("@tapeTags", tapeDBValues.TapeTags);
+                    command.Parameters.AddWithValue("@dateShot", tapeDBValues.DateShot);
+                    command.Parameters.AddWithValue("@masterArchive", tapeDBValues.MasterArchive);
+                    command.Parameters.AddWithValue("@personEntered", tapeDBValues.PersonEntered);
+
+
+                    if (command.ExecuteNonQuery() == 1)
+                    {
+                        //Entry inserts successfully
+                        CloseConnections(command, tapeDBConnection);
+                        return true;
+                    }
+                    else
+                    {
+                        //Entry not added to database
+                        CloseConnections(command, tapeDBConnection);
+                        return false;
+                    }
+
+
                 }
                 else
                 {
-                    //Entry not added to database
-                    CloseConnections(command, tapeDBConnection);
+                    //There is already an entry
+                    Console.WriteLine("Tape DB entry already taken");
+                    if (tapeDBConnection != null) { tapeDBConnection.Close(); }
                     return false;
                 }
-            }else
+            }catch(Exception e)
             {
-                //There is already an entry
-                Console.WriteLine("Tape DB entry already taken");
-                if (tapeDBConnection != null) { tapeDBConnection.Close(); }
+                //Error
+                MainForm.LogFile("Add Tape List Error: " + e.Message);
                 return false;
             }
+            
         }
 
         //----------------------------------------------
@@ -91,44 +109,52 @@ namespace TNG_Database
         /// <returns>Boolean of success of database operation</returns>
         public bool DeleteTapeDatabase(TapeDatabaseValues tapeValues)
         {
-            //Gets and opens up connection with TNG_TapeDatabase.sqlite
-            SQLiteConnection tapeDBConnection = new SQLiteConnection(tngDatabaseConnectString);
-            tapeDBConnection.Open();
-
-            //create sqlite query to check to see if Tape Database project and tape number is already in database
-            string sql = "select count(*) from TapeDatabase where project_id = @project_id and id = @id ";
-            SQLiteCommand command = new SQLiteCommand(sql, tapeDBConnection);
-            command.Parameters.AddWithValue("@project_id", tapeValues.ProjectId);
-            command.Parameters.AddWithValue("@id", tapeValues.ID);
-            Int32 check = Convert.ToInt32(command.ExecuteScalar());
-
-            //If query returned has any rows of data then Master List is already in database
-            if (check == 1)
+            try
             {
-                //Entry double checked to match
-                command.CommandText = "delete from TapeDatabase where id = @id and project_id = @project_id";
+                //Gets and opens up connection with TNG_TapeDatabase.sqlite
+                SQLiteConnection tapeDBConnection = new SQLiteConnection(tngDatabaseConnectString);
+                tapeDBConnection.Open();
 
-                //Execute query and check to see that row was deleted
-                if (command.ExecuteNonQuery() == 1)
+                //create sqlite query to check to see if Tape Database project and tape number is already in database
+                string sql = "select count(*) from TapeDatabase where project_id = @project_id and id = @id ";
+                SQLiteCommand command = new SQLiteCommand(sql, tapeDBConnection);
+                command.Parameters.AddWithValue("@project_id", tapeValues.ProjectId);
+                command.Parameters.AddWithValue("@id", tapeValues.ID);
+                Int32 check = Convert.ToInt32(command.ExecuteScalar());
+
+                //If query returned has any rows of data then Master List is already in database
+                if (check == 1)
                 {
-                    //row was deleted
-                    Console.WriteLine("TapeDatabase Row was deleted");
-                    CloseConnections(command, tapeDBConnection);
-                    return true;
+                    //Entry double checked to match
+                    command.CommandText = "delete from TapeDatabase where id = @id and project_id = @project_id";
+
+                    //Execute query and check to see that row was deleted
+                    if (command.ExecuteNonQuery() == 1)
+                    {
+                        //row was deleted
+                        Console.WriteLine("TapeDatabase Row was deleted");
+                        CloseConnections(command, tapeDBConnection);
+                        return true;
+                    }
+                    else
+                    {
+                        //row was not deleted
+                        Console.WriteLine("TapeDatabase Row was not deleted");
+                        CloseConnections(command, tapeDBConnection);
+                        return false;
+                    }
                 }
                 else
                 {
-                    //row was not deleted
-                    Console.WriteLine("TapeDatabase Row was not deleted");
+                    //There is no entry to delete
+                    Console.WriteLine("No Entry to delete");
                     CloseConnections(command, tapeDBConnection);
                     return false;
                 }
             }
-            else
+            catch (Exception e)
             {
-                //There is no entry to delete
-                Console.WriteLine("No Entry to delete");
-                CloseConnections(command, tapeDBConnection);
+                MainForm.LogFile("Delete Tape List Error: " + e.Message);
                 return false;
             }
         }
@@ -141,67 +167,80 @@ namespace TNG_Database
         /// <param name="id">ID of old item to update</param>
         /// <param name="projectID">Project ID of old item to update</param>
         /// <returns>Boolean of success of database operation</returns>
-        public bool UpdateTapeDatabase(TapeDatabaseValues tapeDBValues, int id, string projectID)
+        public bool UpdateTapeDatabase(TapeDatabaseValues tapeDBValues, TapeDatabaseValues oldTapeValues)
+
+
+
         {
-            //Gets and opens up connection with TNG_TapeDatabase.sqlite
-            SQLiteConnection tapeDBConnection = new SQLiteConnection(tngDatabaseConnectString);
-            tapeDBConnection.Open();
-
-            //create sqlite query to check to see if Tape Database project and tape number is already in database
-            string sql = "select count(*) from TapeDatabase where project_id = @t_pID and id = @id";
-            SQLiteCommand command = new SQLiteCommand(sql, tapeDBConnection);
-            command.Parameters.AddWithValue("@t_pID", projectID);
-            command.Parameters.AddWithValue("@id", id);
-            Int32 check = Convert.ToInt32(command.ExecuteScalar());
-
-            //If query returned has any rows of data then Master List is already in database
-            if (check == 1)
+            try
             {
-                //There is an entry to be updated
-                command.Parameters.Clear();
-                command.CommandText = "update TapeDatabase set tape_name = @tapeName, tape_number = @tapeNumber," +
-                                        "project_id = @projectID, project_name = @projectName, camera = @camera," +
-                                        "tape_tags = @tapeTags, date_shot = @dateShot, master_archive = @masterArchive," +
-                                        " person_entered = @personEntered where id = @id";
-                command.Parameters.AddWithValue("@tapeName", tapeDBValues.TapeName);
-                command.Parameters.AddWithValue("@tapeNumber", tapeDBValues.TapeNumber);
-                command.Parameters.AddWithValue("@projectID", tapeDBValues.ProjectId);
-                command.Parameters.AddWithValue("@projectName", tapeDBValues.ProjectName);
-                command.Parameters.AddWithValue("@camera", tapeDBValues.Camera);
-                command.Parameters.AddWithValue("@tapeTags", tapeDBValues.TapeTags);
-                command.Parameters.AddWithValue("@dateShot", tapeDBValues.DateShot);
-                command.Parameters.AddWithValue("@masterArchive", tapeDBValues.MasterArchive);
-                command.Parameters.AddWithValue("@personEntered", tapeDBValues.PersonEntered);
-                command.Parameters.AddWithValue("@id", id);
+                //Gets and opens up connection with TNG_TapeDatabase.sqlite
+                SQLiteConnection tapeDBConnection = new SQLiteConnection(tngDatabaseConnectString);
+                tapeDBConnection.Open();
 
-                //Execute query and return if row was updated
-                if (command.ExecuteNonQuery() == 1)
+                //create sqlite query to check to see if Tape Database project and tape number is already in database
+                string sql = "select count(*) from TapeDatabase where project_id = @t_pID and id = @id";
+                SQLiteCommand command = new SQLiteCommand(sql, tapeDBConnection);
+                command.Parameters.AddWithValue("@t_pID", oldTapeValues.ProjectId);
+                command.Parameters.AddWithValue("@id", oldTapeValues.ID);
+                Int32 check = Convert.ToInt32(command.ExecuteScalar());
+
+                //If query returned has any rows of data then Master List is already in database
+                if (check == 1)
                 {
-                    //Row was updated
-                    Console.WriteLine("Row update was a success");
-                    CloseConnections(command, tapeDBConnection);
-                    return true;
+                    //There is an entry to be updated
+                    command.Parameters.Clear();
+                    command.CommandText = "update TapeDatabase set tape_name = @tapeName, tape_number = @tapeNumber," +
+                                            "project_id = @projectID, project_name = @projectName, camera = @camera," +
+                                            "tape_tags = @tapeTags, date_shot = @dateShot, master_archive = @masterArchive," +
+                                            " person_entered = @personEntered where id = @id";
+                    command.Parameters.AddWithValue("@tapeName", tapeDBValues.TapeName);
+                    command.Parameters.AddWithValue("@tapeNumber", tapeDBValues.TapeNumber);
+                    command.Parameters.AddWithValue("@projectID", tapeDBValues.ProjectId);
+                    command.Parameters.AddWithValue("@projectName", tapeDBValues.ProjectName);
+                    command.Parameters.AddWithValue("@camera", tapeDBValues.Camera);
+                    command.Parameters.AddWithValue("@tapeTags", tapeDBValues.TapeTags);
+                    command.Parameters.AddWithValue("@dateShot", tapeDBValues.DateShot);
+                    command.Parameters.AddWithValue("@masterArchive", tapeDBValues.MasterArchive);
+                    command.Parameters.AddWithValue("@personEntered", tapeDBValues.PersonEntered);
+                    command.Parameters.AddWithValue("@id", oldTapeValues.ID);
+
+                    //Execute query and return if row was updated
+                    if (command.ExecuteNonQuery() == 1)
+                    {
+                        //Row was updated
+                        Console.WriteLine("Row update was a success");
+                        CloseConnections(command, tapeDBConnection);
+                        return true;
+                    }
+                    else
+                    {
+                        //Row was not updated
+                        Console.WriteLine("Row update was not a success");
+                        CloseConnections(command, tapeDBConnection);
+                        return false;
+                    }
                 }
                 else
                 {
-                    //Row was not updated
-                    Console.WriteLine("Row update was not a success");
+                    //No entry was returned to be updated
+                    Console.WriteLine("No Entry to update");
                     CloseConnections(command, tapeDBConnection);
                     return false;
                 }
             }
-            else
+            catch (Exception e)
             {
-                //No entry was returned to be updated
-                Console.WriteLine("No Entry to update");
-                CloseConnections(command, tapeDBConnection);
+                MainForm.LogFile("Update Tape List Error: " + e.Message);
                 return false;
             }
+            
         }
-
+        #endregion
         //----------------------------------------------
         //---MASTER LIST ADD, DELETE, UPDATE DATABASE---
         //----------------------------------------------
+        #region Master List Database
         /// <summary>
         /// Add an entry to the Master List database
         /// </summary>
@@ -354,10 +393,11 @@ namespace TNG_Database
                 return false;
             }
         }
-
+        #endregion
         //----------------------------------------------
         //------PERSON ADD, DELETE, UPDATE DATABASE-----
         //----------------------------------------------
+        #region Person Database
         /// <summary>
         /// Adds a person to the People Database
         /// </summary>
@@ -498,8 +538,19 @@ namespace TNG_Database
                 return false;
             }
         }
+        #endregion
+        //----------------------------------------------
+        //------PROJECT ADD, DELETE, UPDATE DATABASE----
+        //----------------------------------------------
+        #region Project Database
 
-        //------------------------------------------
+        public bool AddProjects(ProjectValues project)
+        {
+            return false;
+        }
 
+        
+
+        #endregion
     }
 }

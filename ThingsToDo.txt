@@ -5,7 +5,10 @@ Ideas:
 	= Tape Database
 	= Master List Database
 	= People Database
+* change all camera dropdowns to get list from one source
 * REWORK CHECKING DB's FOR INFO, USE SCALERS FOR CHECKING
+* View tags as seperated objects instead of just seeing the comma, but save them as they are csv
+
 
 
 - Create Layout for Input, Search, Edit, Stats (possibly in tabs or upper bar)
@@ -17,6 +20,8 @@ Ideas:
 - Add export and import feature for database
 - Change functions from database to return an array or list or hash
 - Be able to save the old databases and recall them if needed
+
+- Take tag list and make comma seperated string
 
 
 

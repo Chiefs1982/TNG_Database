@@ -10,18 +10,24 @@ using System.Windows.Forms;
 
 namespace TNG_Database
 {
-    public partial class MasterListForm : Form, IUpdateApplicationStatus
+    public partial class MasterListForm : Form
     {
         private Point boxLocation = new Point(316, 40);
         private TNG_Database.MainForm mainform;
         private List<MasterListValues> masterList;
         private MasterListValues sendValues = new MasterListValues();
 
+        UpdateStatus updateStatus = UpdateStatus.Instance();
+
+        //Reference to CommonMethods
+        CommonMethods commonMethod = CommonMethods.Instance();
+
         public MasterListForm()
         {
             InitializeComponent();
         }
 
+        //Open Form Constructor
         public MasterListForm(TNG_Database.MainForm parent)
         {
             InitializeComponent();
@@ -52,32 +58,15 @@ namespace TNG_Database
             defaultMasterGroupBox.Text = "";
             defaultMasterGroupBox.Height = 41;
             defaultMasterListLabel.Visible = true;
-        }
 
-        //------------------------------------------
-        //-------------INTERFACE METHODS------------
-        //------------------------------------------
-
-        //Interface variable that gets sets mainform
-        MainForm IUpdateApplicationStatus.mainform
-        {
-            get { return mainform; }
-            set { mainform = value; }
-        }
-
-        /// <summary>
-        /// Interface Method that updates the status label on Mainform
-        /// </summary>
-        /// <param name="update"></param>
-        public void UpdateApplicationStatus(string update)
-        {
-            mainform.applicationStatusLabel.Text = update;
+            //Load all the dropdowns
+            LoadDropdowns();
         }
 
         //-------------------------------------------------
         //---------CLASS METHODS---------------------------
         //-------------------------------------------------
-
+        #region ClassMethods
         /// <summary>
         /// Populate Master List Listbox with information from database
         /// </summary>
@@ -98,7 +87,7 @@ namespace TNG_Database
                 masterListListBox.Items.Add(masterList[0].MasterArchive);
 
                 //Update Application Status
-                UpdateApplicationStatus("Nothing in database");
+                updateStatus.UpdateStatusBar("Nothing in database", mainform);
             }
             else
             {
@@ -110,9 +99,6 @@ namespace TNG_Database
                 {
                     masterListListBox.Items.Add(values.MasterArchive);
                 }
-
-                //Update Application Status
-                UpdateApplicationStatus("Database Loaded!");
 
                 masterListListBox.SelectedIndex = -1;
             }
@@ -133,21 +119,21 @@ namespace TNG_Database
                     editMasterListGroupBox.Visible = false;
                     deleteMasterListGroupBox.Visible = false;
                     //Update Application Status
-                    UpdateApplicationStatus("Add Master Tape Selected");
+                    updateStatus.UpdateStatusBar("Add Master Tape Selected", mainform);
                     break;
                 case "edit":
                     defaultMasterGroupBox.Visible = false;
                     addMasterListGroupBox.Visible = false;
                     deleteMasterListGroupBox.Visible = false;
                     //Update Application Status
-                    UpdateApplicationStatus("Edit Master Tape Selected");
+                    updateStatus.UpdateStatusBar("Edit Master Tape Selected", mainform);
                     break;
                 case "delete":
                     defaultMasterGroupBox.Visible = false;
                     editMasterListGroupBox.Visible = false;
                     addMasterListGroupBox.Visible = false;
                     //Update Application Status
-                    UpdateApplicationStatus("Delete Master Tape Selected");
+                    updateStatus.UpdateStatusBar("Delete Master Tape Selected", mainform);
                     break;
                 default:
                     addMasterListGroupBox.Visible = false;
@@ -155,26 +141,8 @@ namespace TNG_Database
                     deleteMasterListGroupBox.Visible = false;
                     defaultMasterGroupBox.Visible = true;
                     //Update Application Status
-                    UpdateApplicationStatus("Choose Item");
+                    updateStatus.UpdateStatusBar("Choose Item", mainform);
                     break;
-            }
-        }
-
-        /// <summary>
-        /// Return a string for media device
-        /// </summary>
-        /// <param name="media"></param>
-        /// <returns></returns>
-        private string GetMediaDevice(Int32 media)
-        {
-            switch (media)
-            {
-                case 1:
-                    return "XDCam";
-                case 2:
-                    return "Cannon";
-                default:
-                    return "Standard";
             }
         }
 
@@ -197,59 +165,14 @@ namespace TNG_Database
 
                         sendValues = item;
                         nameLabel.Text = item.MasterArchive;
-                        cameraLabel.Text = GetMediaDevice(Convert.ToInt32(item.MasterMedia));
+                        cameraLabel.Text = commonMethod.GetCameraName(Convert.ToInt32(item.MasterMedia));
                     }
                 }
             }
             else
             {
                 //Update Application Status
-                UpdateApplicationStatus("There was a problem");
-            }
-        }
-
-        /// <summary>
-        /// Gets the camera value.
-        /// </summary>
-        /// <param name="camera">Name of camera selected</param>
-        /// <returns>int of the camera to store in db</returns>
-        private int GetCameraValue(string camera)
-        {
-            switch (camera)
-            {
-                case "Cannon":
-                    return 2;
-                case "XDCam":
-                    return 1;
-                case "Beta":
-                    return 3;
-                case "DVC":
-                    return 4;
-                default:
-                    return 0;
-
-            }
-        }
-
-        /// <summary>
-        /// Gets the index of the camera.
-        /// </summary>
-        /// <param name="camera">Name of the camera selected</param>
-        /// <returns></returns>
-        private int GetCameraIndex(string camera)
-        {
-            switch (camera)
-            {
-                case "Cannon":
-                    return 0;
-                case "XDCam":
-                    return 1;
-                case "Beta":
-                    return 2;
-                case "DVC":
-                    return 3;
-                default:
-                    return 0;
+                updateStatus.UpdateStatusBar("There was a problem", mainform);
             }
         }
 
@@ -275,10 +198,21 @@ namespace TNG_Database
             defaultMasterListLabel.Visible = true;
         }
 
+        /// <summary>
+        /// Loads all the dropdowns.
+        /// </summary>
+        private void LoadDropdowns()
+        {
+            string[] camera = commonMethod.CameraDropdownItems();
+
+            cameraAddMasterCombo.Items.AddRange(camera);
+            editCameraNewMasterDropdown.Items.AddRange(camera);
+        }
+        #endregion ClassMethods
         //---------------------------------------------------
         //--------ADD, DELETE, UPDATE BUTTONS PRESSED--------
         //---------------------------------------------------
-
+        #region Add Edit Delete Buttons Pressed
         //Add button pressed
         private void masterListAddButton_Click(object sender, EventArgs e)
         {
@@ -312,7 +246,7 @@ namespace TNG_Database
             editNewNameMasterTextbox.Text = editOldNameMasterLabel.Text;
 
             //Set dropdown equal to value of the tape
-            editCameraNewMasterDropdown.SelectedIndex = GetCameraIndex(editCameraOldMasterNameLabel.Text);
+            editCameraNewMasterDropdown.SelectedIndex = commonMethod.GetCameraDropdownIndex(editCameraOldMasterNameLabel.Text);
 
             //make edit GB visible
             editMasterListGroupBox.Visible = true;
@@ -330,16 +264,11 @@ namespace TNG_Database
             //Make delete groupbox visible
             deleteMasterListGroupBox.Visible = true;
         }
-
-
-
-
-
-
-
+        #endregion
         //---------------------------------------------------
         //-------------EDIT GB METHODS-----------------------
         //---------------------------------------------------
+        #region Edit GB Controls
         //Edit Camera Dropdown keypress event
         private void editCameraNewMasterDropdown_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -378,13 +307,13 @@ namespace TNG_Database
                 MasterListValues oldValues = new MasterListValues(sendValues.MasterArchive, sendValues.MasterMedia, sendValues.ID);
 
                 //Create MasterListValues of old info
-                MasterListValues newValues = new MasterListValues(editNewNameMasterTextbox.Text, GetCameraValue(editCameraNewMasterDropdown.GetItemText(editCameraNewMasterDropdown.SelectedItem)));
+                MasterListValues newValues = new MasterListValues(editNewNameMasterTextbox.Text, commonMethod.GetCameraNumber(editCameraNewMasterDropdown.GetItemText(editCameraNewMasterDropdown.SelectedItem)));
 
                 //Send to update method in AddToDatabase class & check if successful
                 if(database.UpdateMasterList(oldValues, newValues))
                 {
                     //update successful
-                    UpdateApplicationStatus("Update of Master Tape successful");
+                    updateStatus.UpdateStatusBar("Update of Master Tape successful", mainform);
 
                     //Clear items and close groupbox
                     editNewNameMasterTextbox.Clear();
@@ -395,7 +324,7 @@ namespace TNG_Database
                 }else
                 {
                     //update failed
-                    UpdateApplicationStatus("Update Error");
+                    updateStatus.UpdateStatusBar("Update Error", mainform);
                 }
 
             }
@@ -406,10 +335,11 @@ namespace TNG_Database
         {
             MakeGroupboxesInvisible();
         }
-
+        #endregion
         //---------------------------------------------------
         //--------------ADD GB METHODS-----------------------
         //---------------------------------------------------
+        #region Add GB Controls
         //Add Dropdown Keypress event
         private void cameraAddMasterCombo_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -430,10 +360,10 @@ namespace TNG_Database
             {
                 AddToDatabase database = new AddToDatabase();
 
-                if (database.AddMasterList(addMasterListNameTextbox.Text, GetCameraValue(cameraAddMasterCombo.GetItemText(cameraAddMasterCombo.SelectedItem))))
+                if (database.AddMasterList(addMasterListNameTextbox.Text, commonMethod.GetCameraNumber(cameraAddMasterCombo.GetItemText(cameraAddMasterCombo.SelectedItem))))
                 {
                     //Add entry success
-                    UpdateApplicationStatus("New Master Tape added to database");
+                    updateStatus.UpdateStatusBar("New Master Tape added to database", mainform);
                     addMasterListNameTextbox.Clear();
                     cameraAddMasterCombo.SelectedIndex = 0;
                     MakeGroupboxesInvisible();
@@ -442,7 +372,7 @@ namespace TNG_Database
                 else
                 {
                     //Add Entry failure
-                    UpdateApplicationStatus("Entry was not added to database");
+                    updateStatus.UpdateStatusBar("Entry was not added to database", mainform);
                 }
             }
             
@@ -465,19 +395,17 @@ namespace TNG_Database
                 addMasterListAddButton.Enabled = false;
             }
         }
-
-
-
+        #endregion
         //---------------------------------------------------
         //-------------DELETE GB METHODS---------------------
         //---------------------------------------------------
-
+        #region Delete GB Controls
         //Delete Groupbox Delete button clicked
         private void deleteMasterListDeleteButton_Click(object sender, EventArgs e)
         {
             //Delete button pressed, gather info and delete entry
             //Show message box to make sure user is to be deleted
-            DialogResult deleteMessage = MessageBox.Show("Do you want to delete the user " + deleteMasterNameMasterListLabel.Text + "?", "Deletion Warning!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            DialogResult deleteMessage = MessageBox.Show("Do you want to delete " + deleteMasterNameMasterListLabel.Text + "?", "Deletion Warning!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
             //Check to see if user pressed yes or no
             if (deleteMessage == DialogResult.Yes)
@@ -497,26 +425,25 @@ namespace TNG_Database
                     }
                 }
                 
-                MasterListValues values = new MasterListValues(deleteMasterNameMasterListLabel.Text, GetCameraIndex(deleteCameraNameMasterListLabel.Text),_id);
+                MasterListValues values = new MasterListValues(deleteMasterNameMasterListLabel.Text, commonMethod.GetCameraDropdownIndex(deleteCameraNameMasterListLabel.Text),_id);
 
                 //Delete user from database
                 if (deleteDB.DeleteMasterList(values))
                 {
                     //deletion success
-                    UpdateApplicationStatus(deleteMasterNameMasterListLabel.Text + " deleted!");
+                    updateStatus.UpdateStatusBar(deleteMasterNameMasterListLabel.Text + " deleted!", mainform);
                     MakeGroupboxesInvisible("delete");
                     PopulateMasterList();
                 }
                 else
                 {
-                    UpdateApplicationStatus("There was an error deleting " + deleteMasterNameMasterListLabel.Text);
+                    updateStatus.UpdateStatusBar("There was an error deleting " + deleteMasterNameMasterListLabel.Text, mainform);
                     MakeGroupboxesInvisible("delete");
                 }
             }
             else if (deleteMessage == DialogResult.No)
             {
                 //No Pressed, nothing will be done
-                Console.WriteLine("No Pressed for deletion");
             }
         }
 
@@ -525,7 +452,7 @@ namespace TNG_Database
         {
             MakeGroupboxesInvisible();
         }
-
+        #endregion
 
 
 
@@ -558,22 +485,13 @@ namespace TNG_Database
                 defaultCameraNameMasterListLabel.Visible = true;
 
                 //Update Application Status
-                UpdateApplicationStatus(sendValues.MasterArchive + " Selected");
+                updateStatus.UpdateStatusBar(sendValues.MasterArchive + " Selected", mainform);
             }
             else
             {
                 ShowDefaultGroupboxNothingSelected();
             }
         }
-
-        
-
-
-
-
-
-
-
         //-----------------------------------------------
 
     }

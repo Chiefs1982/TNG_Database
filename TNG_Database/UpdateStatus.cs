@@ -35,7 +35,12 @@ namespace TNG_Database
 
         public void UpdateStatusBar(string update, TNG_Database.MainForm mainForm)
         {
-            
+            mainForm.applicationStatusLabel.Text = update;
+        }
+
+        public void UpdateProgressBar(int add, TNG_Database.MainForm mainForm)
+        {
+            mainForm.mainFormProgressBar.Increment(add);
         }
 
     }

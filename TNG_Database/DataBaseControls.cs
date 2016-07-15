@@ -4,13 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SQLite;
+using System.Text.RegularExpressions;
 
 namespace TNG_Database
 {
     class DataBaseControls
     {
         //TapeDatabaseDB connection string
-        private static string database = "Data Source=TNG_TapeDatabase.sqlite;Version=3;";
+        private static string database = "Data Source=database/TNG_TapeDatabase.sqlite;Version=3;";
+
+        public static string GetDBName()
+        {
+            return database;
+        }
 
         /// <summary>
         /// Close connection and command variables, and collects Garbage
@@ -140,6 +146,134 @@ namespace TNG_Database
             CloseConnections(command, populateConnection);
 
             return tapeList;
+        }
+
+        //----------------------------------------------        
+        /// <summary>
+        /// Gets the person list for people dropdowns.
+        /// </summary>
+        /// <returns></returns>
+        public string[] GetPersonListForDropdown()
+        {
+            List<string> personList;
+
+            //start new sqlite connection
+            SQLiteConnection dropdownConnection = new SQLiteConnection(database);
+            dropdownConnection.Open();
+
+            string query = "select person_name from People order by person_name asc";
+            SQLiteCommand command = new SQLiteCommand(query, dropdownConnection);
+            SQLiteDataReader reader = command.ExecuteReader();
+
+            if (reader.HasRows)
+            {
+                personList = new List<string>(reader.StepCount);
+
+                while (reader.Read())
+                {
+                    personList.Add(reader["person_name"].ToString());
+                }
+            }else
+            {
+                personList = new List<string>();
+                personList.AddRange(new string[] {"Brendan Burghardt", "Brett Snyder", "Aaron Primmer", "Dan Schultz","Jerome Rigoroso", "Kelcy Erbele"});
+            }
+            
+
+            CloseConnections(command, dropdownConnection);
+            return personList.ToArray();
+        }
+
+        //----------------------------------------------        
+        /// <summary>
+        /// Gets the master list for master tape dropdowns.
+        /// </summary>
+        /// <returns></returns>
+        public string[] GetMasterListForDropdown()
+        {
+            List<string> masterList;
+
+            //start new sqlite connection
+            SQLiteConnection dropdownConnection = new SQLiteConnection(database);
+            dropdownConnection.Open();
+
+            string query = "select master_archive from MasterList order by master_archive asc";
+            SQLiteCommand command = new SQLiteCommand(query, dropdownConnection);
+            SQLiteDataReader reader = command.ExecuteReader();
+
+            if (reader.HasRows)
+            {
+                masterList = new List<string>(reader.StepCount);
+
+                while (reader.Read())
+                {
+                    masterList.Add(reader["master_archive"].ToString());
+                }
+            }else
+            {
+                masterList = new List<string>(1);
+                masterList.Add("Not Loaded");
+            }
+
+            CloseConnections(command, dropdownConnection);
+            return masterList.ToArray();
+        }
+
+        /// <summary>
+        /// Searches all database.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <returns></returns>
+        public List<TapeDatabaseValues> SearchAllDB(string[] input)
+        {
+            List<TapeDatabaseValues> tapeDBValues = new List<TapeDatabaseValues>();
+            int dbCheck = 0;
+
+            //start new sqlite connection
+            SQLiteConnection searchConnection = new SQLiteConnection(database);
+            searchConnection.Open();
+
+            string query = "select * from TapeDatabase order by project_id asc";
+            SQLiteCommand command = new SQLiteCommand(query, searchConnection);
+            SQLiteDataReader reader = command.ExecuteReader();
+
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    for(int i = 0;i < reader.FieldCount; i++)
+                    {
+                        dbCheck = tapeDBValues.Count;
+                        foreach(string user in input)
+                        {
+                            if (Regex.IsMatch(reader.GetValue(i).ToString(), user,RegexOptions.IgnoreCase))
+                            {
+                                Console.WriteLine(reader.GetValue(i) + " matched user input");
+                                TapeDatabaseValues dbData = new TapeDatabaseValues(reader["tape_name"].ToString(),
+                                    reader["tape_number"].ToString(),reader["project_id"].ToString(), reader["project_name"].ToString(),
+                                    Convert.ToInt32(reader["camera"]), reader["tape_tags"].ToString(), reader["date_shot"].ToString(),
+                                    reader["master_archive"].ToString(), reader["person_entered"].ToString(), Convert.ToInt32(reader["id"]));
+                                tapeDBValues.Add(dbData);
+                                break;
+                            }
+                        }
+                        if(dbCheck < tapeDBValues.Count)
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if(tapeDBValues != null)
+                {
+                    tapeDBValues.Clear();
+                }
+            }
+
+            return tapeDBValues;
+
         }
     }
 }
