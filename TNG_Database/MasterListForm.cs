@@ -76,8 +76,8 @@ namespace TNG_Database
             masterListListBox.Items.Clear();
 
             //Run method to get all items in Master list
-            DataBaseControls dbControls = new DataBaseControls();
-            masterList = dbControls.GetAllMasterListItems();
+            //DataBaseControls dbControls = new DataBaseControls();
+            masterList = DataBaseControls.GetAllMasterListItems();
 
             //check to see if the first item is the default item
             if(masterList[0].MasterArchive.Equals("Nothing in database"))

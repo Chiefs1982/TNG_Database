@@ -191,9 +191,9 @@ namespace TNG_Database
         {
             if (e.KeyChar.Equals((char)Keys.Enter))
             {
-                if(searchTextbox.Text.Length > 0)
+                if(searchTextbox.Text.Length > 0 && !searchTextbox.Text.Equals(" "))
                 {
-                    PopulateSearchList(searchTextbox.Text);
+                    PopulateSearchList(searchTextbox.Text.Trim());
                 }
                 e.Handled = true;
             }

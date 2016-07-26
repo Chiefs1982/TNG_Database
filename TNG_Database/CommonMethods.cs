@@ -118,7 +118,7 @@ namespace TNG_Database
         /// <returns></returns>
         public string[] CameraDropdownItems()
         {
-            return new string[] { "Cannon", "XDCam", "Beta", "DVC", "Other" };
+            return new string[] { "Canon", "XDCam", "Beta", "DVC", "Other" };
         }
 
         /// <summary>

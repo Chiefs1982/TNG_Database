@@ -34,5 +34,17 @@ namespace TNG_Database.Properties {
                 this["FirstRun"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("c:\\\\")]
+        public string LastFolder {
+            get {
+                return ((string)(this["LastFolder"]));
+            }
+            set {
+                this["LastFolder"] = value;
+            }
+        }
     }
 }

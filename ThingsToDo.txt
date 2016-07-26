@@ -8,7 +8,7 @@ Ideas:
 * change all camera dropdowns to get list from one source
 * REWORK CHECKING DB's FOR INFO, USE SCALERS FOR CHECKING
 * View tags as seperated objects instead of just seeing the comma, but save them as they are csv
-
+* Take tag list and make comma seperated string
 
 
 - Create Layout for Input, Search, Edit, Stats (possibly in tabs or upper bar)
@@ -20,8 +20,12 @@ Ideas:
 - Add export and import feature for database
 - Change functions from database to return an array or list or hash
 - Be able to save the old databases and recall them if needed
-
-- Take tag list and make comma seperated string
+- Create a more extensive search to include all databases
+- Create a MasterArchiveVideos for all videos that have been mastered
+- Create a table that keeps deleted info
+- Create an INNER JOIN for tapes and projects
+- PUT TRY STATEMENTS AROUND SQL stuff
+- Create import of xdcam master csv files
 
 
 

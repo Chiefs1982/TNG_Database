@@ -5,6 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.SQLite;
 using System.Text.RegularExpressions;
+using System.IO;
+using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace TNG_Database
 {
@@ -23,7 +26,7 @@ namespace TNG_Database
         /// </summary>
         /// <param name="command">Active command of SQLiteCommand</param>
         /// <param name="connection">Active connection of SQLiteConnection</param>
-        private void CloseConnections(SQLiteCommand command, SQLiteConnection connection)
+        private static void CloseConnections(SQLiteCommand command, SQLiteConnection connection)
         {
             if(command != null) { command.Dispose(); }
             if(connection != null) { connection.Close(); connection.Dispose(); }
@@ -76,7 +79,7 @@ namespace TNG_Database
         /// Gets all items in the MasterList database
         /// </summary>
         /// <returns>A List of MasterListValues from the database</returns>
-        public List<MasterListValues> GetAllMasterListItems()
+        public static List<MasterListValues> GetAllMasterListItems()
         {
             List<MasterListValues> masterList = new List<MasterListValues>();
 
@@ -227,20 +230,60 @@ namespace TNG_Database
         public List<TapeDatabaseValues> SearchAllDB(string[] input)
         {
             List<TapeDatabaseValues> tapeDBValues = new List<TapeDatabaseValues>();
-            int dbCheck = 0;
+            //int dbCheck = 0;
 
             //start new sqlite connection
             SQLiteConnection searchConnection = new SQLiteConnection(database);
             searchConnection.Open();
+            SQLiteCommand command = new SQLiteCommand(searchConnection);
 
-            string query = "select * from TapeDatabase order by project_id asc";
-            SQLiteCommand command = new SQLiteCommand(query, searchConnection);
+            //start of query pieces
+            string preQuery = "select * from TapeDatabase";
+
+            //add query based on number of entries
+            if(input.Length > 0)
+            {
+                for (int i = 0; i < input.Length; i++)
+                {
+                    string term = "@input" + i;
+                    string value = "'%" + input[i].ToLower() + "%'";
+                    if (i == 0)
+                    {
+                        preQuery += " where";
+                    }
+
+                    if(i > 0)
+                    {
+                        preQuery += " or";
+                    }
+
+                    //preQuery += String.Format(" project_name LIKE {0}",value);
+                    preQuery += String.Format(" project_id like {0} or project_name like {0} or tape_name like {0} or tape_tags like {0} or date_shot like {0} or master_archive like {0}",value);
+                    //command.Parameters.AddWithValue(term,value);
+                    Console.WriteLine(input[i].ToLower());
+                }
+            }
+            preQuery += " order by project_id asc";
+            Console.WriteLine(preQuery);
+
+            //Set assembled query to final query
+            string query = preQuery;
+            command.CommandText = query;
+            Console.WriteLine("Command Text: "+command.CommandText);
             SQLiteDataReader reader = command.ExecuteReader();
 
+            //If there are return values then parse them and display them
             if (reader.HasRows)
             {
                 while (reader.Read())
                 {
+                    TapeDatabaseValues dbData = new TapeDatabaseValues(reader["tape_name"].ToString(),
+                                    reader["tape_number"].ToString(), reader["project_id"].ToString(), reader["project_name"].ToString(),
+                                    Convert.ToInt32(reader["camera"]), reader["tape_tags"].ToString(), reader["date_shot"].ToString(),
+                                    reader["master_archive"].ToString(), reader["person_entered"].ToString(), Convert.ToInt32(reader["id"]));
+                    tapeDBValues.Add(dbData);
+
+                    /*
                     for(int i = 0;i < reader.FieldCount; i++)
                     {
                         dbCheck = tapeDBValues.Count;
@@ -262,6 +305,7 @@ namespace TNG_Database
                             break;
                         }
                     }
+                    */
                 }
             }
             else
@@ -271,8 +315,242 @@ namespace TNG_Database
                     tapeDBValues.Clear();
                 }
             }
-
+            searchConnection.Close();
             return tapeDBValues;
+
+        }
+
+        /// <summary>
+        /// Adds the master tapes from file.
+        /// </summary>
+        /// <param name="worker">Background worker</param>
+        /// <param name="importStream">Import Stream for file</param>
+        /// <param name="ofd">The file returned from OpenFileDialog</param>
+        /// <returns></returns>
+        public static bool AddMasterTapesFromFile(BackgroundWorker worker, Stream importStream, OpenFileDialog ofd, string masterArchive)
+        {
+            //List of Projectvalues to send to database
+            List<MasterTapeValues> projectList = new List<MasterTapeValues>();
+            MasterTapeValues values = new MasterTapeValues();
+
+            //open file if one was selected
+            if ((importStream = ofd.OpenFile()) != null)
+            {
+                try
+                {
+                    //items for 
+                    string line;
+                    string newLine;
+                    char[] seperators = ",".ToCharArray();
+
+                    //streamReader to read csv file
+                    StreamReader textReader = new StreamReader(importStream);
+                    while ((line = textReader.ReadLine()) != null)
+                    {
+                        //parse line and make a line array
+                        newLine = Regex.Replace(line, "[\u2013\u2014]", "-");
+                        string[] lineArray = newLine.Split(seperators, 3);
+
+                        //check to make sure there are 3 parts to each line
+                        if (lineArray.Length > 1)
+                        {
+                            lineArray[0] = lineArray[0].Trim();
+                            lineArray[1] = lineArray[1].Replace(',', '-').Trim();
+                            int clipNumber = Convert.ToInt32(lineArray[0]);
+                            //CHANGE VALUE LATER
+                            values = new MasterTapeValues(lineArray[1], lineArray[2], masterArchive, clipNumber.ToString("000"));
+                            projectList.Add(values);
+                        }
+                        else
+                        {
+                            //only one part, it will not add this value to database
+                        }
+                    }
+
+
+                }
+                catch (Exception error)
+                {
+                    MainForm.LogFile(error.Message);
+                }
+            }
+
+            //counters for updating the progress bar
+            int counter = 0;
+            int progressCounter = 0;
+            float queryCounter = 100.0f / projectList.Count;
+            float progress = 0.0f;
+
+
+            try
+            {
+                //connect to DB
+                SQLiteConnection masterConnection = new SQLiteConnection(database);
+                masterConnection.Open();
+
+                //iterate over each entry and insert it into the DB
+                foreach (MasterTapeValues master in projectList)
+                {
+                    string query = "insert into MasterArchiveVideos (project_id, video_name, master_tape, clip_number) values (@projectID, @videoName, @masterTape, @clipNumber)";
+                    SQLiteCommand command = new SQLiteCommand(query, masterConnection);
+                    command.Parameters.AddWithValue("@projectID", master.ProjectID);
+                    command.Parameters.AddWithValue("@videoName", master.VideoName);
+                    command.Parameters.AddWithValue("@masterTape", master.MasterTape);
+                    command.Parameters.AddWithValue("@clipNumber", master.ClipNumber);
+
+                    if (command.ExecuteNonQuery() == 1)
+                    {
+                        //Success
+                        counter++;
+                        progressCounter++;
+                        if ((progressCounter * queryCounter) >= 1)
+                        {
+                            progress += (queryCounter * progressCounter);
+                            progressCounter = 0;
+                            //update the progess bar
+                            worker.ReportProgress(Convert.ToInt32(progress));
+                            Console.WriteLine("Added: " + master.ProjectID);
+                        }
+                    }
+                    else
+                    {
+                        //Failure
+                    }
+                }
+
+                if (counter > 0)
+                {
+                    Console.WriteLine(counter + " items added to database");
+                    MainForm.LogFile(counter + " master archive(s) added to database");
+                    masterConnection.Close();
+                    return true;
+                }
+                else
+                {
+                    //No entries found
+                    Console.WriteLine("No master archive(s) added to database");
+                    masterConnection.Close();
+                    return false;
+                }
+
+            }
+            catch (SQLiteException e)
+            {
+                MainForm.LogFile("Import Projects Error: " + e.Message);
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Adds all projects from a file.
+        /// </summary>
+        /// <param name="values">The values.</param>
+        /// <returns>true if succeeded, false if failed</returns>
+        public static bool AddProjectsFromFile(BackgroundWorker worker, Stream importStream, OpenFileDialog ofd)
+        {
+            //List of Projectvalues to send to database
+            List<ProjectValues> projectList = new List<ProjectValues>();
+            ProjectValues values = new ProjectValues();
+
+
+            if ((importStream = ofd.OpenFile()) != null)
+            {
+
+                try
+                {
+                    //items for 
+                    string line;
+                    string newLine;
+                    char[] seperators = ",".ToCharArray();
+
+
+                    //streamReader to read csv file
+                    StreamReader textReader = new StreamReader(importStream);
+                    while ((line = textReader.ReadLine()) != null)
+                    {
+                        newLine = line.Replace("-", ",");
+                        string[] lineArray = newLine.Split(seperators, 2);
+
+                        //check to make sure there are 2 parts to each line
+                        if (lineArray.Length > 1)
+                        {
+                            lineArray[0] = lineArray[0].Trim();
+                            lineArray[1] = lineArray[1].Replace(',', '-').Trim();
+                            values = new ProjectValues(lineArray[0], lineArray[1]);
+                            projectList.Add(values);
+                        }
+                        else
+                        {
+                            //only one part, it will not add this value to database
+                        }
+                    }
+
+
+                }
+                catch (Exception error)
+                {
+                    MainForm.LogFile(error.Message);
+                }
+            }
+
+            int counter = 0;
+            int progressCounter = 0;
+            float queryCounter = 100.0f / projectList.Count;
+            float progress = 0.0f;
+
+            try
+            {
+                SQLiteConnection projectConnection = new SQLiteConnection(database);
+                projectConnection.Open();
+
+                foreach (ProjectValues value in projectList)
+                {
+                    string query = "insert into Projects (project_id, project_name) values (@projectID, @projectName)";
+                    SQLiteCommand command = new SQLiteCommand(query, projectConnection);
+                    command.Parameters.AddWithValue("@projectID", value.ProjectID);
+                    command.Parameters.AddWithValue("@projectName", value.Projectname);
+
+
+                    if (command.ExecuteNonQuery() == 1)
+                    {
+                        //Success
+                        counter++;
+                        progressCounter++;
+                        if ((progressCounter * queryCounter) >= 1)
+                        {
+                            
+                            progress += (queryCounter * progressCounter);
+                            progressCounter = 0;
+                            worker.ReportProgress(Convert.ToInt32(progress));
+                            Console.WriteLine("Added: " + value.ProjectID + ", Progress = " + progress);
+                        }
+                    }
+                    else
+                    {
+                        //Failure
+                    }
+                }
+
+                if (counter > 0)
+                {
+                    Console.WriteLine(counter + " items added to database");
+                    MainForm.LogFile(counter + " projects added to database");
+                    projectConnection.Close();
+                    return true;
+                }
+                else
+                {
+                    Console.WriteLine("No projects added to database");
+                    projectConnection.Close();
+                    return false;
+                }
+            }
+            catch (SQLiteException e)
+            {
+                MainForm.LogFile("Import Projects Error: " + e.Message);
+                return false;
+            }
+
 
         }
     }

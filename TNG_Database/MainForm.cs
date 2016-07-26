@@ -69,8 +69,12 @@ namespace TNG_Database
 
                 string createProjectsTable = "CREATE TABLE `Projects` (`id`	INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "`project_id` TEXT, `project_name` TEXT)";
+
+                string createMasterArchiveVideos = "CREATE TABLE `MasterArchiveVideos` (`id` INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "`project_id` TEXT, `video_name` TEXT, `master_tape` TEXT, `clip_number` TEXT)";
+
                 //put all create strings into string array
-                string[] allCreates = { createTapeTable, createMasterTable, createPeopleTable, createProjectsTable };
+                string[] allCreates = { createTapeTable, createMasterTable, createPeopleTable, createProjectsTable,createMasterArchiveVideos };
                 
                 //try to write tables to database
                 try
@@ -106,7 +110,7 @@ namespace TNG_Database
             }
             else
             {
-                Console.WriteLine("Database does exists already");
+
             }
             //Set it so this won't run again
             Properties.TNG_Settings.Default.FirstRun = false;
@@ -140,6 +144,7 @@ namespace TNG_Database
             }catch(Exception e)
             {
                 //Error
+                Console.WriteLine(e.ToString());
             }
         }
 
@@ -147,25 +152,6 @@ namespace TNG_Database
         {
             applicationStatusLabel.Text = status;
         }
-        /*
-        private void button1_Click(object sender, EventArgs e)
-        {
-            TapeDatabaseValues tbv = new TapeDatabaseValues("Teacher Service Agreement", "1", "16012", "Teacher Service Agreement", 1, "teacher, service, agreement, schools, k12", "DATE", "Master 52", "Aaron Primmer");
-            TapeDatabaseValues tbv2 = new TapeDatabaseValues("Teacher Service Agreement", "1", "16015", "Teacher Service Agreement", 1, "teacher, service, agreement, schools, k12", "DATE", "Master 52", "Aaron Primmer");
-            //string add_name = "Brett snyder";
-            string add_name = "Master 51";
-            //string editToName = "Brett Snyder";
-            string editToName = "Master 52";
-            AddToDatabase addDB = new AddToDatabase();
-            if(addDB.UpdateTapeDatabase(tbv2, 3, "16012")){
-                Console.WriteLine(add_name + " was updated from Tape DB");
-            }else
-            {
-                Console.WriteLine(add_name + " was not updated from Tape DB");
-            }
-            
-        }
-        */
 
         //Click on Close
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -232,50 +218,162 @@ namespace TNG_Database
             mainFormProgressBar.Increment(add);
         }
 
+        //Import->Projects
         private void textFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            
+            string importSetting = "projects";
             ofd = new OpenFileDialog();
-            ofd.InitialDirectory = "c:\\";
-            ofd.Filter = "comma seperated files (*.csv)|*.csv";
+            ofd.InitialDirectory = Properties.TNG_Settings.Default.LastFolder;
+            ofd.Filter = "comma seperated files (*.csv)|*.csv|text files (*.txt)|*.txt";
             ofd.RestoreDirectory = true;
 
             if (ofd.ShowDialog() == DialogResult.OK)
             {
                 if (ofd.OpenFile() != null)
                 {
+                    Properties.TNG_Settings.Default.LastFolder = Path.GetDirectoryName(ofd.FileName);
+                    Console.WriteLine(Properties.TNG_Settings.Default.LastFolder);
                     if (backgroundWorker1.IsBusy != true)
                     {
-                        backgroundWorker1.RunWorkerAsync();
+                        mainFormProgressBar.Value = 0;
+                        backgroundWorker1.RunWorkerAsync(importSetting);
                     }
                 }
             }
-
-                
         }
 
+        //does the background work
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
             Stream importStream = null;
             BackgroundWorker worker = sender as BackgroundWorker;
-            if((importStream = ofd.OpenFile()) != null)
+
+            if ((importStream = ofd.OpenFile()) != null)
             {
+
+                switch (e.Argument.ToString())
+                {
+                    case "projects":
+                        DataBaseControls.AddProjectsFromFile(worker, importStream,ofd);
+                        break;
+                    case "masters":
+                        //Master List import, has a popup to enter Master Tape to add to
+                        List<MasterListValues> masterListValues = DataBaseControls.GetAllMasterListItems();
+                        string masterTapeName = "";
+                        bool addMasters = false;
+                        //create a new form for user to enter tape name
+                        Form masterPrompt = new Form();
+                        masterPrompt.Height = 200;
+                        masterPrompt.Width = 500;
+                        masterPrompt.Text = "Enter Tape Name";
+
+                        //Set up items to add to popup box
+                        Label textLabel = new Label() { Left = 50, Top = 20, Text = "Master Archive to Import" };
+                        ComboBox inputBox = new ComboBox() { Left = 50, Top = 50, Width = 400 };
+                        //add items to combobox
+                        foreach (MasterListValues values in masterListValues)
+                        {
+                            inputBox.Items.Add(values.MasterArchive);
+                        }
+                        inputBox.SelectedIndex = 0;
+                        //Set up buttons to add
+                        Button confirmation = new Button() { Text = "OK", Left = 225, Width = 100, Top = 100 };
+                        Button cancelButton = new Button() { Text = "Cancel", Left = 350, Width = 100, Top = 100};
+                        //button actions
+                        cancelButton.Click += (senderPrompt, ePrompt) => { addMasters = false; masterPrompt.Close(); };
+                        confirmation.Click += (senderPrompt, ePrompt) => { addMasters = true; masterTapeName = inputBox.Text;masterPrompt.Close();};
+                        //Add items to form
+                        masterPrompt.Controls.Add(textLabel);
+                        masterPrompt.Controls.Add(inputBox);
+                        masterPrompt.Controls.Add(confirmation);
+                        masterPrompt.Controls.Add(cancelButton);
+                        masterPrompt.ShowDialog();
+                        //Add entries or Cancel depending on button clicked
+                        if (addMasters)
+                        {
+                            StatusUpdate("Importing " + masterTapeName + " Entries");
+                            DataBaseControls.AddMasterTapesFromFile(worker, importStream, ofd, masterTapeName);
+                        }else
+                        {
+                            worker.CancelAsync();
+                            if (worker.CancellationPending)
+                            {
+                                e.Cancel = true;
+                                return;
+                            }
+                        }
+                        break;
+                }
+            }
+        }
+
+        //Update progress of adding projects
+        private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            if(e.ProgressPercentage > 100)
+            {
+                mainFormProgressBar.Value = 100;
+            }else
+            {
+                //Increment the progressbar by number provided
+                //mainFormProgressBar.Increment(e.ProgressPercentage);
+                mainFormProgressBar.Value = e.ProgressPercentage;
+            }
+            
+        }
+
+        //Background process completed
+        private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (e.Cancelled == true)
+            {
+                //cancelled
+                UpdateStatusBarBottom("Cancelled!");
+            }
+            else if (e.Error != null)
+            {
+                //error
+                LogFile(e.Error.Message);
+            }
+            else
+            {
+                //Success
+                UpdateStatusBarBottom("Done!");
+                //make sure progress bar is the max after completion
+                mainFormProgressBar.Value = mainFormProgressBar.Maximum;
+            }
+        }
+
+        //CHECK AND DELETE IF IT WORKS
+        /// <summary>
+        /// Adds all projects from a file.
+        /// </summary>
+        /// <param name="values">The values.</param>
+        /// <returns>true if succeeded, false if failed</returns>
+        private bool AddProjectsFromFile(BackgroundWorker worker, Stream importStream)
+        {
+            //List of Projectvalues to send to database
+            List<ProjectValues> projectList = new List<ProjectValues>();
+            ProjectValues values = new ProjectValues();
+
+
+            if ((importStream = ofd.OpenFile()) != null)
+            {
+                
                 try
                 {
                     //items for 
                     string line;
                     string newLine;
                     char[] seperators = ",".ToCharArray();
-                    //List of Projectvalues to send to database
-                    List<ProjectValues> projectList = new List<ProjectValues>();
-                    ProjectValues values = new ProjectValues();
+                    
 
                     //streamReader to read csv file
                     StreamReader textReader = new StreamReader(importStream);
                     while ((line = textReader.ReadLine()) != null)
                     {
-                        //newLine = line.Replace('-', ',').Replace(" , ", ",");
-                        string[] lineArray = line.Split(seperators, 2);
+                        newLine = line.Replace(" - ", ",");
+                        string[] lineArray = newLine.Split(seperators, 2);
 
                         //check to make sure there are 2 parts to each line
                         if (lineArray.Length > 1)
@@ -284,33 +382,14 @@ namespace TNG_Database
                             lineArray[1] = lineArray[1].Replace(',', '-').Trim();
                             values = new ProjectValues(lineArray[0], lineArray[1]);
                             projectList.Add(values);
-
                         }
                         else
                         {
                             //only one part, it will not add this value to database
                         }
-
                     }
 
-                    //List must have at least one entry in it
-                    if (projectList.Count > 0)
-                    {
-                        //create access point to addToDatabase
-                        AddToDatabase addDB = new AddToDatabase();
-                        //Async task to add projects
-                        Task t = Task.Run(() => {
-                            if (AddProjectsFromFile(projectList, worker))
-                            {
-                                Console.WriteLine("Success");
-                            }
-                            else
-                            {
-                                Console.WriteLine("Failed");
-                            }
-                        });
-                        t.Wait();
-                    }
+
                 }
                 catch (Exception error)
                 {
@@ -318,101 +397,87 @@ namespace TNG_Database
                 }
             }
 
-            
-            
-        }
-
-        private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            if(e.ProgressPercentage > 100)
-            {
-                mainFormProgressBar.Value = 100;
-            }else
-            {
-                mainFormProgressBar.PerformStep();
-            }
-            
-        }
-
-        private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            if (e.Cancelled == true)
-            {
-                UpdateStatusBarBottom("Canceled!");
-            }
-            else if (e.Error != null)
-            {
-                LogFile(e.Error.Message);
-            }
-            else
-            {
-                UpdateStatusBarBottom("Done!");
-            }
-        }
-
-        /// <summary>
-        /// Adds all projects from a file.
-        /// </summary>
-        /// <param name="values">The values.</param>
-        /// <returns>true if succeeded, false if failed</returns>
-        private bool AddProjectsFromFile(List<ProjectValues> values, BackgroundWorker worker)
-        {
-
             int counter = 0;
             int progressCounter = 0;
-            int queryCounter = values.Count / 100;
-            int progress = 0;
-            SQLiteConnection projectConnection = new SQLiteConnection(connect);
-            projectConnection.Open();
+            float queryCounter = 100.0f / projectList.Count;
+            float progress = 0.0f;
 
-            foreach (ProjectValues value in values)
+            try
             {
-                string query = "insert into Projects (project_id, project_name) values (@projectID, @projectName)";
-                SQLiteCommand command = new SQLiteCommand(query, projectConnection);
-                command.Parameters.AddWithValue("@projectID", value.ProjectID);
-                command.Parameters.AddWithValue("@projectName", value.Projectname);
+                SQLiteConnection projectConnection = new SQLiteConnection(connect);
+                projectConnection.Open();
 
-                try
+                foreach (ProjectValues value in projectList)
                 {
+                    string query = "insert into Projects (project_id, project_name) values (@projectID, @projectName)";
+                    SQLiteCommand command = new SQLiteCommand(query, projectConnection);
+                    command.Parameters.AddWithValue("@projectID", value.ProjectID);
+                    command.Parameters.AddWithValue("@projectName", value.Projectname);
+
+
                     if (command.ExecuteNonQuery() == 1)
                     {
                         //Success
                         counter++;
                         progressCounter++;
-                        if (progressCounter >= queryCounter)
+                        if ((progressCounter * queryCounter) >= 1)
                         {
                             progressCounter = 0;
-                            progress++;
-                            worker.ReportProgress(progress);
+                            progress += queryCounter;
+                            worker.ReportProgress(Convert.ToInt32(progress));
                             Console.WriteLine("Added: " + value.ProjectID);
                         }
-
                     }
                     else
                     {
                         //Failure
                     }
                 }
-                catch (SQLiteException e)
+
+                if (counter > 0)
                 {
-                    LogFile("Import Projects Error: " + e.Message);
+                    Console.WriteLine(counter + " items added to database");
+                    LogFile(counter + " projects added to database");
+                    projectConnection.Close();
+                    return true;
                 }
-
-
+                else
+                {
+                    Console.WriteLine("No projects added to database");
+                    projectConnection.Close();
+                    return false;
+                }
             }
-
-            if (counter > 0)
+            catch (SQLiteException e)
             {
-                Console.WriteLine(counter + " items added to database");
-                LogFile(counter + " projects added to database");
-                projectConnection.Close();
-                return true;
-            }
-            else
-            {
-                Console.WriteLine("No projects added to database");
-                projectConnection.Close();
+                LogFile("Import Projects Error: " + e.Message);
                 return false;
+            }
+
+
+        }
+
+        //Import a XDCam master csv file click
+        private void xDCamMasterToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string importMaster = "masters";
+            ofd = new OpenFileDialog();
+            ofd.InitialDirectory = Properties.TNG_Settings.Default.LastFolder;
+            ofd.Filter = "comma seperated files (*.csv)|*.csv";
+            ofd.RestoreDirectory = true;
+
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                if (ofd.OpenFile() != null)
+                {
+                    Properties.TNG_Settings.Default.LastFolder = Path.GetDirectoryName(ofd.FileName);
+                    Console.WriteLine(Properties.TNG_Settings.Default.LastFolder);
+                    if (backgroundWorker1.IsBusy != true)
+                    {
+                        mainFormProgressBar.Value = 0;
+                        backgroundWorker1.RunWorkerAsync(importMaster);
+                    }
+                }
             }
         }
     }

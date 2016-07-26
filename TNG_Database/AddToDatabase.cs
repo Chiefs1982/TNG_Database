@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SQLite;
+using System.ComponentModel;
 
 namespace TNG_Database
 {
@@ -168,9 +169,6 @@ namespace TNG_Database
         /// <param name="projectID">Project ID of old item to update</param>
         /// <returns>Boolean of success of database operation</returns>
         public bool UpdateTapeDatabase(TapeDatabaseValues tapeDBValues, TapeDatabaseValues oldTapeValues)
-
-
-
         {
             try
             {
@@ -249,47 +247,56 @@ namespace TNG_Database
         /// <returns>Boolean of success of database operation</returns>
         public bool AddMasterList(string name, int camera)
         {
-            //Gets and opens up connection with TNG_TapeDatabase.sqlite
-            SQLiteConnection masterConnection = new SQLiteConnection(tngDatabaseConnectString);
-            masterConnection.Open();
-            
-            //create sqlite query to check to see if Master list name is already in database
-            string sql = "select count(*) from MasterList where lower(master_archive) = @m_name";
-            SQLiteCommand command = new SQLiteCommand(sql, masterConnection);
-            command.Parameters.AddWithValue("@m_name", name.ToLower());
-            Int32 check = Convert.ToInt32(command.ExecuteScalar());
-
-            //If query returned has any rows of data then Master List is already in database
-            if (check == 0)
+            try
             {
-                //No rows were returned, so entry can be added
-                command.Parameters.Clear();
-                command.CommandText = "insert into MasterList (master_archive, master_media) values (@m_newName, @m_newMedia)";
-                command.Parameters.AddWithValue("@m_newName", name);
-                command.Parameters.AddWithValue("@m_newMedia", camera);
+                //Gets and opens up connection with TNG_TapeDatabase.sqlite
+                SQLiteConnection masterConnection = new SQLiteConnection(tngDatabaseConnectString);
+                masterConnection.Open();
 
-                //Execute Insert query and check if it was added
-                if (command.ExecuteNonQuery() == 1)
+                //create sqlite query to check to see if Master list name is already in database
+                string sql = "select count(*) from MasterList where lower(master_archive) = @m_name";
+                SQLiteCommand command = new SQLiteCommand(sql, masterConnection);
+                command.Parameters.AddWithValue("@m_name", name.ToLower());
+                Int32 check = Convert.ToInt32(command.ExecuteScalar());
+
+                //If query returned has any rows of data then Master List is already in database
+                if (check == 0)
                 {
-                    //Entry added to Master List database
-                    Console.WriteLine("Master list inserted correctly");
-                    CloseConnections(command, masterConnection);
-                    return true;
+                    //No rows were returned, so entry can be added
+                    command.Parameters.Clear();
+                    command.CommandText = "insert into MasterList (master_archive, master_media) values (@m_newName, @m_newMedia)";
+                    command.Parameters.AddWithValue("@m_newName", name);
+                    command.Parameters.AddWithValue("@m_newMedia", camera);
+
+                    //Execute Insert query and check if it was added
+                    if (command.ExecuteNonQuery() == 1)
+                    {
+                        //Entry added to Master List database
+                        Console.WriteLine("Master list inserted correctly");
+                        CloseConnections(command, masterConnection);
+                        return true;
+                    }
+                    else
+                    {
+                        //Entry was not added to database
+                        Console.WriteLine("Master List entry not added correctly");
+                        CloseConnections(command, masterConnection);
+                        return false;
+                    }
+
                 }
                 else
                 {
-                    //Entry was not added to database
-                    Console.WriteLine("Master List entry not added correctly");
+                    //At least 1 row was returned, so entry already exists
                     CloseConnections(command, masterConnection);
                     return false;
                 }
-                
-            }else
+            }catch(Exception e)
             {
-                //At least 1 row was returned, so entry already exists
-                CloseConnections(command, masterConnection);
+                MainForm.LogFile("Master List Add Error: " + e.Message);
                 return false;
             }
+            
         }
 
         //-----------------------------------
@@ -300,43 +307,51 @@ namespace TNG_Database
         /// <returns>Boolean of success of database operation</returns>
         public bool DeleteMasterList(MasterListValues deleteValues)
         {
-            //Gets and opens up connection with TNG_TapeDatabase.sqlite
-            SQLiteConnection masterConnection = new SQLiteConnection(tngDatabaseConnectString);
-            masterConnection.Open();
-
-            //create sqlite query to check to see if Master list name is already in database
-            string sql = "select count(*) from MasterList where lower(master_archive) = @m_name and id = @id";
-            SQLiteCommand command = new SQLiteCommand(sql, masterConnection);
-            command.Parameters.AddWithValue("@m_name", deleteValues.MasterArchive.ToLower());
-            command.Parameters.AddWithValue("@id", deleteValues.ID);
-            Int32 check = Convert.ToInt32(command.ExecuteScalar());
-
-            //If query returned has any rows of data then Master List is already in database
-            if (check == 1)
+            try
             {
-                //There is an entry to be deleted
-                command.CommandText = "delete from MasterList where id = @id and lower(master_archive) = @m_name";
+                //Gets and opens up connection with TNG_TapeDatabase.sqlite
+                SQLiteConnection masterConnection = new SQLiteConnection(tngDatabaseConnectString);
+                masterConnection.Open();
 
-                if (command.ExecuteNonQuery() == 1)
+                //create sqlite query to check to see if Master list name is already in database
+                string sql = "select count(*) from MasterList where lower(master_archive) = @m_name and id = @id";
+                SQLiteCommand command = new SQLiteCommand(sql, masterConnection);
+                command.Parameters.AddWithValue("@m_name", deleteValues.MasterArchive.ToLower());
+                command.Parameters.AddWithValue("@id", deleteValues.ID);
+                Int32 check = Convert.ToInt32(command.ExecuteScalar());
+
+                //If query returned has any rows of data then Master List is already in database
+                if (check == 1)
                 {
-                    //Entry deleted
-                    Console.WriteLine("Entry deleted successfully");
-                    CloseConnections(command, masterConnection);
-                    return true;
+                    //There is an entry to be deleted
+                    command.CommandText = "delete from MasterList where id = @id and lower(master_archive) = @m_name";
+
+                    if (command.ExecuteNonQuery() == 1)
+                    {
+                        //Entry deleted
+                        Console.WriteLine("Entry deleted successfully");
+                        CloseConnections(command, masterConnection);
+                        return true;
+                    }
+                    else
+                    {
+                        //Entry was not deleted
+                        Console.WriteLine("Entry was not deleted successfully");
+                        CloseConnections(command, masterConnection);
+                        return false;
+                    }
                 }
                 else
                 {
-                    //Entry was not deleted
-                    Console.WriteLine("Entry was not deleted successfully");
+                    //There is no entry for the selected item to delete
+                    Console.WriteLine("No Entry that matches name to be deleted");
                     CloseConnections(command, masterConnection);
                     return false;
                 }
             }
-            else
+            catch (Exception e)
             {
-                //There is no entry for the selected item to delete
-                Console.WriteLine("No Entry that matches name to be deleted");
-                CloseConnections(command, masterConnection);
+                MainForm.LogFile("Master List Delete Error: " + e.Message);
                 return false;
             }
         }
@@ -350,46 +365,54 @@ namespace TNG_Database
         /// <returns>Boolean of success of database operation</returns>
         public bool UpdateMasterList(MasterListValues oldValues, MasterListValues updateValues)
         {
-            //Gets and opens up connection with TNG_TapeDatabase.sqlite
-            SQLiteConnection masterConnection = new SQLiteConnection(tngDatabaseConnectString);
-            masterConnection.Open();
-
-            //create sqlite query to check to see if Master list name is already in database
-            string sql = "select count(*) from MasterList where lower(master_archive) = @m_name and id = @id";
-            SQLiteCommand command = new SQLiteCommand(sql, masterConnection);
-            command.Parameters.AddWithValue("@m_name", oldValues.MasterArchive.ToLower());
-            command.Parameters.AddWithValue("@id", oldValues.ID);
-            Int32 check = Convert.ToInt32(command.ExecuteScalar());
-
-            //If query returned has any rows of data then Master List is already in database
-            if (check == 1)
+            try
             {
-                //Update entry
-                command.CommandText = "update MasterList set master_archive = @m_newName, master_media = @m_newMedia where id = @id";
-                command.Parameters.AddWithValue("@m_newName", updateValues.MasterArchive);
-                command.Parameters.AddWithValue("@m_newMedia", updateValues.MasterMedia);
+                //Gets and opens up connection with TNG_TapeDatabase.sqlite
+                SQLiteConnection masterConnection = new SQLiteConnection(tngDatabaseConnectString);
+                masterConnection.Open();
 
-                //Execute query and check to make sure row was updated
-                if (command.ExecuteNonQuery() == 1)
+                //create sqlite query to check to see if Master list name is already in database
+                string sql = "select count(*) from MasterList where lower(master_archive) = @m_name and id = @id";
+                SQLiteCommand command = new SQLiteCommand(sql, masterConnection);
+                command.Parameters.AddWithValue("@m_name", oldValues.MasterArchive.ToLower());
+                command.Parameters.AddWithValue("@id", oldValues.ID);
+                Int32 check = Convert.ToInt32(command.ExecuteScalar());
+
+                //If query returned has any rows of data then Master List is already in database
+                if (check == 1)
                 {
-                    //Row updated
-                    Console.WriteLine("Row updated");
-                    CloseConnections(command, masterConnection);
-                    return true;
+                    //Update entry
+                    command.CommandText = "update MasterList set master_archive = @m_newName, master_media = @m_newMedia where id = @id";
+                    command.Parameters.AddWithValue("@m_newName", updateValues.MasterArchive);
+                    command.Parameters.AddWithValue("@m_newMedia", updateValues.MasterMedia);
+
+                    //Execute query and check to make sure row was updated
+                    if (command.ExecuteNonQuery() == 1)
+                    {
+                        //Row updated
+                        Console.WriteLine("Row updated");
+                        CloseConnections(command, masterConnection);
+                        return true;
+                    }
+                    else
+                    {
+                        //Row not updated
+                        Console.WriteLine("Row not updated");
+                        CloseConnections(command, masterConnection);
+                        return false;
+                    }
                 }
                 else
                 {
-                    //Row not updated
-                    Console.WriteLine("Row not updated");
+                    //There was nothing to update
+                    Console.WriteLine("Nothing to update");
                     CloseConnections(command, masterConnection);
                     return false;
                 }
             }
-            else
+            catch (Exception e)
             {
-                //There was nothing to update
-                Console.WriteLine("Nothing to update");
-                CloseConnections(command, masterConnection);
+                MainForm.LogFile("Master List Update Error: " + e.Message);
                 return false;
             }
         }
@@ -405,39 +428,47 @@ namespace TNG_Database
         /// <returns>Boolean of success of database operation</returns>
         public bool AddPerson(string name)
         {
-            //Gets and opens up connection with TNG_TapeDatabase.sqlite
-            SQLiteConnection personConnection = new SQLiteConnection(tngDatabaseConnectString);
-            personConnection.Open();
-
-            //create sqlite query to check to see if name is already in database
-            string sql = "select count(*) from People where lower(person_name) = @p_name";
-            SQLiteCommand command = new SQLiteCommand(sql, personConnection);
-            command.Parameters.AddWithValue("@p_name", name.ToLower());
-            Int32 check = Convert.ToInt32(command.ExecuteScalar());
-
-            //If query returned has any rows of data then name is already in database
-            if (check == 0)
+            try
             {
-                //person is not in database and needs to be added
-                command.CommandText = "insert into People (person_name) values (@add_name)";
-                command.Parameters.AddWithValue("@add_name", name);
+                //Gets and opens up connection with TNG_TapeDatabase.sqlite
+                SQLiteConnection personConnection = new SQLiteConnection(tngDatabaseConnectString);
+                personConnection.Open();
 
-                //execute adding person query and check to see person was added
-                if (command.ExecuteNonQuery() == 1)
+                //create sqlite query to check to see if name is already in database
+                string sql = "select count(*) from People where lower(person_name) = @p_name";
+                SQLiteCommand command = new SQLiteCommand(sql, personConnection);
+                command.Parameters.AddWithValue("@p_name", name.ToLower());
+                Int32 check = Convert.ToInt32(command.ExecuteScalar());
+
+                //If query returned has any rows of data then name is already in database
+                if (check == 0)
                 {
-                    CloseConnections(command, personConnection);
-                    return true;
+                    //person is not in database and needs to be added
+                    command.CommandText = "insert into People (person_name) values (@add_name)";
+                    command.Parameters.AddWithValue("@add_name", name);
+
+                    //execute adding person query and check to see person was added
+                    if (command.ExecuteNonQuery() == 1)
+                    {
+                        CloseConnections(command, personConnection);
+                        return true;
+                    }
+                    else
+                    {
+                        CloseConnections(command, personConnection);
+                        return false;
+                    }
+
                 }
                 else
                 {
                     CloseConnections(command, personConnection);
                     return false;
                 }
-
             }
-            else
+            catch(Exception e)
             {
-                CloseConnections(command, personConnection);
+                MainForm.LogFile("Person Add Error" + e.Message);
                 return false;
             }
         }
@@ -450,40 +481,48 @@ namespace TNG_Database
         /// <returns>Boolean of success of database operation</returns>
         public bool DeletePerson(string name)
         {
-            //Gets and opens up connection with TNG_TapeDatabase.sqlite
-            SQLiteConnection personConnection = new SQLiteConnection(tngDatabaseConnectString);
-            personConnection.Open();
-
-            //create sqlite query to check to see if name is already in database
-            string sql = "select count(*) from People where person_name = @p_name";
-            SQLiteCommand command = new SQLiteCommand(sql, personConnection);
-            command.Parameters.AddWithValue("@p_name", name);
-            Int32 check = Convert.ToInt32(command.ExecuteScalar());
-
-            //If query returned has any rows of data then name is already in database
-            if (check == 1)
+            try
             {
-                //Name matched in database
-                command.CommandText = "delete from People where person_name = @p_name";
+                //Gets and opens up connection with TNG_TapeDatabase.sqlite
+                SQLiteConnection personConnection = new SQLiteConnection(tngDatabaseConnectString);
+                personConnection.Open();
 
-                //execute delete query and check to see row was deleted
-                if (command.ExecuteNonQuery() == 1)
+                //create sqlite query to check to see if name is already in database
+                string sql = "select count(*) from People where person_name = @p_name";
+                SQLiteCommand command = new SQLiteCommand(sql, personConnection);
+                command.Parameters.AddWithValue("@p_name", name);
+                Int32 check = Convert.ToInt32(command.ExecuteScalar());
+
+                //If query returned has any rows of data then name is already in database
+                if (check == 1)
                 {
-                    //Person deleted from database
-                    CloseConnections(command, personConnection);
-                    return true;
+                    //Name matched in database
+                    command.CommandText = "delete from People where person_name = @p_name";
+
+                    //execute delete query and check to see row was deleted
+                    if (command.ExecuteNonQuery() == 1)
+                    {
+                        //Person deleted from database
+                        CloseConnections(command, personConnection);
+                        return true;
+                    }
+                    else
+                    {
+                        //Person not deleted from database
+                        CloseConnections(command, personConnection);
+                        return false;
+                    }
                 }
                 else
                 {
-                    //Person not deleted from database
+                    //there was no name in the database to delete
                     CloseConnections(command, personConnection);
                     return false;
                 }
             }
-            else
+            catch (Exception e)
             {
-                //there was no name in the database to delete
-                CloseConnections(command, personConnection);
+                MainForm.LogFile("Person Delete Error" + e.Message);
                 return false;
             }
         }
@@ -497,44 +536,53 @@ namespace TNG_Database
         /// <returns>Boolean of success of database operation</returns>
         public bool EditPerson(string name, string edit_name)
         {
-            //make name lowercase to check DB
-            string lower_name = name.ToLower();
-
-            //Gets and opens up connection with TNG_TapeDatabase.sqlite
-            SQLiteConnection personConnection = new SQLiteConnection(tngDatabaseConnectString);
-            personConnection.Open();
-
-            //create sqlite query to check to see if name is already in database
-            string sql = "select count(*) from People where person_name = @p_name";
-            SQLiteCommand command = new SQLiteCommand(sql, personConnection);
-            command.Parameters.AddWithValue("@p_name", name);
-            //Execute count on query
-            Int32 check = Convert.ToInt32(command.ExecuteScalar());
-
-            //check to make sure it returned 1 row
-            if(check == 1)
+            try
             {
-                //set update parameters
-                command.CommandText = "update People set person_name = @up_name where person_name = @p_name";
-                command.Parameters.AddWithValue("@up_name", edit_name);
+                //make name lowercase to check DB
+                string lower_name = name.ToLower();
 
-                //execute query
-                if(command.ExecuteNonQuery() == 1)
+                //Gets and opens up connection with TNG_TapeDatabase.sqlite
+                SQLiteConnection personConnection = new SQLiteConnection(tngDatabaseConnectString);
+                personConnection.Open();
+
+                //create sqlite query to check to see if name is already in database
+                string sql = "select count(*) from People where person_name = @p_name";
+                SQLiteCommand command = new SQLiteCommand(sql, personConnection);
+                command.Parameters.AddWithValue("@p_name", name);
+                //Execute count on query
+                Int32 check = Convert.ToInt32(command.ExecuteScalar());
+
+                //check to make sure it returned 1 row
+                if (check == 1)
                 {
-                    //update success, close and return true
-                    CloseConnections(command, personConnection);
-                    return true;
-                }else
+                    //set update parameters
+                    command.CommandText = "update People set person_name = @up_name where person_name = @p_name";
+                    command.Parameters.AddWithValue("@up_name", edit_name);
+
+                    //execute query
+                    if (command.ExecuteNonQuery() == 1)
+                    {
+                        //update success, close and return true
+                        CloseConnections(command, personConnection);
+                        return true;
+                    }
+                    else
+                    {
+                        //update failed, close and return false
+                        CloseConnections(command, personConnection);
+                        return false;
+                    }
+                }
+                else
                 {
-                    //update failed, close and return false
+                    //No match returned, close and return false
                     CloseConnections(command, personConnection);
                     return false;
                 }
             }
-            else
+            catch (Exception e)
             {
-                //No match returned, close and return false
-                CloseConnections(command, personConnection);
+                MainForm.LogFile("Person Update Error" + e.Message);
                 return false;
             }
         }
@@ -548,8 +596,6 @@ namespace TNG_Database
         {
             return false;
         }
-
-        
 
         #endregion
     }

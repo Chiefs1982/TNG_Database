@@ -79,6 +79,7 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="MasterArchiveVideoValues.cs" />
     <Compile Include="MasterListForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -86,6 +87,7 @@
       <DependentUpon>MasterListForm.cs</DependentUpon>
     </Compile>
     <Compile Include="MasterListValues.cs" />
+    <Compile Include="MasterTapeValues.cs" />
     <Compile Include="PeopleForm.cs">
       <SubType>Form</SubType>
     </Compile>

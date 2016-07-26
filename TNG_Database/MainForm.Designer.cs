@@ -41,6 +41,7 @@
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.textFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.xDCamMasterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -80,10 +81,10 @@
             this.exportDatabaseToolStripMenuItem,
             this.toolStripSeparator1,
             this.addNewItemsToolStripMenuItem,
+            this.importToolStripMenuItem,
             this.toolStripSeparator3,
             this.preferencesToolStripMenuItem,
-            this.exitToolStripMenuItem,
-            this.importToolStripMenuItem});
+            this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
@@ -149,7 +150,8 @@
             // importToolStripMenuItem
             // 
             this.importToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.textFileToolStripMenuItem});
+            this.textFileToolStripMenuItem,
+            this.xDCamMasterToolStripMenuItem});
             this.importToolStripMenuItem.Name = "importToolStripMenuItem";
             this.importToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.importToolStripMenuItem.Text = "Import";
@@ -157,9 +159,16 @@
             // textFileToolStripMenuItem
             // 
             this.textFileToolStripMenuItem.Name = "textFileToolStripMenuItem";
-            this.textFileToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.textFileToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
             this.textFileToolStripMenuItem.Text = "Projects";
             this.textFileToolStripMenuItem.Click += new System.EventHandler(this.textFileToolStripMenuItem_Click);
+            // 
+            // xDCamMasterToolStripMenuItem
+            // 
+            this.xDCamMasterToolStripMenuItem.Name = "xDCamMasterToolStripMenuItem";
+            this.xDCamMasterToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
+            this.xDCamMasterToolStripMenuItem.Text = "XDCam Master";
+            this.xDCamMasterToolStripMenuItem.Click += new System.EventHandler(this.xDCamMasterToolStripMenuItem_Click);
             // 
             // editToolStripMenuItem
             // 
@@ -272,6 +281,8 @@
             // 
             // backgroundWorker1
             // 
+            this.backgroundWorker1.WorkerReportsProgress = true;
+            this.backgroundWorker1.WorkerSupportsCancellation = true;
             this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
             this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
             this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
@@ -328,7 +339,8 @@
         public System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripMenuItem importToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem textFileToolStripMenuItem;
-        private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        public System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private System.Windows.Forms.ToolStripMenuItem xDCamMasterToolStripMenuItem;
     }
 }
 
