@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.SQLite;
 using System.ComponentModel;
+using TNG_Database.Values;
 
 namespace TNG_Database
 {

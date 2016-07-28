@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SQLite;
 using System.IO;
+using TNG_Database.Values;
 
 namespace TNG_Database
 {
@@ -21,7 +22,10 @@ namespace TNG_Database
 
         private string connect = DataBaseControls.GetDBName();
         OpenFileDialog ofd;
-        
+
+        //Reference to CommonMethods
+        CommonMethods commonMethod = CommonMethods.Instance();
+
         public MainForm()
         {
             
@@ -242,6 +246,83 @@ namespace TNG_Database
             }
         }
 
+        /// <summary>
+        /// Checks the import function and calls appropriate import function.
+        /// </summary>
+        /// <param name="worker">The background worker.</param>
+        /// <param name="e">The <see cref="DoWorkEventArgs"/> instance containing the event data.</param>
+        private void CheckImportFunction(BackgroundWorker worker, DoWorkEventArgs e)
+        {
+            Stream importStream = null;
+
+            switch (e.Argument.ToString())
+            {
+                case "projects":
+                    DataBaseControls.AddProjectsFromFile(worker, importStream, ofd);
+                    break;
+                case "masters":
+                    //Master List import, has a popup to enter Master Tape to add to
+                    List<MasterListValues> masterListValues = DataBaseControls.GetAllMasterListItems();
+                    string[] cameraValues = commonMethod.CameraDropdownItems();
+                    string masterTapeName = "";
+                    string cameraMasterName = "";
+                    bool addMasters = false;
+                    //create a new form for user to enter tape name
+                    Form masterPrompt = new Form();
+                    masterPrompt.Height = 200;
+                    masterPrompt.Width = 500;
+                    masterPrompt.Text = "Enter Tape Name";
+
+                    //Set up items to add to popup box
+                    Label textLabel = new Label() { Left = 50, Top = 20, Text = "Master Archive to Import" };
+                    ComboBox inputBox = new ComboBox() { Left = 50, Top = 50, Width = 400 };
+                    //add items to combobox
+                    foreach (MasterListValues values in masterListValues)
+                    {
+                        inputBox.Items.Add(values.MasterArchive);
+                    }
+                    inputBox.SelectedIndex = 0;
+                    //add media combobox
+                    ComboBox mediaCombo = new ComboBox() { Left = 50, Top = 75, Width = 200 };
+                    foreach(string mediaValue in cameraValues)
+                    {
+                        mediaCombo.Items.Add(mediaValue);
+                    }
+                    mediaCombo.SelectedIndex = 1;
+                    mediaCombo.KeyPress += (senderCombo, eCombo) => { eCombo.Handled = true; };
+                    mediaCombo.SelectedIndexChanged += (senderCombo, eCombo) => { textLabel.Focus(); };
+                    //Set up buttons to add
+                    Button confirmation = new Button() { Text = "OK", Left = 240, Width = 100, Top = 120 };
+                    Button cancelButton = new Button() { Text = "Cancel", Left = 350, Width = 100, Top = 120 };
+                    //button actions
+                    cancelButton.Click += (senderPrompt, ePrompt) => { addMasters = false; masterPrompt.Close(); };
+                    confirmation.Click += (senderPrompt, ePrompt) => { addMasters = true; masterTapeName = inputBox.Text; cameraMasterName = mediaCombo.Text; masterPrompt.Close(); };
+                    //Add items to form
+                    masterPrompt.Controls.Add(textLabel);
+                    masterPrompt.Controls.Add(inputBox);
+                    masterPrompt.Controls.Add(mediaCombo);
+                    masterPrompt.Controls.Add(confirmation);
+                    masterPrompt.Controls.Add(cancelButton);
+                    masterPrompt.ShowDialog();
+                    //Add entries or Cancel depending on button clicked
+                    if (addMasters)
+                    {
+                        StatusUpdate("Importing " + masterTapeName + " Entries");
+                        DataBaseControls.AddMasterTapesFromFile(worker, importStream, ofd, masterTapeName, commonMethod.GetCameraNumber(cameraMasterName));
+                    }
+                    else
+                    {
+                        worker.CancelAsync();
+                        if (worker.CancellationPending)
+                        {
+                            e.Cancel = true;
+                            return;
+                        }
+                    }
+                    break;
+            }
+        }
+
         //does the background work
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
@@ -250,60 +331,7 @@ namespace TNG_Database
 
             if ((importStream = ofd.OpenFile()) != null)
             {
-
-                switch (e.Argument.ToString())
-                {
-                    case "projects":
-                        DataBaseControls.AddProjectsFromFile(worker, importStream,ofd);
-                        break;
-                    case "masters":
-                        //Master List import, has a popup to enter Master Tape to add to
-                        List<MasterListValues> masterListValues = DataBaseControls.GetAllMasterListItems();
-                        string masterTapeName = "";
-                        bool addMasters = false;
-                        //create a new form for user to enter tape name
-                        Form masterPrompt = new Form();
-                        masterPrompt.Height = 200;
-                        masterPrompt.Width = 500;
-                        masterPrompt.Text = "Enter Tape Name";
-
-                        //Set up items to add to popup box
-                        Label textLabel = new Label() { Left = 50, Top = 20, Text = "Master Archive to Import" };
-                        ComboBox inputBox = new ComboBox() { Left = 50, Top = 50, Width = 400 };
-                        //add items to combobox
-                        foreach (MasterListValues values in masterListValues)
-                        {
-                            inputBox.Items.Add(values.MasterArchive);
-                        }
-                        inputBox.SelectedIndex = 0;
-                        //Set up buttons to add
-                        Button confirmation = new Button() { Text = "OK", Left = 225, Width = 100, Top = 100 };
-                        Button cancelButton = new Button() { Text = "Cancel", Left = 350, Width = 100, Top = 100};
-                        //button actions
-                        cancelButton.Click += (senderPrompt, ePrompt) => { addMasters = false; masterPrompt.Close(); };
-                        confirmation.Click += (senderPrompt, ePrompt) => { addMasters = true; masterTapeName = inputBox.Text;masterPrompt.Close();};
-                        //Add items to form
-                        masterPrompt.Controls.Add(textLabel);
-                        masterPrompt.Controls.Add(inputBox);
-                        masterPrompt.Controls.Add(confirmation);
-                        masterPrompt.Controls.Add(cancelButton);
-                        masterPrompt.ShowDialog();
-                        //Add entries or Cancel depending on button clicked
-                        if (addMasters)
-                        {
-                            StatusUpdate("Importing " + masterTapeName + " Entries");
-                            DataBaseControls.AddMasterTapesFromFile(worker, importStream, ofd, masterTapeName);
-                        }else
-                        {
-                            worker.CancelAsync();
-                            if (worker.CancellationPending)
-                            {
-                                e.Cancel = true;
-                                return;
-                            }
-                        }
-                        break;
-                }
+                CheckImportFunction(worker, e);
             }
         }
 
@@ -343,119 +371,7 @@ namespace TNG_Database
                 mainFormProgressBar.Value = mainFormProgressBar.Maximum;
             }
         }
-
-        //CHECK AND DELETE IF IT WORKS
-        /// <summary>
-        /// Adds all projects from a file.
-        /// </summary>
-        /// <param name="values">The values.</param>
-        /// <returns>true if succeeded, false if failed</returns>
-        private bool AddProjectsFromFile(BackgroundWorker worker, Stream importStream)
-        {
-            //List of Projectvalues to send to database
-            List<ProjectValues> projectList = new List<ProjectValues>();
-            ProjectValues values = new ProjectValues();
-
-
-            if ((importStream = ofd.OpenFile()) != null)
-            {
-                
-                try
-                {
-                    //items for 
-                    string line;
-                    string newLine;
-                    char[] seperators = ",".ToCharArray();
-                    
-
-                    //streamReader to read csv file
-                    StreamReader textReader = new StreamReader(importStream);
-                    while ((line = textReader.ReadLine()) != null)
-                    {
-                        newLine = line.Replace(" - ", ",");
-                        string[] lineArray = newLine.Split(seperators, 2);
-
-                        //check to make sure there are 2 parts to each line
-                        if (lineArray.Length > 1)
-                        {
-                            lineArray[0] = lineArray[0].Trim();
-                            lineArray[1] = lineArray[1].Replace(',', '-').Trim();
-                            values = new ProjectValues(lineArray[0], lineArray[1]);
-                            projectList.Add(values);
-                        }
-                        else
-                        {
-                            //only one part, it will not add this value to database
-                        }
-                    }
-
-
-                }
-                catch (Exception error)
-                {
-                    LogFile(error.Message);
-                }
-            }
-
-            int counter = 0;
-            int progressCounter = 0;
-            float queryCounter = 100.0f / projectList.Count;
-            float progress = 0.0f;
-
-            try
-            {
-                SQLiteConnection projectConnection = new SQLiteConnection(connect);
-                projectConnection.Open();
-
-                foreach (ProjectValues value in projectList)
-                {
-                    string query = "insert into Projects (project_id, project_name) values (@projectID, @projectName)";
-                    SQLiteCommand command = new SQLiteCommand(query, projectConnection);
-                    command.Parameters.AddWithValue("@projectID", value.ProjectID);
-                    command.Parameters.AddWithValue("@projectName", value.Projectname);
-
-
-                    if (command.ExecuteNonQuery() == 1)
-                    {
-                        //Success
-                        counter++;
-                        progressCounter++;
-                        if ((progressCounter * queryCounter) >= 1)
-                        {
-                            progressCounter = 0;
-                            progress += queryCounter;
-                            worker.ReportProgress(Convert.ToInt32(progress));
-                            Console.WriteLine("Added: " + value.ProjectID);
-                        }
-                    }
-                    else
-                    {
-                        //Failure
-                    }
-                }
-
-                if (counter > 0)
-                {
-                    Console.WriteLine(counter + " items added to database");
-                    LogFile(counter + " projects added to database");
-                    projectConnection.Close();
-                    return true;
-                }
-                else
-                {
-                    Console.WriteLine("No projects added to database");
-                    projectConnection.Close();
-                    return false;
-                }
-            }
-            catch (SQLiteException e)
-            {
-                LogFile("Import Projects Error: " + e.Message);
-                return false;
-            }
-
-
-        }
+        
 
         //Import a XDCam master csv file click
         private void xDCamMasterToolStripMenuItem_Click(object sender, EventArgs e)

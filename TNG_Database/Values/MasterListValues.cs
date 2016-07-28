@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TNG_Database
+namespace TNG_Database.Values
 {
     //Class that keeps values for Master List Archive for Records
     class MasterListValues

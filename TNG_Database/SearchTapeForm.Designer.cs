@@ -42,11 +42,14 @@
             this.columnDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnMaster = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnPerson = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnClip = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
+            this.searchTotalFoundLabel = new System.Windows.Forms.Label();
             this.defaultTapeGroupbox = new System.Windows.Forms.GroupBox();
             this.searchItemsPanel = new System.Windows.Forms.Panel();
+            this.searchClipNameLabel = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             this.searchTagFlowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.searchTapeNumberLabel = new System.Windows.Forms.Label();
             this.searchTapeNameLabel = new System.Windows.Forms.Label();
@@ -117,7 +120,8 @@
             this.columnTags,
             this.columnDate,
             this.columnMaster,
-            this.columnPerson});
+            this.columnPerson,
+            this.columnClip});
             this.searchListView.FullRowSelect = true;
             this.searchListView.Location = new System.Drawing.Point(12, 79);
             this.searchListView.MultiSelect = false;
@@ -171,6 +175,10 @@
             this.columnPerson.Text = "Entered By";
             this.columnPerson.Width = 80;
             // 
+            // columnClip
+            // 
+            this.columnClip.Text = "Clip";
+            // 
             // comboBox1
             // 
             this.comboBox1.FormattingEnabled = true;
@@ -188,14 +196,14 @@
             this.label3.TabIndex = 7;
             this.label3.Text = "Filter By:";
             // 
-            // label4
+            // searchTotalFoundLabel
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 63);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(93, 13);
-            this.label4.TabIndex = 8;
-            this.label4.Text = "( 0 ) Entries Found";
+            this.searchTotalFoundLabel.AutoSize = true;
+            this.searchTotalFoundLabel.Location = new System.Drawing.Point(12, 63);
+            this.searchTotalFoundLabel.Name = "searchTotalFoundLabel";
+            this.searchTotalFoundLabel.Size = new System.Drawing.Size(93, 13);
+            this.searchTotalFoundLabel.TabIndex = 8;
+            this.searchTotalFoundLabel.Text = "( 0 ) Entries Found";
             // 
             // defaultTapeGroupbox
             // 
@@ -209,6 +217,8 @@
             // 
             // searchItemsPanel
             // 
+            this.searchItemsPanel.Controls.Add(this.searchClipNameLabel);
+            this.searchItemsPanel.Controls.Add(this.label5);
             this.searchItemsPanel.Controls.Add(this.searchTagFlowLayoutPanel);
             this.searchItemsPanel.Controls.Add(this.searchTapeNumberLabel);
             this.searchItemsPanel.Controls.Add(this.searchTapeNameLabel);
@@ -232,13 +242,31 @@
             this.searchItemsPanel.Size = new System.Drawing.Size(799, 155);
             this.searchItemsPanel.TabIndex = 45;
             // 
+            // searchClipNameLabel
+            // 
+            this.searchClipNameLabel.AutoSize = true;
+            this.searchClipNameLabel.Location = new System.Drawing.Point(490, 135);
+            this.searchClipNameLabel.Name = "searchClipNameLabel";
+            this.searchClipNameLabel.Size = new System.Drawing.Size(118, 13);
+            this.searchClipNameLabel.TabIndex = 47;
+            this.searchClipNameLabel.Text = "Clip Number If Selected";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(403, 135);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(67, 13);
+            this.label5.TabIndex = 46;
+            this.label5.Text = "Clip Number:";
+            // 
             // searchTagFlowLayoutPanel
             // 
             this.searchTagFlowLayoutPanel.AutoScroll = true;
-            this.searchTagFlowLayoutPanel.AutoScrollMinSize = new System.Drawing.Size(353, 86);
+            this.searchTagFlowLayoutPanel.AutoScrollMinSize = new System.Drawing.Size(353, 62);
             this.searchTagFlowLayoutPanel.Location = new System.Drawing.Point(443, 62);
             this.searchTagFlowLayoutPanel.Name = "searchTagFlowLayoutPanel";
-            this.searchTagFlowLayoutPanel.Size = new System.Drawing.Size(353, 86);
+            this.searchTagFlowLayoutPanel.Size = new System.Drawing.Size(353, 62);
             this.searchTagFlowLayoutPanel.TabIndex = 45;
             // 
             // searchTapeNumberLabel
@@ -410,7 +438,7 @@
             this.ClientSize = new System.Drawing.Size(844, 587);
             this.ControlBox = false;
             this.Controls.Add(this.defaultTapeGroupbox);
-            this.Controls.Add(this.label4);
+            this.Controls.Add(this.searchTotalFoundLabel);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.searchListView);
@@ -452,7 +480,7 @@
         private System.Windows.Forms.ColumnHeader columnPerson;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label searchTotalFoundLabel;
         private System.Windows.Forms.GroupBox defaultTapeGroupbox;
         private System.Windows.Forms.Panel searchItemsPanel;
         private System.Windows.Forms.FlowLayoutPanel searchTagFlowLayoutPanel;
@@ -474,5 +502,8 @@
         private System.Windows.Forms.Label searchProjectIDLabel;
         private System.Windows.Forms.Label searchProjectNameLabel;
         private System.Windows.Forms.Label searchNoItemSelectedLabel;
+        private System.Windows.Forms.Label searchClipNameLabel;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ColumnHeader columnClip;
     }
 }

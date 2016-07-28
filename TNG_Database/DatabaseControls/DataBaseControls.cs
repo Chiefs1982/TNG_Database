@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.IO;
 using System.ComponentModel;
 using System.Windows.Forms;
+using TNG_Database.Values;
 
 namespace TNG_Database
 {
@@ -227,24 +228,28 @@ namespace TNG_Database
         /// </summary>
         /// <param name="input">The input.</param>
         /// <returns></returns>
-        public List<TapeDatabaseValues> SearchAllDB(string[] input)
+        public List<SearchValues> SearchAllDB(string[] input)
         {
-            List<TapeDatabaseValues> tapeDBValues = new List<TapeDatabaseValues>();
-            //int dbCheck = 0;
+            //declare values
+            List<SearchValues> tapeDBValues = new List<SearchValues>();
+            string preQuery = "";
+            string query = "";
 
             //start new sqlite connection
             SQLiteConnection searchConnection = new SQLiteConnection(database);
             searchConnection.Open();
             SQLiteCommand command = new SQLiteCommand(searchConnection);
 
-            //start of query pieces
-            string preQuery = "select * from TapeDatabase";
+            //start of query pieces for tape Database
+            preQuery = "select * from TapeDatabase";
 
             //add query based on number of entries
             if(input.Length > 0)
             {
+                //iterate over all entries
                 for (int i = 0; i < input.Length; i++)
                 {
+                    //set up value for each input
                     string term = "@input" + i;
                     string value = "'%" + input[i].ToLower() + "%'";
                     if (i == 0)
@@ -257,9 +262,8 @@ namespace TNG_Database
                         preQuery += " or";
                     }
 
-                    //preQuery += String.Format(" project_name LIKE {0}",value);
+                    //set up the regex part of the query
                     preQuery += String.Format(" project_id like {0} or project_name like {0} or tape_name like {0} or tape_tags like {0} or date_shot like {0} or master_archive like {0}",value);
-                    //command.Parameters.AddWithValue(term,value);
                     Console.WriteLine(input[i].ToLower());
                 }
             }
@@ -267,7 +271,7 @@ namespace TNG_Database
             Console.WriteLine(preQuery);
 
             //Set assembled query to final query
-            string query = preQuery;
+            query = preQuery;
             command.CommandText = query;
             Console.WriteLine("Command Text: "+command.CommandText);
             SQLiteDataReader reader = command.ExecuteReader();
@@ -277,44 +281,134 @@ namespace TNG_Database
             {
                 while (reader.Read())
                 {
-                    TapeDatabaseValues dbData = new TapeDatabaseValues(reader["tape_name"].ToString(),
-                                    reader["tape_number"].ToString(), reader["project_id"].ToString(), reader["project_name"].ToString(),
-                                    Convert.ToInt32(reader["camera"]), reader["tape_tags"].ToString(), reader["date_shot"].ToString(),
-                                    reader["master_archive"].ToString(), reader["person_entered"].ToString(), Convert.ToInt32(reader["id"]));
-                    tapeDBValues.Add(dbData);
+                    SearchValues dbData = new SearchValues();
+                    dbData.TapeName = reader["tape_name"].ToString();
+                    dbData.TapeNumber =  reader["tape_number"].ToString();
+                    dbData.ProjectID = reader["project_id"].ToString();
+                    dbData.ProjectName = reader["project_name"].ToString();
+                    dbData.Camera = reader["camera"].ToString();
+                    dbData.TapeTags = reader["tape_tags"].ToString();
+                    dbData.DateShot = reader["date_shot"].ToString();
+                    dbData.MasterArchive = reader["master_archive"].ToString();
+                    dbData.Person = reader["person_entered"].ToString();
+                    dbData.ID = Convert.ToInt32(reader["id"]);
 
-                    /*
-                    for(int i = 0;i < reader.FieldCount; i++)
-                    {
-                        dbCheck = tapeDBValues.Count;
-                        foreach(string user in input)
-                        {
-                            if (Regex.IsMatch(reader.GetValue(i).ToString(), user,RegexOptions.IgnoreCase))
-                            {
-                                Console.WriteLine(reader.GetValue(i) + " matched user input");
-                                TapeDatabaseValues dbData = new TapeDatabaseValues(reader["tape_name"].ToString(),
-                                    reader["tape_number"].ToString(),reader["project_id"].ToString(), reader["project_name"].ToString(),
-                                    Convert.ToInt32(reader["camera"]), reader["tape_tags"].ToString(), reader["date_shot"].ToString(),
-                                    reader["master_archive"].ToString(), reader["person_entered"].ToString(), Convert.ToInt32(reader["id"]));
-                                tapeDBValues.Add(dbData);
-                                break;
-                            }
-                        }
-                        if(dbCheck < tapeDBValues.Count)
-                        {
-                            break;
-                        }
-                    }
-                    */
+                    tapeDBValues.Add(dbData);
                 }
             }
-            else
+
+            //close reader for next query
+            reader.Close();
+
+            //start of query pieces for Projects
+            preQuery = "select * from Projects";
+
+            //add query based on number of entries
+            if (input.Length > 0)
             {
-                if(tapeDBValues != null)
+                //iterate over all entries
+                for (int i = 0; i < input.Length; i++)
                 {
-                    tapeDBValues.Clear();
+                    //set up value for each input
+                    string value = "'%" + input[i].ToLower() + "%'";
+                    if (i == 0)
+                    {
+                        preQuery += " where";
+                    }
+
+                    if (i > 0)
+                    {
+                        preQuery += " or";
+                    }
+
+                    //set up the regex part of the query
+                    preQuery += String.Format(" project_id like {0} or project_name like {0}", value);
+                    Console.WriteLine(input[i].ToLower());
                 }
             }
+            preQuery += " order by project_id asc";
+            Console.WriteLine(preQuery);
+
+            //Set assembled query to final query
+            query = preQuery;
+            command.CommandText = query;
+            Console.WriteLine("Command Text: " + command.CommandText);
+            reader = command.ExecuteReader();
+
+            //If there are return values then parse them and display them
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    //Add values to returned list
+                    SearchValues dbData = new SearchValues();
+                    dbData.ProjectID = reader["project_id"].ToString();
+                    dbData.ProjectName = reader["project_name"].ToString();
+                    dbData.ID = Convert.ToInt32(reader["id"]);
+
+                    tapeDBValues.Add(dbData);
+                }
+            }
+
+            //close reader for next query
+            reader.Close();
+
+            //start of query pieces for Master Archive Videos
+            preQuery = "select * from MasterArchiveVideos";
+
+            //add query based on number of entries
+            if (input.Length > 0)
+            {
+                //iterate over all entries
+                for (int i = 0; i < input.Length; i++)
+                {
+                    //set up value for each input
+                    string value = "'%" + input[i].ToLower() + "%'";
+                    if (i == 0)
+                    {
+                        preQuery += " where";
+                    }
+
+                    if (i > 0)
+                    {
+                        preQuery += " or";
+                    }
+
+                    //set up the regex part of the query
+                    preQuery += String.Format(" project_id like {0} or video_name like {0} or master_tape like {0}", value);
+                    Console.WriteLine(input[i].ToLower());
+                }
+            }
+            preQuery += " order by project_id asc";
+            Console.WriteLine(preQuery);
+
+            //Set assembled query to final query
+            query = preQuery;
+            command.CommandText = query;
+            Console.WriteLine("Command Text: " + command.CommandText);
+            reader = command.ExecuteReader();
+
+            //If there are return values then parse them and display them
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    //Add values to returned list
+                    SearchValues dbData = new SearchValues();
+                    dbData.ProjectID = reader["project_id"].ToString();
+                    dbData.ProjectName = reader["video_name"].ToString();
+                    dbData.MasterArchive = reader["master_tape"].ToString();
+                    dbData.ClipNumber = reader["clip_number"].ToString();
+                    dbData.ID = Convert.ToInt32(reader["id"]);
+
+                    tapeDBValues.Add(dbData);
+                }
+            }
+
+            //close reader for next query
+            reader.Close();
+
+            //close connection and return final list
             searchConnection.Close();
             return tapeDBValues;
 
@@ -327,7 +421,7 @@ namespace TNG_Database
         /// <param name="importStream">Import Stream for file</param>
         /// <param name="ofd">The file returned from OpenFileDialog</param>
         /// <returns></returns>
-        public static bool AddMasterTapesFromFile(BackgroundWorker worker, Stream importStream, OpenFileDialog ofd, string masterArchive)
+        public static bool AddMasterTapesFromFile(BackgroundWorker worker, Stream importStream, OpenFileDialog ofd, string masterArchive, int media)
         {
             //List of Projectvalues to send to database
             List<MasterTapeValues> projectList = new List<MasterTapeValues>();
@@ -387,12 +481,27 @@ namespace TNG_Database
                 //connect to DB
                 SQLiteConnection masterConnection = new SQLiteConnection(database);
                 masterConnection.Open();
+                
+                //Insert new Archive media if it doesn't already exist
+                string masterQuery = "insert or ignore into MasterList(master_archive, master_media) values (@m_archive, @m_media)";
+                SQLiteCommand command = new SQLiteCommand(masterQuery, masterConnection);
+                command.Parameters.AddWithValue("@m_archive", masterArchive);
+                command.Parameters.AddWithValue("@m_media", media);
+
+                if(command.ExecuteNonQuery() == 1)
+                {
+                    Console.WriteLine("Master List insert Success");
+                }else
+                {
+                    Console.WriteLine("Master List insert Failed");
+                }
 
                 //iterate over each entry and insert it into the DB
                 foreach (MasterTapeValues master in projectList)
                 {
                     string query = "insert into MasterArchiveVideos (project_id, video_name, master_tape, clip_number) values (@projectID, @videoName, @masterTape, @clipNumber)";
-                    SQLiteCommand command = new SQLiteCommand(query, masterConnection);
+                    command = new SQLiteCommand(query, masterConnection);
+                    command.Parameters.Clear();
                     command.Parameters.AddWithValue("@projectID", master.ProjectID);
                     command.Parameters.AddWithValue("@videoName", master.VideoName);
                     command.Parameters.AddWithValue("@masterTape", master.MasterTape);

@@ -8,14 +8,15 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TNG_Database.Values;
 
 namespace TNG_Database
 {
     public partial class SearchTapeForm : Form
     {
         TNG_Database.MainForm mainForm;
-        private List<TapeDatabaseValues> searchList;
-        private TapeDatabaseValues searchValues;
+        private List<SearchValues> searchList;
+        private SearchValues searchValues;
         private List<string> tagList = new List<string>();
 
         //CommonMethod reference
@@ -55,30 +56,47 @@ namespace TNG_Database
         /// <param name="input">The input.</param>
         private void PopulateSearchList(string input)
         {
+            //Clear List items and returned list
             searchListView.Items.Clear();
             if(searchList != null)
             {
                 searchList.Clear();
             }
 
+            //Clear all display labels
             ClearLabels();
 
+            //Search all databases for entries
             DataBaseControls dbControl = new DataBaseControls();
             searchList = dbControl.SearchAllDB(input.Split(' ')); ;
 
+            //Check if no entries where returned
             if (searchList.Count.Equals(0))
             {
+                //No entries returned
                 updateStatus.UpdateStatusBar("No Items Mathced Search, Try Again", mainForm);
                 Console.WriteLine("Nothing found");
             }else
             {
-                foreach(TapeDatabaseValues values in searchList)
+                //Entries returned, iterate over all entries and add them to list
+                foreach(SearchValues values in searchList)
                 {
-                    searchListView.Items.Add(new ListViewItem(new string[] { values.ProjectId, values.ProjectName, values.TapeName, values.TapeNumber, commonMethod.GetCameraName(values.Camera), values.TapeTags, values.DateShot, values.MasterArchive, values.PersonEntered })).Tag = Convert.ToInt32(values.ID);
+                    searchListView.Items.Add(new ListViewItem(new string[] { values.ProjectID, values.ProjectName, values.TapeName, values.TapeNumber, values.Camera, values.TapeTags, values.DateShot, values.MasterArchive, values.Person, values.ClipNumber })).Tag = Convert.ToInt32(values.ID);
                 }
                 updateStatus.UpdateStatusBar(searchList.Count + " item entries found", mainForm);
                 Console.WriteLine(searchList.Count + " item entries found");
             }
+            //set entries returned number
+            if(searchList.Count != 1)
+            {
+                searchTotalFoundLabel.Text = "( " + searchList.Count + " ) entries found";
+            }
+            else
+            {
+                searchTotalFoundLabel.Text = "( " + searchList.Count + " ) entry found";
+            }
+            
+            //set focus to the listview
             searchListView.Focus();
         }
 
@@ -127,17 +145,18 @@ namespace TNG_Database
         /// </summary>
         private void AddListItemToValues()
         {
-            searchValues = new TapeDatabaseValues();
+            searchValues = new SearchValues();
             searchValues.ID = Convert.ToInt32(searchListView.SelectedItems[0].Tag);
-            searchValues.ProjectId = searchListView.SelectedItems[0].SubItems[0].Text;
+            searchValues.ProjectID = searchListView.SelectedItems[0].SubItems[0].Text;
             searchValues.ProjectName = searchListView.SelectedItems[0].SubItems[1].Text;
             searchValues.TapeName = searchListView.SelectedItems[0].SubItems[2].Text;
             searchValues.TapeNumber = searchListView.SelectedItems[0].SubItems[3].Text;
-            searchValues.Camera = commonMethod.GetCameraNumber(searchListView.SelectedItems[0].SubItems[4].Text);
+            searchValues.Camera = searchListView.SelectedItems[0].SubItems[4].Text;
             searchValues.TapeTags = searchListView.SelectedItems[0].SubItems[5].Text;
             searchValues.DateShot = searchListView.SelectedItems[0].SubItems[6].Text;
             searchValues.MasterArchive = searchListView.SelectedItems[0].SubItems[7].Text;
-            searchValues.PersonEntered = searchListView.SelectedItems[0].SubItems[8].Text;
+            searchValues.Person = searchListView.SelectedItems[0].SubItems[8].Text;
+            searchValues.ClipNumber = searchListView.SelectedItems[0].SubItems[9].Text;
         }
 
         /// <summary>
@@ -146,14 +165,15 @@ namespace TNG_Database
         private void AddValuesToLabels()
         {
             //load values to user can see
-            searchProjectIDLabel.Text = searchValues.ProjectId;
+            searchProjectIDLabel.Text = searchValues.ProjectID;
             searchProjectNameLabel.Text = searchValues.ProjectName;
             searchTapeNameLabel.Text = searchValues.TapeName;
             searchTapeNumberLabel.Text = searchValues.TapeNumber;
-            searchCameraLabel.Text = commonMethod.GetCameraName(searchValues.Camera);
+            searchCameraLabel.Text = searchValues.Camera;
             searchDateLabel.Text = searchValues.DateShot;
             searchMasterArchiveLabel.Text = searchValues.MasterArchive;
-            searchPersonLabel.Text = searchValues.PersonEntered;
+            searchPersonLabel.Text = searchValues.Person;
+            searchClipNameLabel.Text = searchValues.ClipNumber;
             //set to display tags
             tagList = searchValues.TapeTags.Split(',').ToList();
             DisplayTags(searchTagFlowLayoutPanel, tagList);
@@ -175,6 +195,7 @@ namespace TNG_Database
             searchDateLabel.Text = "";
             searchMasterArchiveLabel.Text = "";
             searchPersonLabel.Text = "";
+            searchClipNameLabel.Text = "";
             searchTagFlowLayoutPanel.Controls.Clear();
             tagList.Clear();
             if(searchValues != null)

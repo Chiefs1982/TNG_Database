@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TNG_Database
+namespace TNG_Database.Values
 {
     //This class holds information regarding tape info to be inserted into database
     class TapeDatabaseValues

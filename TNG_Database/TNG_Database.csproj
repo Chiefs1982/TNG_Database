@@ -70,24 +70,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddToDatabase.cs" />
-    <Compile Include="CommonMethods.cs" />
-    <Compile Include="DataBaseControls.cs" />
+    <Compile Include="DatabaseControls\AddToDatabase.cs" />
+    <Compile Include="Helpers\CommonMethods.cs" />
+    <Compile Include="DatabaseControls\DataBaseControls.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="MasterArchiveVideoValues.cs" />
+    <Compile Include="Values\MasterArchiveVideoValues.cs" />
     <Compile Include="MasterListForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MasterListForm.Designer.cs">
       <DependentUpon>MasterListForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="MasterListValues.cs" />
-    <Compile Include="MasterTapeValues.cs" />
+    <Compile Include="Values\MasterListValues.cs" />
+    <Compile Include="Values\MasterTapeValues.cs" />
     <Compile Include="PeopleForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -95,7 +95,7 @@
       <DependentUpon>PeopleForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
-    <Compile Include="ProjectValues.cs" />
+    <Compile Include="Values\ProjectValues.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SearchTapeForm.cs">
       <SubType>Form</SubType>
@@ -103,8 +103,8 @@
     <Compile Include="SearchTapeForm.Designer.cs">
       <DependentUpon>SearchTapeForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="TapeDatabaseValues.cs" />
-    <Compile Include="IUpdateApplicationStatus.cs" />
+    <Compile Include="Values\TapeDatabaseValues.cs" />
+    <Compile Include="Interfaces\IUpdateApplicationStatus.cs" />
     <Compile Include="TapeListForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -116,8 +116,9 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>TNG_Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="UpdateStatus.cs" />
-    <Compile Include="UserValues.cs" />
+    <Compile Include="Helpers\UpdateStatus.cs" />
+    <Compile Include="Values\UserValues.cs" />
+    <Compile Include="Values\SearchValues.cs" />
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
