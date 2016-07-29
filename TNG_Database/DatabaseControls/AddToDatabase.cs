@@ -117,42 +117,67 @@ namespace TNG_Database
                 SQLiteConnection tapeDBConnection = new SQLiteConnection(tngDatabaseConnectString);
                 tapeDBConnection.Open();
 
-                //create sqlite query to check to see if Tape Database project and tape number is already in database
-                string sql = "select count(*) from TapeDatabase where project_id = @project_id and id = @id ";
-                SQLiteCommand command = new SQLiteCommand(sql, tapeDBConnection);
-                command.Parameters.AddWithValue("@project_id", tapeValues.ProjectId);
-                command.Parameters.AddWithValue("@id", tapeValues.ID);
-                Int32 check = Convert.ToInt32(command.ExecuteScalar());
-
-                //If query returned has any rows of data then Master List is already in database
-                if (check == 1)
+                //Insert entry to delete into Deleted Tape Database DB
+                SQLiteCommand command = new SQLiteCommand(tapeDBConnection);
+                command.CommandText = "insert into DeleteTapeDatabase (tape_name, tape_number, project_id, project_name, camera, tape_tags, date_shot, master_archive, person_entered) values (@tapeName, @tapeNumber, @projectID, @projectNumber, @camera, @tapeTags, @dateShot, @masterArchive, @personEntered)";
+                command.Parameters.AddWithValue("@tapeName", tapeValues.TapeName);
+                command.Parameters.AddWithValue("@tapeNumber", tapeValues.TapeNumber);
+                command.Parameters.AddWithValue("@projectID", tapeValues.ProjectId);
+                command.Parameters.AddWithValue("@projectNumber", tapeValues.ProjectName);
+                command.Parameters.AddWithValue("@camera", tapeValues.Camera);
+                command.Parameters.AddWithValue("@tapeTags", tapeValues.TapeTags);
+                command.Parameters.AddWithValue("@dateShot", tapeValues.DateShot);
+                command.Parameters.AddWithValue("@masterArchive", tapeValues.MasterArchive);
+                command.Parameters.AddWithValue("@personEntered", tapeValues.PersonEntered);
+                
+                //check if entry was added
+                if(command.ExecuteNonQuery() == 1)
                 {
-                    //Entry double checked to match
-                    command.CommandText = "delete from TapeDatabase where id = @id and project_id = @project_id";
+                    //Entry added
+                    //create sqlite query to check to see if Tape Database project and tape number is already in database
+                    command.Parameters.Clear();
+                    command.CommandText = "select count(*) from TapeDatabase where project_id = @project_id and id = @id ";
+                    command.Parameters.AddWithValue("@project_id", tapeValues.ProjectId);
+                    command.Parameters.AddWithValue("@id", tapeValues.ID);
+                    Int32 check = Convert.ToInt32(command.ExecuteScalar());
 
-                    //Execute query and check to see that row was deleted
-                    if (command.ExecuteNonQuery() == 1)
+                    //If query returned has any rows of data then Master List is already in database
+                    if (check == 1)
                     {
-                        //row was deleted
-                        Console.WriteLine("TapeDatabase Row was deleted");
-                        CloseConnections(command, tapeDBConnection);
-                        return true;
+                        //Entry double checked to match
+                        command.CommandText = "delete from TapeDatabase where id = @id and project_id = @project_id";
+
+                        //Execute query and check to see that row was deleted
+                        if (command.ExecuteNonQuery() == 1)
+                        {
+                            //row was deleted
+                            Console.WriteLine("TapeDatabase Row was deleted");
+                            CloseConnections(command, tapeDBConnection);
+                            return true;
+                        }
+                        else
+                        {
+                            //row was not deleted
+                            Console.WriteLine("TapeDatabase Row was not deleted");
+                            CloseConnections(command, tapeDBConnection);
+                            return false;
+                        }
                     }
                     else
                     {
-                        //row was not deleted
-                        Console.WriteLine("TapeDatabase Row was not deleted");
+                        //There is no entry to delete
+                        Console.WriteLine("No Entry to delete");
                         CloseConnections(command, tapeDBConnection);
                         return false;
                     }
-                }
-                else
+                }else
                 {
-                    //There is no entry to delete
-                    Console.WriteLine("No Entry to delete");
+                    //Add deletion item to deleted db not valid
                     CloseConnections(command, tapeDBConnection);
                     return false;
                 }
+
+                
             }
             catch (Exception e)
             {
@@ -314,37 +339,53 @@ namespace TNG_Database
                 SQLiteConnection masterConnection = new SQLiteConnection(tngDatabaseConnectString);
                 masterConnection.Open();
 
-                //create sqlite query to check to see if Master list name is already in database
-                string sql = "select count(*) from MasterList where lower(master_archive) = @m_name and id = @id";
-                SQLiteCommand command = new SQLiteCommand(sql, masterConnection);
-                command.Parameters.AddWithValue("@m_name", deleteValues.MasterArchive.ToLower());
-                command.Parameters.AddWithValue("@id", deleteValues.ID);
-                Int32 check = Convert.ToInt32(command.ExecuteScalar());
+                //Insert deleted entry into Deleted Master List DB
+                SQLiteCommand command = new SQLiteCommand(masterConnection);
+                command.CommandText = "insert into DeleteMasterList (master_archive, master_media) values (@m_newName, @m_newMedia)";
+                command.Parameters.AddWithValue("@m_newName", deleteValues.MasterArchive);
+                command.Parameters.AddWithValue("@m_newMedia", deleteValues.MasterMedia);
 
-                //If query returned has any rows of data then Master List is already in database
-                if (check == 1)
+                if(command.ExecuteNonQuery() == 1)
                 {
-                    //There is an entry to be deleted
-                    command.CommandText = "delete from MasterList where id = @id and lower(master_archive) = @m_name";
+                    //create sqlite query to check to see if Master list name is already in database
+                    command.Parameters.Clear();
+                    command.CommandText = "select count(*) from MasterList where lower(master_archive) = @m_name and id = @id";
+                    command.Parameters.AddWithValue("@m_name", deleteValues.MasterArchive.ToLower());
+                    command.Parameters.AddWithValue("@id", deleteValues.ID);
+                    Int32 check = Convert.ToInt32(command.ExecuteScalar());
 
-                    if (command.ExecuteNonQuery() == 1)
+                    //If query returned has any rows of data then Master List is already in database
+                    if (check == 1)
                     {
-                        //Entry deleted
-                        Console.WriteLine("Entry deleted successfully");
-                        CloseConnections(command, masterConnection);
-                        return true;
+                        //There is an entry to be deleted
+                        command.CommandText = "delete from MasterList where id = @id and lower(master_archive) = @m_name";
+
+                        if (command.ExecuteNonQuery() == 1)
+                        {
+                            //Entry deleted
+                            Console.WriteLine("Entry deleted successfully");
+                            CloseConnections(command, masterConnection);
+                            return true;
+                        }
+                        else
+                        {
+                            //Entry was not deleted
+                            Console.WriteLine("Entry was not deleted successfully");
+                            CloseConnections(command, masterConnection);
+                            return false;
+                        }
                     }
                     else
                     {
-                        //Entry was not deleted
-                        Console.WriteLine("Entry was not deleted successfully");
+                        //There is no entry for the selected item to delete
+                        Console.WriteLine("No Entry that matches name to be deleted");
                         CloseConnections(command, masterConnection);
                         return false;
                     }
                 }
                 else
                 {
-                    //There is no entry for the selected item to delete
+                    //Could not insert into Delete DB
                     Console.WriteLine("No Entry that matches name to be deleted");
                     CloseConnections(command, masterConnection);
                     return false;
@@ -451,11 +492,13 @@ namespace TNG_Database
                     //execute adding person query and check to see person was added
                     if (command.ExecuteNonQuery() == 1)
                     {
+                        //add successful
                         CloseConnections(command, personConnection);
                         return true;
                     }
                     else
                     {
+                        //add failed
                         CloseConnections(command, personConnection);
                         return false;
                     }
@@ -463,6 +506,7 @@ namespace TNG_Database
                 }
                 else
                 {
+                    //entry already exists
                     CloseConnections(command, personConnection);
                     return false;
                 }
@@ -488,9 +532,14 @@ namespace TNG_Database
                 SQLiteConnection personConnection = new SQLiteConnection(tngDatabaseConnectString);
                 personConnection.Open();
 
+                //Insert entry to be deleted into Deleted Person DB
+                SQLiteCommand command = new SQLiteCommand(personConnection);
+                command.CommandText = "insert into DeletePeople (person_name) values (@add_name)";
+                command.Parameters.AddWithValue("@add_name", name);
+
                 //create sqlite query to check to see if name is already in database
-                string sql = "select count(*) from People where person_name = @p_name";
-                SQLiteCommand command = new SQLiteCommand(sql, personConnection);
+                command.Parameters.Clear();
+                command.CommandText = "select count(*) from People where person_name = @p_name";
                 command.Parameters.AddWithValue("@p_name", name);
                 Int32 check = Convert.ToInt32(command.ExecuteScalar());
 
@@ -593,11 +642,337 @@ namespace TNG_Database
         //----------------------------------------------
         #region Project Database
 
+        /// <summary>
+        /// Adds Entry to the projects database.
+        /// </summary>
+        /// <param name="project">project to add</param>
+        /// <returns>true if successful, false if it failed</returns>
         public bool AddProjects(ProjectValues project)
         {
-            return false;
+            try
+            {
+                SQLiteConnection projectsConnection = new SQLiteConnection(tngDatabaseConnectString);
+                projectsConnection.Open();
+
+
+                SQLiteCommand command = new SQLiteCommand(projectsConnection);
+
+                //create sqlite query to check to see if name is already in database
+                command.CommandText = "select count(*) from Projects where project_id = @p_id";
+                command.Parameters.AddWithValue("@p_id", project.ProjectID);
+                Int32 check = Convert.ToInt32(command.ExecuteScalar());
+
+                if (check == 0)
+                {
+                    //No matches, add entry to DB
+                    command.Parameters.Clear();
+                    command.CommandText = "insert or ignore into Projects(project_id, project_name) values(@p_id, @p_name)";
+                    command.Parameters.AddWithValue("@p_id", project.ProjectID);
+                    command.Parameters.AddWithValue("@p_name", project.Projectname);
+
+                    if (command.ExecuteNonQuery() == 1)
+                    {
+                        //insert successful
+                        CloseConnections(command, projectsConnection);
+                        return true;
+                    }
+                    else
+                    {
+                        //insert failed
+                        CloseConnections(command, projectsConnection);
+                        return false;
+                    }
+                }else
+                {
+                    //Already an entry, abort
+                    CloseConnections(command, projectsConnection);
+                    return false;
+                }
+            }
+            catch(SQLiteException e)
+            {
+                MainForm.LogFile("SQLite Error: " + e.Message);
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Deletes Entry in the projects database.
+        /// </summary>
+        /// <param name="project">project to delete</param>
+        /// <returns>true if successful, false if it failed</returns>
+        public bool DeleteProjects(ProjectValues project)
+        {
+            try
+            {
+                SQLiteConnection projectsConnection = new SQLiteConnection(tngDatabaseConnectString);
+                projectsConnection.Open();
+                SQLiteCommand command = new SQLiteCommand(projectsConnection);
+
+                //Insert delete entry into Delete Projects DB
+                command.CommandText = "insert DeleteProjects(project_id, project_name) values(@p_id, @p_name)";
+                command.Parameters.AddWithValue("@p_id", project.ProjectID);
+                command.Parameters.AddWithValue("@p_name", project.Projectname);
+
+                if(command.ExecuteNonQuery() == 1)
+                {
+                    //Insert into Deletion DB successful
+                    //Delete from Projects DB
+                    command.Parameters.Clear();
+                    command.CommandText = "delete from Projects where id = @id";
+                    command.Parameters.AddWithValue("@id", project.ID);
+
+                    if(command.ExecuteNonQuery() == 1)
+                    {
+                        //deletion successful
+                        CloseConnections(command, projectsConnection);
+                        return true;
+                    }
+                    else
+                    {
+                        //deletion failed
+                        CloseConnections(command, projectsConnection);
+                        return false;
+                    }
+                }else
+                {
+                    //Insert into Deletion DB failed
+                    CloseConnections(command, projectsConnection);
+                    return false;
+                }
+            }
+            catch(SQLiteException e)
+            {
+                MainForm.LogFile("SQLite Error: " + e.Message);
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Edits Entry in the projects database.
+        /// </summary>
+        /// <param name="oldProject">old project to update</param>
+        /// <param name="newProject">new values to update the old</param>
+        /// <returns>true if successful, false if it failed</returns>
+        public bool EditProject(ProjectValues oldProject, ProjectValues newProject)
+        {
+            try
+            {
+                SQLiteConnection projectsConnection = new SQLiteConnection(tngDatabaseConnectString);
+                projectsConnection.Open();
+                SQLiteCommand command = new SQLiteCommand(projectsConnection);
+
+                command.CommandText = "select count(*) from Projects where id = @id";
+                command.Parameters.AddWithValue("@id", oldProject.ID);
+                
+
+                if(Convert.ToInt32(command.ExecuteScalar()) == 1)
+                {
+                    //entry found to update
+                    command.Parameters.Clear();
+                    command.CommandText = "update Projects set project_id = @p_id, project_name = @p_name where id = @id";
+                    command.Parameters.AddWithValue("@p_id", newProject.ProjectID);
+                    command.Parameters.AddWithValue("@p_name", newProject.Projectname);
+                    command.Parameters.AddWithValue("@id", oldProject.ID);
+
+                    if(command.ExecuteNonQuery() == 1)
+                    {
+                        //Update successful
+                        CloseConnections(command, projectsConnection);
+                        return true;
+                    }else
+                    {
+                        //Update Failed
+                        CloseConnections(command, projectsConnection);
+                        return false;
+                    }
+                }else
+                {
+                    //No entry found to update
+                    CloseConnections(command, projectsConnection);
+                    return false;
+                }
+            }
+            catch(SQLiteException e)
+            {
+                MainForm.LogFile("SQLite Error: " + e.Message);
+                return false;
+            }
         }
 
         #endregion
+        //--------------------------------------------------------
+        //---MASTER ARCHIVE VIDEO ADD, DELETE, UPDATE DATABASE----
+        //--------------------------------------------------------
+        #region MasterArchiveVideos Database
+
+        /// <summary>
+        /// Adds Entry to the MasterArchiveVideos database.
+        /// </summary>
+        /// <param name="video">video to add</param>
+        /// <returns>true if successful, false if it failed</returns>
+        public bool AddMasterArchiveVideo(MasterArchiveVideoValues video)
+        {
+            try
+            {
+                SQLiteConnection videoConnection = new SQLiteConnection(tngDatabaseConnectString);
+                videoConnection.Open();
+                SQLiteCommand command = new SQLiteCommand(videoConnection);
+
+                //create sqlite query to check to see if name is already in database
+                command.CommandText = "select count(*) from MasterArchiveVideos where video_name = @v_name";
+                command.Parameters.AddWithValue("@v_name", video.VideoName);
+                Int32 check = Convert.ToInt32(command.ExecuteScalar());
+
+                if (check == 0)
+                {
+                    //No matches, add entry to DB
+                    command.Parameters.Clear();
+                    command.CommandText = "insert into MasterArchiveVideos(project_id, video_name, master_tape, clip_number) values(@p_id, @v_name, @m_tape, @c_number)";
+                    command.Parameters.AddWithValue("@p_id", video.ProjectId);
+                    command.Parameters.AddWithValue("@v_name", video.VideoName);
+                    command.Parameters.AddWithValue("@m_tape", video.MasterTape);
+                    command.Parameters.AddWithValue("@c_number", video.ClipNumber);
+
+                    if (command.ExecuteNonQuery() == 1)
+                    {
+                        //insert successful
+                        CloseConnections(command, videoConnection);
+                        return true;
+                    }
+                    else
+                    {
+                        //insert failed
+                        CloseConnections(command, videoConnection);
+                        return false;
+                    }
+                }
+                else
+                {
+                    //Already an entry, abort
+                    CloseConnections(command, videoConnection);
+                    return false;
+                }
+            }
+            catch (SQLiteException e)
+            {
+                MainForm.LogFile("SQLite Error: " + e.Message);
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Deletes Entry in the projects database.
+        /// </summary>
+        /// <param name="project">project to delete</param>
+        /// <returns>true if successful, false if it failed</returns>
+        public bool DeleteMasterArchiveVideo(MasterArchiveVideoValues video)
+        {
+            try
+            {
+                SQLiteConnection videoConnection = new SQLiteConnection(tngDatabaseConnectString);
+                videoConnection.Open();
+                SQLiteCommand command = new SQLiteCommand(videoConnection);
+
+                //Insert delete entry into Delete Projects DB
+                command.CommandText = "insert into DeleteMasterArchiveVideos(project_id, video_name, master_tape, clip_number) values(@p_id, @v_name, @m_tape, @c_number)";
+                command.Parameters.AddWithValue("@p_id", video.ProjectId);
+                command.Parameters.AddWithValue("@v_name", video.VideoName);
+                command.Parameters.AddWithValue("@m_tape", video.MasterTape);
+                command.Parameters.AddWithValue("@c_number", video.ClipNumber);
+
+                if (command.ExecuteNonQuery() == 1)
+                {
+                    //Insert into Deletion DB successful
+                    //Delete from Projects DB
+                    command.Parameters.Clear();
+                    command.CommandText = "delete from MasterArchiveVideos where id = @id";
+                    command.Parameters.AddWithValue("@id", video.ID);
+
+                    if (command.ExecuteNonQuery() == 1)
+                    {
+                        //deletion successful
+                        CloseConnections(command, videoConnection);
+                        return true;
+                    }
+                    else
+                    {
+                        //deletion failed
+                        CloseConnections(command, videoConnection);
+                        return false;
+                    }
+                }
+                else
+                {
+                    //Insert into Deletion DB failed
+                    CloseConnections(command, videoConnection);
+                    return false;
+                }
+            }
+            catch (SQLiteException e)
+            {
+                MainForm.LogFile("SQLite Error: " + e.Message);
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Edits Entry in the projects database.
+        /// </summary>
+        /// <param name="oldVideo">old project to update</param>
+        /// <param name="newVideo">new values to update the old</param>
+        /// <returns>true if successful, false if it failed</returns>
+        public bool EditMasterArchiveVideo(MasterArchiveVideoValues oldVideo, MasterArchiveVideoValues newVideo)
+        {
+            try
+            {
+                SQLiteConnection videoConnection = new SQLiteConnection(tngDatabaseConnectString);
+                videoConnection.Open();
+                SQLiteCommand command = new SQLiteCommand(videoConnection);
+
+                command.CommandText = "select count(*) from MasterArchiveVideos where id = @id";
+                command.Parameters.AddWithValue("@id", oldVideo.ID);
+
+
+                if (Convert.ToInt32(command.ExecuteScalar()) == 1)
+                {
+                    //entry found to update
+                    command.Parameters.Clear();
+                    command.CommandText = "update MasterArchiveVideos set project_id = @p_id, video_name = @v_name, master_tape = @m_tape, clip_number = @c_number where id = @id";
+                    command.Parameters.AddWithValue("@p_id", newVideo.ProjectId);
+                    command.Parameters.AddWithValue("@v_name", newVideo.VideoName);
+                    command.Parameters.AddWithValue("@m_tape", newVideo.MasterTape);
+                    command.Parameters.AddWithValue("@c_number", newVideo.ClipNumber);
+                    command.Parameters.AddWithValue("@id", oldVideo.ID);
+
+                    if (command.ExecuteNonQuery() == 1)
+                    {
+                        //Update successful
+                        CloseConnections(command, videoConnection);
+                        return true;
+                    }
+                    else
+                    {
+                        //Update Failed
+                        CloseConnections(command, videoConnection);
+                        return false;
+                    }
+                }
+                else
+                {
+                    //No entry found to update
+                    CloseConnections(command, videoConnection);
+                    return false;
+                }
+            }
+            catch (SQLiteException e)
+            {
+                MainForm.LogFile("SQLite Error: " + e.Message);
+                return false;
+            }
+        }
+
+        #endregion
+
     }
 }

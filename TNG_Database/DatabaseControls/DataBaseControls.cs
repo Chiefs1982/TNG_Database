@@ -209,6 +209,9 @@ namespace TNG_Database
             {
                 masterList = new List<string>(reader.StepCount);
 
+                //Add blank MasterList
+                masterList.Add("");
+
                 while (reader.Read())
                 {
                     masterList.Add(reader["master_archive"].ToString());

@@ -5,26 +5,29 @@ Ideas:
 	= Tape Database
 	= Master List Database
 	= People Database
+	= Projects Database
+	= MasterArchiveVideos Database
 * change all camera dropdowns to get list from one source
 * REWORK CHECKING DB's FOR INFO, USE SCALERS FOR CHECKING
 * View tags as seperated objects instead of just seeing the comma, but save them as they are csv
 * Take tag list and make comma seperated string
 * Create import of xdcam master csv files
 * Create a MasterArchiveVideos for all videos that have been mastered
+* Create a table that keeps deleted info
+* Create a more extensive search to include all databases
+* Be able to create a new listing for a master archive
+* Dropdown for person that entered in new listings
 
 
 - Create Layout for Input, Search, Edit, Stats (possibly in tabs or upper bar)
 - Create way to select Master from dropdown and display all projects on media
-- Be able to create a new listing for a master archive
-- Dropdown for person that entered in new listings
 - Status updated at the bottom of the window as interface
 - Add a backup feature that backs everything up every month or so
 - Add export and import feature for database
-- Change functions from database to return an array or list or hash
 - Be able to save the old databases and recall them if needed
-- Create a more extensive search to include all databases
-- Create a table that keeps deleted info
-- Create an INNER JOIN for tapes and projects
+- Add project add, update, delete form
+- Add MasterArchiveVideo add, update, delete form
+- Automatically add project name to project numbers from the projects DB
 - PUT TRY STATEMENTS AROUND SQL stuff
 
 

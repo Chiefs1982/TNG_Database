@@ -65,20 +65,30 @@ namespace TNG_Database
                    "`project_id` TEXT, `project_name` TEXT, `camera` INTEGER, `tape_tags` TEXT," +
                    "`date_shot` TEXT, `master_archive` TEXT, `person_entered` TEXT)";
 
-                string createMasterTable = "CREATE TABLE `MasterList` (`id`	INTEGER PRIMARY KEY AUTOINCREMENT," +
+                string createMasterTable = "CREATE TABLE `MasterList` (`id` INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "`master_archive` TEXT UNIQUE, `master_media` INTEGER)";
 
                 string createPeopleTable = "CREATE TABLE `People` (`id`	INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "`person_name` TEXT UNIQUE)";
 
                 string createProjectsTable = "CREATE TABLE `Projects` (`id`	INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "`project_id` TEXT, `project_name` TEXT)";
+                    "`project_id` TEXT UNIQUE, `project_name` TEXT)";
 
                 string createMasterArchiveVideos = "CREATE TABLE `MasterArchiveVideos` (`id` INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "`project_id` TEXT, `video_name` TEXT, `master_tape` TEXT, `clip_number` TEXT)";
 
+                string createDeleteTapeDatabase = "CREATE TABLE `DeleteTapeDatabase` (`id` INTEGER PRIMARY KEY AUTOINCREMENT,`tape_name` TEXT,`tape_number` TEXT,`project_id` TEXT, `project_name` TEXT, `camera` INTEGER, `tape_tags` TEXT,`date_shot` TEXT, `master_archive` TEXT, `person_entered` TEXT)";
+
+                string createDeleteProjects = "CREATE TABLE `DeleteProjects` (`id` INTEGER PRIMARY KEY AUTOINCREMENT,`project_id` TEXT, `project_name` TEXT)";
+
+                string createDeletePeople = "CREATE TABLE `DeletePeople` (`id` INTEGER PRIMARY KEY AUTOINCREMENT,`person_name` TEXT UNIQUE)";
+
+                string createDeleteMasterList = "CREATE TABLE `DeleteMasterList` (`id` INTEGER PRIMARY KEY AUTOINCREMENT,`master_archive` TEXT UNIQUE, `master_media` INTEGER)";
+
+                string createDeleteMasterArchiveVideos = "CREATE TABLE `DeleteMasterArchiveVideos` (`id` INTEGER PRIMARY KEY AUTOINCREMENT,`project_id` TEXT,`video_name` TEXT,`master_tape` TEXT,`clip_number` TEXT)";
+
                 //put all create strings into string array
-                string[] allCreates = { createTapeTable, createMasterTable, createPeopleTable, createProjectsTable,createMasterArchiveVideos };
+                string[] allCreates = { createTapeTable, createMasterTable, createPeopleTable, createProjectsTable, createMasterArchiveVideos, createDeleteTapeDatabase, createDeleteProjects, createDeletePeople, createDeleteMasterList, createDeleteMasterArchiveVideos };
                 
                 //try to write tables to database
                 try
