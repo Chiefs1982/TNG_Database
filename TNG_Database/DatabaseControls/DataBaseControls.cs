@@ -114,6 +114,40 @@ namespace TNG_Database
             return masterList;
         }
 
+        /// <summary>
+        /// Gets all project items.
+        /// </summary>
+        /// <returns></returns>
+        public static List<ProjectValues> GetAllProjectItems()
+        {
+            //List item to return
+            List<ProjectValues> values = new List<ProjectValues>();
+            ProjectValues projectValue;
+
+            //start SQLite Connection
+            SQLiteConnection projectsConnection = new SQLiteConnection(database);
+            projectsConnection.Open();
+            SQLiteCommand command = new SQLiteCommand(projectsConnection);
+
+            command.CommandText = "select * from Projects";
+            SQLiteDataReader reader = command.ExecuteReader();
+
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    projectValue = new ProjectValues(reader["project_id"].ToString(), reader["project_name"].ToString(), Convert.ToInt32(reader["id"]));
+                    values.Add(projectValue);
+
+                }
+                CloseConnections(command, projectsConnection);
+            }else
+            {
+                CloseConnections(command, projectsConnection);
+            }
+
+            return values;
+        }
         //-------------------------------------------
 
         public List<TapeDatabaseValues> GetAllTapeValues()

@@ -710,7 +710,7 @@ namespace TNG_Database
                 SQLiteCommand command = new SQLiteCommand(projectsConnection);
 
                 //Insert delete entry into Delete Projects DB
-                command.CommandText = "insert DeleteProjects(project_id, project_name) values(@p_id, @p_name)";
+                command.CommandText = "insert into DeleteProjects(project_id, project_name) values(@p_id, @p_name)";
                 command.Parameters.AddWithValue("@p_id", project.ProjectID);
                 command.Parameters.AddWithValue("@p_name", project.Projectname);
 

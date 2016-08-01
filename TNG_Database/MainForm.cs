@@ -19,6 +19,7 @@ namespace TNG_Database
         public TNG_Database.PeopleForm peopleForm;
         public TNG_Database.MasterListForm masterListForm;
         public TNG_Database.TapeListForm tapeListForm;
+        public TNG_Database.ProjectsForm projectsForm;
 
         private string connect = DataBaseControls.GetDBName();
         OpenFileDialog ofd;
@@ -174,6 +175,7 @@ namespace TNG_Database
         }
 
         //-----------------------------------
+        #region Data Toolstrip
         //Opens up people form to add, delete or update user list
         private void usersToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -219,6 +221,32 @@ namespace TNG_Database
             
         }
 
+        //Open projects data from menu
+        private void projectsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //Create new instance of form MasterListForm
+            projectsForm = new TNG_Database.ProjectsForm(this);
+
+            //close chold of mdi if there is one active
+            if (ActiveMdiChild != null) { ActiveMdiChild.Close(); }
+
+            //show Master list form and maximize it instantly
+            projectsForm.Show();
+            projectsForm.WindowState = FormWindowState.Maximized;
+        }
+
+        //Open Archive videos data from menu
+        private void archiveVideosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Updates the status bar bottom.
+        /// </summary>
+        /// <param name="update">The update.</param>
         public void UpdateStatusBarBottom(string update)
         {
             applicationStatusLabel.Text = update;
@@ -406,5 +434,7 @@ namespace TNG_Database
                 }
             }
         }
+
+        
     }
 }

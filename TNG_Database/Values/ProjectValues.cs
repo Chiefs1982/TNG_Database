@@ -23,6 +23,13 @@ namespace TNG_Database.Values
             project_name = _project_name;
         }
 
+        public void Clear()
+        {
+            id = 0;
+            project_id = "";
+            project_name = "";
+        }
+
         //------------------------------------
         //------ACCESSOR METHODS--------------
         //------------------------------------

@@ -79,19 +79,25 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Values\MasterArchiveVideoValues.cs" />
-    <Compile Include="MasterListForm.cs">
+    <Compile Include="DataForms\ProjectsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MasterListForm.Designer.cs">
+    <Compile Include="DataForms\ProjectsForm.Designer.cs">
+      <DependentUpon>ProjectsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Values\MasterArchiveVideoValues.cs" />
+    <Compile Include="DataForms\MasterListForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DataForms\MasterListForm.Designer.cs">
       <DependentUpon>MasterListForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Values\MasterListValues.cs" />
     <Compile Include="Values\MasterTapeValues.cs" />
-    <Compile Include="PeopleForm.cs">
+    <Compile Include="DataForms\PeopleForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PeopleForm.Designer.cs">
+    <Compile Include="DataForms\PeopleForm.Designer.cs">
       <DependentUpon>PeopleForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
@@ -105,10 +111,10 @@
     </Compile>
     <Compile Include="Values\TapeDatabaseValues.cs" />
     <Compile Include="Interfaces\IUpdateApplicationStatus.cs" />
-    <Compile Include="TapeListForm.cs">
+    <Compile Include="DataForms\TapeListForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TapeListForm.Designer.cs">
+    <Compile Include="DataForms\TapeListForm.Designer.cs">
       <DependentUpon>TapeListForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\TNG_Settings.Designer.cs">
@@ -119,13 +125,16 @@
     <Compile Include="Helpers\UpdateStatus.cs" />
     <Compile Include="Values\UserValues.cs" />
     <Compile Include="Values\SearchValues.cs" />
+    <EmbeddedResource Include="DataForms\ProjectsForm.resx">
+      <DependentUpon>ProjectsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MasterListForm.resx">
+    <EmbeddedResource Include="DataForms\MasterListForm.resx">
       <DependentUpon>MasterListForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PeopleForm.resx">
+    <EmbeddedResource Include="DataForms\PeopleForm.resx">
       <DependentUpon>PeopleForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -140,7 +149,7 @@
     <EmbeddedResource Include="SearchTapeForm.resx">
       <DependentUpon>SearchTapeForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="TapeListForm.resx">
+    <EmbeddedResource Include="DataForms\TapeListForm.resx">
       <DependentUpon>TapeListForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />

@@ -44,6 +44,7 @@
             this.tapeListDeleteEntryButton = new System.Windows.Forms.Button();
             this.defaultTapeGroupbox = new System.Windows.Forms.GroupBox();
             this.defaultItemsPanel = new System.Windows.Forms.Panel();
+            this.defaultTagFlowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.defaultTapeNumberLabel = new System.Windows.Forms.Label();
             this.defaultTapeNameLabel = new System.Windows.Forms.Label();
             this.defaultMasterArchiveLabel = new System.Windows.Forms.Label();
@@ -85,6 +86,7 @@
             this.addProjectLabel = new System.Windows.Forms.Label();
             this.addIDLabel = new System.Windows.Forms.Label();
             this.deleteTapeGroupbox = new System.Windows.Forms.GroupBox();
+            this.deleteTagFlowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.deleteTapeDeleteButton = new System.Windows.Forms.Button();
             this.deleteTapeCancelButton = new System.Windows.Forms.Button();
             this.deleteTapeNumberLabel = new System.Windows.Forms.Label();
@@ -105,6 +107,7 @@
             this.deleteProjectIDLabel = new System.Windows.Forms.Label();
             this.deleteProjectNameLabel = new System.Windows.Forms.Label();
             this.editTapeGroupbox = new System.Windows.Forms.GroupBox();
+            this.editTageFlowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.editTapeEditButton = new System.Windows.Forms.Button();
             this.editTapeCancelButton = new System.Windows.Forms.Button();
             this.editPersonDropdown = new System.Windows.Forms.ComboBox();
@@ -125,9 +128,6 @@
             this.editProjectNameTextbox = new System.Windows.Forms.TextBox();
             this.label24 = new System.Windows.Forms.Label();
             this.label25 = new System.Windows.Forms.Label();
-            this.editTageFlowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
-            this.deleteTagFlowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
-            this.defaultTagFlowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.defaultTapeGroupbox.SuspendLayout();
             this.defaultItemsPanel.SuspendLayout();
             this.addTapeGroupbox.SuspendLayout();
@@ -273,6 +273,15 @@
             this.defaultItemsPanel.Name = "defaultItemsPanel";
             this.defaultItemsPanel.Size = new System.Drawing.Size(619, 155);
             this.defaultItemsPanel.TabIndex = 45;
+            // 
+            // defaultTagFlowLayoutPanel
+            // 
+            this.defaultTagFlowLayoutPanel.AutoScroll = true;
+            this.defaultTagFlowLayoutPanel.AutoScrollMinSize = new System.Drawing.Size(340, 86);
+            this.defaultTagFlowLayoutPanel.Location = new System.Drawing.Point(276, 62);
+            this.defaultTagFlowLayoutPanel.Name = "defaultTagFlowLayoutPanel";
+            this.defaultTagFlowLayoutPanel.Size = new System.Drawing.Size(340, 86);
+            this.defaultTagFlowLayoutPanel.TabIndex = 45;
             // 
             // defaultTapeNumberLabel
             // 
@@ -686,6 +695,13 @@
             this.deleteTapeGroupbox.TabStop = false;
             this.deleteTapeGroupbox.Text = "Delete Tape Entry";
             // 
+            // deleteTagFlowLayoutPanel
+            // 
+            this.deleteTagFlowLayoutPanel.Location = new System.Drawing.Point(370, 82);
+            this.deleteTagFlowLayoutPanel.Name = "deleteTagFlowLayoutPanel";
+            this.deleteTagFlowLayoutPanel.Size = new System.Drawing.Size(350, 66);
+            this.deleteTagFlowLayoutPanel.TabIndex = 29;
+            // 
             // deleteTapeDeleteButton
             // 
             this.deleteTapeDeleteButton.Location = new System.Drawing.Point(549, 154);
@@ -882,12 +898,21 @@
             this.editTapeGroupbox.Controls.Add(this.editProjectNameTextbox);
             this.editTapeGroupbox.Controls.Add(this.label24);
             this.editTapeGroupbox.Controls.Add(this.label25);
-            this.editTapeGroupbox.Location = new System.Drawing.Point(744, 132);
+            this.editTapeGroupbox.Location = new System.Drawing.Point(753, 116);
             this.editTapeGroupbox.Name = "editTapeGroupbox";
             this.editTapeGroupbox.Size = new System.Drawing.Size(726, 195);
             this.editTapeGroupbox.TabIndex = 7;
             this.editTapeGroupbox.TabStop = false;
             this.editTapeGroupbox.Text = "Edit Tape Entry";
+            // 
+            // editTageFlowLayoutPanel
+            // 
+            this.editTageFlowLayoutPanel.AutoScroll = true;
+            this.editTageFlowLayoutPanel.AutoScrollMinSize = new System.Drawing.Size(415, 48);
+            this.editTageFlowLayoutPanel.Location = new System.Drawing.Point(290, 102);
+            this.editTageFlowLayoutPanel.Name = "editTageFlowLayoutPanel";
+            this.editTageFlowLayoutPanel.Size = new System.Drawing.Size(415, 48);
+            this.editTageFlowLayoutPanel.TabIndex = 20;
             // 
             // editTapeEditButton
             // 
@@ -1076,31 +1101,6 @@
             this.label25.Size = new System.Drawing.Size(57, 13);
             this.label25.TabIndex = 0;
             this.label25.Text = "Project ID:";
-            // 
-            // editTageFlowLayoutPanel
-            // 
-            this.editTageFlowLayoutPanel.AutoScroll = true;
-            this.editTageFlowLayoutPanel.AutoScrollMinSize = new System.Drawing.Size(415, 48);
-            this.editTageFlowLayoutPanel.Location = new System.Drawing.Point(290, 102);
-            this.editTageFlowLayoutPanel.Name = "editTageFlowLayoutPanel";
-            this.editTageFlowLayoutPanel.Size = new System.Drawing.Size(415, 48);
-            this.editTageFlowLayoutPanel.TabIndex = 20;
-            // 
-            // deleteTagFlowLayoutPanel
-            // 
-            this.deleteTagFlowLayoutPanel.Location = new System.Drawing.Point(370, 82);
-            this.deleteTagFlowLayoutPanel.Name = "deleteTagFlowLayoutPanel";
-            this.deleteTagFlowLayoutPanel.Size = new System.Drawing.Size(350, 66);
-            this.deleteTagFlowLayoutPanel.TabIndex = 29;
-            // 
-            // defaultTagFlowLayoutPanel
-            // 
-            this.defaultTagFlowLayoutPanel.AutoScroll = true;
-            this.defaultTagFlowLayoutPanel.AutoScrollMinSize = new System.Drawing.Size(340, 86);
-            this.defaultTagFlowLayoutPanel.Location = new System.Drawing.Point(276, 62);
-            this.defaultTagFlowLayoutPanel.Name = "defaultTagFlowLayoutPanel";
-            this.defaultTagFlowLayoutPanel.Size = new System.Drawing.Size(340, 86);
-            this.defaultTagFlowLayoutPanel.TabIndex = 45;
             // 
             // TapeListForm
             // 
