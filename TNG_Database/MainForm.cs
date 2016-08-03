@@ -20,6 +20,7 @@ namespace TNG_Database
         public TNG_Database.MasterListForm masterListForm;
         public TNG_Database.TapeListForm tapeListForm;
         public TNG_Database.ProjectsForm projectsForm;
+        public TNG_Database.MasterArchiveVideosForm masterArchiveForm;
 
         private string connect = DataBaseControls.GetDBName();
         OpenFileDialog ofd;
@@ -238,7 +239,15 @@ namespace TNG_Database
         //Open Archive videos data from menu
         private void archiveVideosToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            //Create new instance of form MasterListForm
+            masterArchiveForm = new TNG_Database.MasterArchiveVideosForm(this);
 
+            //close chold of mdi if there is one active
+            if (ActiveMdiChild != null) { ActiveMdiChild.Close(); }
+
+            //show Master list form and maximize it instantly
+            masterArchiveForm.Show();
+            masterArchiveForm.WindowState = FormWindowState.Maximized;
         }
 
         #endregion

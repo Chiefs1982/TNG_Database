@@ -71,6 +71,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DatabaseControls\AddToDatabase.cs" />
+    <Compile Include="DatabaseControls\DeletedValuesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DatabaseControls\DeletedValuesForm.Designer.cs">
+      <DependentUpon>DeletedValuesForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Helpers\CommonMethods.cs" />
     <Compile Include="DatabaseControls\DataBaseControls.cs" />
     <Compile Include="MainForm.cs">
@@ -84,6 +90,12 @@
     </Compile>
     <Compile Include="DataForms\ProjectsForm.Designer.cs">
       <DependentUpon>ProjectsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DataForms\MasterArchiveVideosForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DataForms\MasterArchiveVideosForm.Designer.cs">
+      <DependentUpon>MasterArchiveVideosForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Values\MasterArchiveVideoValues.cs" />
     <Compile Include="DataForms\MasterListForm.cs">
@@ -125,6 +137,12 @@
     <Compile Include="Helpers\UpdateStatus.cs" />
     <Compile Include="Values\UserValues.cs" />
     <Compile Include="Values\SearchValues.cs" />
+    <EmbeddedResource Include="DatabaseControls\DeletedValuesForm.resx">
+      <DependentUpon>DeletedValuesForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataForms\MasterArchiveVideosForm.resx">
+      <DependentUpon>MasterArchiveVideosForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="DataForms\ProjectsForm.resx">
       <DependentUpon>ProjectsForm.cs</DependentUpon>
     </EmbeddedResource>

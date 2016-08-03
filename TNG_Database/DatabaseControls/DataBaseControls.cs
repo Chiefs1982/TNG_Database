@@ -29,8 +29,8 @@ namespace TNG_Database
         /// <param name="connection">Active connection of SQLiteConnection</param>
         private static void CloseConnections(SQLiteCommand command, SQLiteConnection connection)
         {
-            if(command != null) { command.Dispose(); }
-            if(connection != null) { connection.Close(); connection.Dispose(); }
+            if (command != null) { command.Dispose(); }
+            if (connection != null) { connection.Close(); connection.Dispose(); }
             GC.Collect();
         }
 
@@ -50,7 +50,7 @@ namespace TNG_Database
             string query = "select person_name from People";
             SQLiteCommand queryCommand = new SQLiteCommand(query, populateConnection);
             SQLiteDataReader reader = queryCommand.ExecuteReader();
-            
+
             //check to make sure query returned a string
             if (reader.HasRows)
             {
@@ -104,7 +104,7 @@ namespace TNG_Database
                 {
                     masterList.Add(new MasterListValues(reader["master_archive"].ToString(), Convert.ToInt32(reader["master_media"]), Convert.ToInt32(reader["id"])));
                 }
-            }else
+            } else
             {
                 masterList = new List<MasterListValues>(1);
                 masterList.Add(new MasterListValues("Nothing in database", 2));
@@ -129,7 +129,7 @@ namespace TNG_Database
             projectsConnection.Open();
             SQLiteCommand command = new SQLiteCommand(projectsConnection);
 
-            command.CommandText = "select * from Projects";
+            command.CommandText = "select * from Projects order by project_id asc";
             SQLiteDataReader reader = command.ExecuteReader();
 
             if (reader.HasRows)
@@ -141,7 +141,7 @@ namespace TNG_Database
 
                 }
                 CloseConnections(command, projectsConnection);
-            }else
+            } else
             {
                 CloseConnections(command, projectsConnection);
             }
@@ -150,6 +150,10 @@ namespace TNG_Database
         }
         //-------------------------------------------
 
+        /// <summary>
+        /// Gets all tape values.
+        /// </summary>
+        /// <returns></returns>
         public List<TapeDatabaseValues> GetAllTapeValues()
         {
             List<TapeDatabaseValues> tapeList;
@@ -186,12 +190,58 @@ namespace TNG_Database
             return tapeList;
         }
 
+        /// <summary>
+        /// Gets all archive video values.
+        /// </summary>
+        /// <returns></returns>
+        public static List<MasterTapeValues> GetAllArchiveVideoValues()
+        {
+            //declare values
+            List<MasterTapeValues> mList = new List<MasterTapeValues>();
+            MasterTapeValues value;
+
+            try
+            {
+                //establish connection
+                SQLiteConnection archiveConnection = new SQLiteConnection(database);
+                archiveConnection.Open();
+                //new command
+                SQLiteCommand command = new SQLiteCommand(archiveConnection);
+                //add query
+                command.CommandText = "select * from MasterArchiveVideos order by project_id asc";
+
+                SQLiteDataReader reader = command.ExecuteReader();
+
+                if (reader.HasRows)
+                {
+                    //data has been returned
+                    while (reader.Read())
+                    {
+                        value = new MasterTapeValues(reader["project_id"].ToString(), reader["video_name"].ToString(), reader["master_tape"].ToString(), reader["clip_number"].ToString(), Convert.ToInt32(reader["id"]));
+                        mList.Add(value);
+                    }
+                    CloseConnections(command, archiveConnection);
+                }
+                else
+                {
+                    //returned nothing
+                    CloseConnections(command, archiveConnection);
+                }
+
+                
+            }catch(SQLiteException e)
+            {
+                MainForm.LogFile("SQLite Error: " + e.Message);
+            }
+            return mList;
+        }
+
         //----------------------------------------------        
         /// <summary>
         /// Gets the person list for people dropdowns.
         /// </summary>
         /// <returns></returns>
-        public string[] GetPersonListForDropdown()
+        public static string[] GetPersonListForDropdown()
         {
             List<string> personList;
 
@@ -227,7 +277,7 @@ namespace TNG_Database
         /// Gets the master list for master tape dropdowns.
         /// </summary>
         /// <returns></returns>
-        public string[] GetMasterListForDropdown()
+        public static string[] GetMasterListForDropdown()
         {
             List<string> masterList;
 
@@ -698,6 +748,46 @@ namespace TNG_Database
             }
 
 
+        }
+
+        public static string GetProjectNameFromNumber(string projectID)
+        {
+            string projectName = "";
+
+            try
+            {
+                SQLiteConnection projectConnection = new SQLiteConnection(database);
+                projectConnection.Open();
+
+                SQLiteCommand command = new SQLiteCommand(projectConnection);
+
+                command.CommandText = "select project_name from Projects where project_id = @p_id limit 1";
+                command.Parameters.AddWithValue("@p_id", projectID);
+                SQLiteDataReader reader = command.ExecuteReader();
+
+                if (reader.HasRows)
+                {
+                    //data returned
+                    while (reader.Read())
+                    {
+                        projectName = reader["project_name"].ToString();
+                    }
+                }else
+                {
+                    //nothing returned
+                    projectName = null;
+                }
+
+                CloseConnections(command, projectConnection);
+
+            }
+            catch (SQLiteException e)
+            {
+                MainForm.LogFile("SQLite Error: " + e.Message);
+            }
+
+            return projectName;
+            
         }
     }
 }

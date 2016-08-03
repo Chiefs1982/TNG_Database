@@ -12,7 +12,7 @@ namespace TNG_Database.Values
         private string project_id;
         private string video_name;
         private string master_tape;
-        private int clip_number;
+        private string clip_number;
 
         //For Default no values constructor
         public MasterArchiveVideoValues()
@@ -21,7 +21,7 @@ namespace TNG_Database.Values
         }
 
 
-        public MasterArchiveVideoValues(string projectID, string videoName, string masterTape, int clipNumber, int _id = 0)
+        public MasterArchiveVideoValues(string projectID, string videoName, string masterTape, string clipNumber, int _id = 0)
         {
             id = _id;
             project_id = projectID;
@@ -35,7 +35,7 @@ namespace TNG_Database.Values
             id = 0;
             project_id = null;
             video_name = null;
-            clip_number = 0;
+            clip_number = null;
         }
 
         //Getters & Setters
@@ -63,7 +63,7 @@ namespace TNG_Database.Values
             set { project_id = value; }
         }
 
-        public int ClipNumber
+        public string ClipNumber
         {
             get { return clip_number; }
             set { clip_number = value; }

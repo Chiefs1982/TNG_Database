@@ -111,32 +111,35 @@ namespace TNG_Database
             //clear panel
             gbPanel.Controls.Clear();
 
-            //iterate over all items in list and add them to the panel
-            for (int i = 0; i < tagList.Count(); i++)
+            if(tagList.Count > 0 && !tagList[0].Equals(""))
             {
-                //create Picturebox variable
+                //iterate over all items in list and add them to the panel
+                for (int i = 0; i < tagList.Count(); i++)
+                {
+                    //create Picturebox variable
 
 
-                //Create FLP for individual tags, set properties
-                FlowLayoutPanel flp = new FlowLayoutPanel();
-                flp.AutoSize = true;
-                flp.BackColor = Color.FromArgb(77, 77, 76);
-                flp.ForeColor = Color.White;
-                flp.Margin = new Padding(5, 1, 5, 1);
-                flp.Padding = new Padding(2);
+                    //Create FLP for individual tags, set properties
+                    FlowLayoutPanel flp = new FlowLayoutPanel();
+                    flp.AutoSize = true;
+                    flp.BackColor = Color.FromArgb(77, 77, 76);
+                    flp.ForeColor = Color.White;
+                    flp.Margin = new Padding(5, 1, 5, 1);
+                    flp.Padding = new Padding(2);
 
-                //add Label of the tag and set properties
-                Label addTagLabel = new Label();
-                addTagLabel.Text = tagList[i].ToString();
-                addTagLabel.Margin = new Padding(5, 0, 2, 0);
-                addTagLabel.AutoSize = true;
-                addTagLabel.Tag = i; //tag set to value of the index
+                    //add Label of the tag and set properties
+                    Label addTagLabel = new Label();
+                    addTagLabel.Text = tagList[i].ToString();
+                    addTagLabel.Margin = new Padding(5, 0, 2, 0);
+                    addTagLabel.AutoSize = true;
+                    addTagLabel.Tag = i; //tag set to value of the index
 
-                //add label to the FLP
-                flp.Controls.Add(addTagLabel);
-                
-                //add the FLP to the larger FLP to display tags as seperate items
-                gbPanel.Controls.Add(flp);
+                    //add label to the FLP
+                    flp.Controls.Add(addTagLabel);
+
+                    //add the FLP to the larger FLP to display tags as seperate items
+                    gbPanel.Controls.Add(flp);
+                }
             }
         }
 

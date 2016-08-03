@@ -64,6 +64,7 @@
             this.defaultProjectNameLabel = new System.Windows.Forms.Label();
             this.defaultNoItemSelectedLabel = new System.Windows.Forms.Label();
             this.addTapeGroupbox = new System.Windows.Forms.GroupBox();
+            this.addTapeListProjectName = new System.Windows.Forms.Label();
             this.addTagDisplayFlowLayout = new System.Windows.Forms.FlowLayoutPanel();
             this.addTapeAddButton = new System.Windows.Forms.Button();
             this.addTapeCancelButton = new System.Windows.Forms.Button();
@@ -82,7 +83,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.addTapeNumUpDown = new System.Windows.Forms.NumericUpDown();
             this.addProjectIDTextbox = new System.Windows.Forms.TextBox();
-            this.addProjectNameTextbox = new System.Windows.Forms.TextBox();
             this.addProjectLabel = new System.Windows.Forms.Label();
             this.addIDLabel = new System.Windows.Forms.Label();
             this.deleteTapeGroupbox = new System.Windows.Forms.GroupBox();
@@ -125,9 +125,9 @@
             this.label23 = new System.Windows.Forms.Label();
             this.editTapeNumberUpDown = new System.Windows.Forms.NumericUpDown();
             this.editProjectIDTextbox = new System.Windows.Forms.TextBox();
-            this.editProjectNameTextbox = new System.Windows.Forms.TextBox();
             this.label24 = new System.Windows.Forms.Label();
             this.label25 = new System.Windows.Forms.Label();
+            this.editProjectNameLabel = new System.Windows.Forms.Label();
             this.defaultTapeGroupbox.SuspendLayout();
             this.defaultItemsPanel.SuspendLayout();
             this.addTapeGroupbox.SuspendLayout();
@@ -447,6 +447,7 @@
             // 
             // addTapeGroupbox
             // 
+            this.addTapeGroupbox.Controls.Add(this.addTapeListProjectName);
             this.addTapeGroupbox.Controls.Add(this.addTagDisplayFlowLayout);
             this.addTapeGroupbox.Controls.Add(this.addTapeAddButton);
             this.addTapeGroupbox.Controls.Add(this.addTapeCancelButton);
@@ -465,15 +466,23 @@
             this.addTapeGroupbox.Controls.Add(this.label1);
             this.addTapeGroupbox.Controls.Add(this.addTapeNumUpDown);
             this.addTapeGroupbox.Controls.Add(this.addProjectIDTextbox);
-            this.addTapeGroupbox.Controls.Add(this.addProjectNameTextbox);
             this.addTapeGroupbox.Controls.Add(this.addProjectLabel);
             this.addTapeGroupbox.Controls.Add(this.addIDLabel);
-            this.addTapeGroupbox.Location = new System.Drawing.Point(744, 333);
+            this.addTapeGroupbox.Location = new System.Drawing.Point(744, 317);
             this.addTapeGroupbox.Name = "addTapeGroupbox";
             this.addTapeGroupbox.Size = new System.Drawing.Size(726, 195);
             this.addTapeGroupbox.TabIndex = 5;
             this.addTapeGroupbox.TabStop = false;
             this.addTapeGroupbox.Text = "Add New Tape";
+            // 
+            // addTapeListProjectName
+            // 
+            this.addTapeListProjectName.AutoSize = true;
+            this.addTapeListProjectName.Location = new System.Drawing.Point(83, 53);
+            this.addTapeListProjectName.Name = "addTapeListProjectName";
+            this.addTapeListProjectName.Size = new System.Drawing.Size(73, 13);
+            this.addTapeListProjectName.TabIndex = 21;
+            this.addTapeListProjectName.Text = "Name from db";
             // 
             // addTagDisplayFlowLayout
             // 
@@ -489,7 +498,7 @@
             this.addTapeAddButton.Location = new System.Drawing.Point(549, 155);
             this.addTapeAddButton.Name = "addTapeAddButton";
             this.addTapeAddButton.Size = new System.Drawing.Size(75, 23);
-            this.addTapeAddButton.TabIndex = 19;
+            this.addTapeAddButton.TabIndex = 10;
             this.addTapeAddButton.Text = "Add";
             this.addTapeAddButton.UseVisualStyleBackColor = true;
             this.addTapeAddButton.Click += new System.EventHandler(this.addTapeAddButton_Click);
@@ -499,7 +508,7 @@
             this.addTapeCancelButton.Location = new System.Drawing.Point(630, 155);
             this.addTapeCancelButton.Name = "addTapeCancelButton";
             this.addTapeCancelButton.Size = new System.Drawing.Size(75, 23);
-            this.addTapeCancelButton.TabIndex = 18;
+            this.addTapeCancelButton.TabIndex = 11;
             this.addTapeCancelButton.Text = "Cancel";
             this.addTapeCancelButton.UseVisualStyleBackColor = true;
             this.addTapeCancelButton.Click += new System.EventHandler(this.addTapeCancelButton_Click);
@@ -510,7 +519,7 @@
             this.addTapePersonDropdown.Location = new System.Drawing.Point(86, 129);
             this.addTapePersonDropdown.Name = "addTapePersonDropdown";
             this.addTapePersonDropdown.Size = new System.Drawing.Size(198, 21);
-            this.addTapePersonDropdown.TabIndex = 17;
+            this.addTapePersonDropdown.TabIndex = 5;
             this.addTapePersonDropdown.DropDownClosed += new System.EventHandler(this.addTapePersonDropdown_DropDownClosed);
             this.addTapePersonDropdown.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.addTapePersonDropdown_KeyPress);
             // 
@@ -529,7 +538,7 @@
             this.addTapeMasterArchiveDropdown.Location = new System.Drawing.Point(86, 155);
             this.addTapeMasterArchiveDropdown.Name = "addTapeMasterArchiveDropdown";
             this.addTapeMasterArchiveDropdown.Size = new System.Drawing.Size(188, 21);
-            this.addTapeMasterArchiveDropdown.TabIndex = 15;
+            this.addTapeMasterArchiveDropdown.TabIndex = 6;
             this.addTapeMasterArchiveDropdown.DropDownClosed += new System.EventHandler(this.addTapeMasterArchiveDropdown_DropDownClosed);
             this.addTapeMasterArchiveDropdown.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.addTapeMasterArchiveDropdown_KeyPress);
             // 
@@ -550,7 +559,7 @@
             this.addDateDateTime.MinDate = new System.DateTime(1987, 1, 1, 0, 0, 0, 0);
             this.addDateDateTime.Name = "addDateDateTime";
             this.addDateDateTime.Size = new System.Drawing.Size(121, 20);
-            this.addDateDateTime.TabIndex = 13;
+            this.addDateDateTime.TabIndex = 4;
             // 
             // label5
             // 
@@ -566,7 +575,7 @@
             this.addTagsTextbox.Location = new System.Drawing.Point(290, 76);
             this.addTagsTextbox.Name = "addTagsTextbox";
             this.addTagsTextbox.Size = new System.Drawing.Size(415, 20);
-            this.addTagsTextbox.TabIndex = 11;
+            this.addTagsTextbox.TabIndex = 9;
             this.addTagsTextbox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.addTagsTextbox_KeyPress);
             // 
             // label4
@@ -584,7 +593,7 @@
             this.addCameraComboBox.Location = new System.Drawing.Point(86, 76);
             this.addCameraComboBox.Name = "addCameraComboBox";
             this.addCameraComboBox.Size = new System.Drawing.Size(121, 21);
-            this.addCameraComboBox.TabIndex = 9;
+            this.addCameraComboBox.TabIndex = 3;
             this.addCameraComboBox.DropDownClosed += new System.EventHandler(this.addCameraComboBox_DropDownClosed);
             this.addCameraComboBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.addCameraComboBox_KeyPress);
             // 
@@ -602,7 +611,7 @@
             this.addTapeNameTextbox.Location = new System.Drawing.Point(450, 50);
             this.addTapeNameTextbox.Name = "addTapeNameTextbox";
             this.addTapeNameTextbox.Size = new System.Drawing.Size(255, 20);
-            this.addTapeNameTextbox.TabIndex = 7;
+            this.addTapeNameTextbox.TabIndex = 8;
             // 
             // label2
             // 
@@ -627,7 +636,7 @@
             this.addTapeNumUpDown.Location = new System.Drawing.Point(450, 24);
             this.addTapeNumUpDown.Name = "addTapeNumUpDown";
             this.addTapeNumUpDown.Size = new System.Drawing.Size(65, 20);
-            this.addTapeNumUpDown.TabIndex = 4;
+            this.addTapeNumUpDown.TabIndex = 7;
             this.addTapeNumUpDown.Value = new decimal(new int[] {
             1,
             0,
@@ -637,16 +646,10 @@
             // addProjectIDTextbox
             // 
             this.addProjectIDTextbox.Location = new System.Drawing.Point(86, 23);
+            this.addProjectIDTextbox.MaxLength = 6;
             this.addProjectIDTextbox.Name = "addProjectIDTextbox";
             this.addProjectIDTextbox.Size = new System.Drawing.Size(118, 20);
-            this.addProjectIDTextbox.TabIndex = 3;
-            // 
-            // addProjectNameTextbox
-            // 
-            this.addProjectNameTextbox.Location = new System.Drawing.Point(86, 50);
-            this.addProjectNameTextbox.Name = "addProjectNameTextbox";
-            this.addProjectNameTextbox.Size = new System.Drawing.Size(255, 20);
-            this.addProjectNameTextbox.TabIndex = 2;
+            this.addProjectIDTextbox.TabIndex = 1;
             // 
             // addProjectLabel
             // 
@@ -688,7 +691,7 @@
             this.deleteTapeGroupbox.Controls.Add(this.label10);
             this.deleteTapeGroupbox.Controls.Add(this.deleteProjectIDLabel);
             this.deleteTapeGroupbox.Controls.Add(this.deleteProjectNameLabel);
-            this.deleteTapeGroupbox.Location = new System.Drawing.Point(27, 559);
+            this.deleteTapeGroupbox.Location = new System.Drawing.Point(12, 533);
             this.deleteTapeGroupbox.Name = "deleteTapeGroupbox";
             this.deleteTapeGroupbox.Size = new System.Drawing.Size(726, 195);
             this.deleteTapeGroupbox.TabIndex = 6;
@@ -877,6 +880,7 @@
             // 
             // editTapeGroupbox
             // 
+            this.editTapeGroupbox.Controls.Add(this.editProjectNameLabel);
             this.editTapeGroupbox.Controls.Add(this.editTageFlowLayoutPanel);
             this.editTapeGroupbox.Controls.Add(this.editTapeEditButton);
             this.editTapeGroupbox.Controls.Add(this.editTapeCancelButton);
@@ -895,10 +899,9 @@
             this.editTapeGroupbox.Controls.Add(this.label23);
             this.editTapeGroupbox.Controls.Add(this.editTapeNumberUpDown);
             this.editTapeGroupbox.Controls.Add(this.editProjectIDTextbox);
-            this.editTapeGroupbox.Controls.Add(this.editProjectNameTextbox);
             this.editTapeGroupbox.Controls.Add(this.label24);
             this.editTapeGroupbox.Controls.Add(this.label25);
-            this.editTapeGroupbox.Location = new System.Drawing.Point(753, 116);
+            this.editTapeGroupbox.Location = new System.Drawing.Point(744, 116);
             this.editTapeGroupbox.Name = "editTapeGroupbox";
             this.editTapeGroupbox.Size = new System.Drawing.Size(726, 195);
             this.editTapeGroupbox.TabIndex = 7;
@@ -919,7 +922,7 @@
             this.editTapeEditButton.Location = new System.Drawing.Point(549, 155);
             this.editTapeEditButton.Name = "editTapeEditButton";
             this.editTapeEditButton.Size = new System.Drawing.Size(75, 23);
-            this.editTapeEditButton.TabIndex = 19;
+            this.editTapeEditButton.TabIndex = 11;
             this.editTapeEditButton.Text = "Edit";
             this.editTapeEditButton.UseVisualStyleBackColor = true;
             this.editTapeEditButton.Click += new System.EventHandler(this.editTapeEditButton_Click);
@@ -929,7 +932,7 @@
             this.editTapeCancelButton.Location = new System.Drawing.Point(630, 155);
             this.editTapeCancelButton.Name = "editTapeCancelButton";
             this.editTapeCancelButton.Size = new System.Drawing.Size(75, 23);
-            this.editTapeCancelButton.TabIndex = 18;
+            this.editTapeCancelButton.TabIndex = 12;
             this.editTapeCancelButton.Text = "Cancel";
             this.editTapeCancelButton.UseVisualStyleBackColor = true;
             this.editTapeCancelButton.Click += new System.EventHandler(this.editTapeCancelButton_Click);
@@ -940,7 +943,7 @@
             this.editPersonDropdown.Location = new System.Drawing.Point(86, 129);
             this.editPersonDropdown.Name = "editPersonDropdown";
             this.editPersonDropdown.Size = new System.Drawing.Size(198, 21);
-            this.editPersonDropdown.TabIndex = 17;
+            this.editPersonDropdown.TabIndex = 5;
             this.editPersonDropdown.DropDownClosed += new System.EventHandler(this.editPersonDropdown_DropDownClosed);
             this.editPersonDropdown.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.editPersonDropdown_KeyPress);
             // 
@@ -959,7 +962,7 @@
             this.editMasterArchiveDropdown.Location = new System.Drawing.Point(86, 157);
             this.editMasterArchiveDropdown.Name = "editMasterArchiveDropdown";
             this.editMasterArchiveDropdown.Size = new System.Drawing.Size(188, 21);
-            this.editMasterArchiveDropdown.TabIndex = 15;
+            this.editMasterArchiveDropdown.TabIndex = 6;
             this.editMasterArchiveDropdown.DropDownClosed += new System.EventHandler(this.editMasterArchiveDropdown_DropDownClosed);
             this.editMasterArchiveDropdown.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.editMasterArchiveDropdown_KeyPress);
             // 
@@ -980,7 +983,7 @@
             this.editDateShotDate.MinDate = new System.DateTime(1987, 1, 1, 0, 0, 0, 0);
             this.editDateShotDate.Name = "editDateShotDate";
             this.editDateShotDate.Size = new System.Drawing.Size(121, 20);
-            this.editDateShotDate.TabIndex = 13;
+            this.editDateShotDate.TabIndex = 4;
             // 
             // label19
             // 
@@ -996,7 +999,7 @@
             this.editTagsTextbox.Location = new System.Drawing.Point(290, 76);
             this.editTagsTextbox.Name = "editTagsTextbox";
             this.editTagsTextbox.Size = new System.Drawing.Size(415, 20);
-            this.editTagsTextbox.TabIndex = 11;
+            this.editTagsTextbox.TabIndex = 10;
             this.editTagsTextbox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.editTagsTextbox_KeyPress);
             // 
             // label20
@@ -1020,7 +1023,7 @@
             this.editCameraDropdown.MaxDropDownItems = 4;
             this.editCameraDropdown.Name = "editCameraDropdown";
             this.editCameraDropdown.Size = new System.Drawing.Size(121, 21);
-            this.editCameraDropdown.TabIndex = 9;
+            this.editCameraDropdown.TabIndex = 3;
             this.editCameraDropdown.DropDownClosed += new System.EventHandler(this.editCameraDropdown_DropDownClosed);
             this.editCameraDropdown.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.editCameraDropdown_KeyPress);
             // 
@@ -1038,7 +1041,7 @@
             this.editTapeNameTextbox.Location = new System.Drawing.Point(450, 50);
             this.editTapeNameTextbox.Name = "editTapeNameTextbox";
             this.editTapeNameTextbox.Size = new System.Drawing.Size(255, 20);
-            this.editTapeNameTextbox.TabIndex = 7;
+            this.editTapeNameTextbox.TabIndex = 8;
             // 
             // label22
             // 
@@ -1063,7 +1066,7 @@
             this.editTapeNumberUpDown.Location = new System.Drawing.Point(450, 24);
             this.editTapeNumberUpDown.Name = "editTapeNumberUpDown";
             this.editTapeNumberUpDown.Size = new System.Drawing.Size(65, 20);
-            this.editTapeNumberUpDown.TabIndex = 4;
+            this.editTapeNumberUpDown.TabIndex = 7;
             this.editTapeNumberUpDown.Value = new decimal(new int[] {
             1,
             0,
@@ -1073,16 +1076,10 @@
             // editProjectIDTextbox
             // 
             this.editProjectIDTextbox.Location = new System.Drawing.Point(86, 23);
+            this.editProjectIDTextbox.MaxLength = 6;
             this.editProjectIDTextbox.Name = "editProjectIDTextbox";
             this.editProjectIDTextbox.Size = new System.Drawing.Size(118, 20);
-            this.editProjectIDTextbox.TabIndex = 3;
-            // 
-            // editProjectNameTextbox
-            // 
-            this.editProjectNameTextbox.Location = new System.Drawing.Point(86, 50);
-            this.editProjectNameTextbox.Name = "editProjectNameTextbox";
-            this.editProjectNameTextbox.Size = new System.Drawing.Size(255, 20);
-            this.editProjectNameTextbox.TabIndex = 2;
+            this.editProjectIDTextbox.TabIndex = 1;
             // 
             // label24
             // 
@@ -1101,6 +1098,15 @@
             this.label25.Size = new System.Drawing.Size(57, 13);
             this.label25.TabIndex = 0;
             this.label25.Text = "Project ID:";
+            // 
+            // editProjectNameLabel
+            // 
+            this.editProjectNameLabel.AutoSize = true;
+            this.editProjectNameLabel.Location = new System.Drawing.Point(83, 53);
+            this.editProjectNameLabel.Name = "editProjectNameLabel";
+            this.editProjectNameLabel.Size = new System.Drawing.Size(69, 13);
+            this.editProjectNameLabel.TabIndex = 21;
+            this.editProjectNameLabel.Text = "Project name";
             // 
             // TapeListForm
             // 
@@ -1166,7 +1172,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.NumericUpDown addTapeNumUpDown;
         private System.Windows.Forms.TextBox addProjectIDTextbox;
-        private System.Windows.Forms.TextBox addProjectNameTextbox;
         private System.Windows.Forms.Label addProjectLabel;
         private System.Windows.Forms.Label addIDLabel;
         private System.Windows.Forms.ComboBox addTapePersonDropdown;
@@ -1212,7 +1217,6 @@
         private System.Windows.Forms.Label label23;
         private System.Windows.Forms.NumericUpDown editTapeNumberUpDown;
         private System.Windows.Forms.TextBox editProjectIDTextbox;
-        private System.Windows.Forms.TextBox editProjectNameTextbox;
         private System.Windows.Forms.Label label24;
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.Panel defaultItemsPanel;
@@ -1240,5 +1244,7 @@
         private System.Windows.Forms.FlowLayoutPanel editTageFlowLayoutPanel;
         private System.Windows.Forms.FlowLayoutPanel deleteTagFlowLayoutPanel;
         private System.Windows.Forms.FlowLayoutPanel defaultTagFlowLayoutPanel;
+        private System.Windows.Forms.Label addTapeListProjectName;
+        private System.Windows.Forms.Label editProjectNameLabel;
     }
 }

@@ -27,6 +27,16 @@ namespace TNG_Database.Values
             clip_number = _clip_number;
         }
 
+        //Clear MasterTapeValues
+        public void Clear()
+        {
+            id = 0;
+            project_id = null;
+            video_name = null;
+            master_tape = null;
+            clip_number = null;
+        }
+
         //------------------------------------
         //------ACCESSOR METHODS--------------
         //------------------------------------

@@ -68,13 +68,15 @@ namespace TNG_Database
 
             //Attach all add textboxes to an event
             addProjectIDTextbox.TextChanged += addTextBoxes_TextChanged;
-            addProjectNameTextbox.TextChanged += addTextBoxes_TextChanged;
             addTapeNameTextbox.TextChanged += addTextBoxes_TextChanged;
             addTagsTextbox.TextChanged += addTextBoxes_TextChanged;
 
+            //Project ID lost focus
+            addProjectIDTextbox.LostFocus += AddProjectIDTextbox_LostFocus;
+            editProjectIDTextbox.LostFocus += EditProjectIDTextbox_LostFocus;
+
             //Attach all edit textboxes to an event
             editProjectIDTextbox.TextChanged += editTextBoxes_TextChanged;
-            editProjectNameTextbox.TextChanged += editTextBoxes_TextChanged;
             editTapeNameTextbox.TextChanged += editTextBoxes_TextChanged;
             editTagsTextbox.TextChanged += editTextBoxes_TextChanged;
 
@@ -91,6 +93,10 @@ namespace TNG_Database
         }
 
         
+
+
+
+
         //-------------------------------------------
         //------------CLASS METHODS------------------
         //-------------------------------------------
@@ -240,10 +246,9 @@ namespace TNG_Database
         /// </summary>
         private void LoadDropdowns()
         {
-            DataBaseControls dbControls = new DataBaseControls();
             //Set up method in Control Database to get person and master list to populate dropdowns
-            string[] people = dbControls.GetPersonListForDropdown();
-            string[] masterTapes = dbControls.GetMasterListForDropdown();
+            string[] people = DataBaseControls.GetPersonListForDropdown();
+            string[] masterTapes = DataBaseControls.GetMasterListForDropdown();
             string[] cameraDropdowns = commonMethod.CameraDropdownItems();
 
             //load values into camera dropdowns
@@ -263,7 +268,7 @@ namespace TNG_Database
         private void ClearAddControls()
         {
             addProjectIDTextbox.Clear();
-            addProjectNameTextbox.Clear();
+            addTapeListProjectName.Text = "";
             addTapeNameTextbox.Clear();
             addTagsTextbox.Clear();
             addTapeNumUpDown.Value = 1;
@@ -280,7 +285,7 @@ namespace TNG_Database
         private void ClearEditControls()
         {
             editProjectIDTextbox.Clear();
-            editProjectNameTextbox.Clear();
+            editProjectNameLabel.Text = "";
             editTapeNameTextbox.Clear();
             editTagsTextbox.Clear();
             editTapeNumberUpDown.Value = 1;
@@ -445,7 +450,7 @@ namespace TNG_Database
 
             LoadTapeValuesFromList();
             editProjectIDTextbox.Text = tapeValues.ProjectId;
-            editProjectNameTextbox.Text = tapeValues.ProjectName;
+            editProjectNameLabel.Text = tapeValues.ProjectName;
             editTapeNameTextbox.Text = tapeValues.TapeName;
             editTapeNumberUpDown.Text = tapeValues.TapeNumber;
             editCameraDropdown.SelectedIndex = commonMethod.GetCameraDropdownIndex(commonMethod.GetCameraName(tapeValues.Camera));
@@ -488,14 +493,21 @@ namespace TNG_Database
         private void addTapeAddButton_Click(object sender, EventArgs e)
         {
             //check to make sure that all info is entered
-            if(addProjectIDTextbox.Text.Length > 0 && addProjectNameTextbox.Text.Length > 0
+            if(addProjectIDTextbox.Text.Length > 0
                 && addTapeNameTextbox.Text.Length > 0 && addTagList.Count > 0
                 && addTapeNumUpDown.Value > 0 && addCameraComboBox.Text.Length > 0
-                && addTapeMasterArchiveDropdown.Text.Length > 0 && addTapePersonDropdown.Text.Length > 0)
+                && addTapePersonDropdown.Text.Length > 0)
             {
                 //load tape values to add to database
                 tapeValues.ProjectId = addProjectIDTextbox.Text;
-                tapeValues.ProjectName = addProjectNameTextbox.Text;
+                if(addTapeListProjectName.Text.Length > 0)
+                {
+                    tapeValues.ProjectName = addTapeListProjectName.Text;
+                }else
+                {
+                    tapeValues.ProjectName = addTapeNameTextbox.Text;
+                }
+                
                 tapeValues.TapeName = addTapeNameTextbox.Text;
                 tapeValues.TapeNumber = addTapeNumUpDown.Value.ToString();
                 tapeValues.Camera = commonMethod.GetCameraNumber(addCameraComboBox.Text);
@@ -574,10 +586,19 @@ namespace TNG_Database
         private void editTapeEditButton_Click(object sender, EventArgs e)
         {
             AddToDatabase editDB = new AddToDatabase();
+            string projectNameEdit = "";
+
+            if(editProjectNameLabel.Text.Length > 0)
+            {
+                projectNameEdit = editProjectNameLabel.Text;
+            }else
+            {
+                projectNameEdit = editTapeNameTextbox.Text;
+            }
 
             //Create new TapeDatabaseValues for edited entry
             TapeDatabaseValues newTapeValues = new TapeDatabaseValues(
-                editTapeNameTextbox.Text,editTapeNumberUpDown.Value.ToString(),editProjectIDTextbox.Text,editProjectNameTextbox.Text,
+                editTapeNameTextbox.Text,editTapeNumberUpDown.Value.ToString(),editProjectIDTextbox.Text, projectNameEdit,
                 commonMethod.GetCameraNumber(editCameraDropdown.Text),String.Join(",",editTagList),commonMethod.ConvertDateFromDropdownForDB(editDateShotDate.Value),
                 editMasterArchiveDropdown.Text,editPersonDropdown.Text);
 
@@ -745,7 +766,7 @@ namespace TNG_Database
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void addTextBoxes_TextChanged(object sender, EventArgs e)
         {
-            if(addProjectIDTextbox.Text.Length > 0 && addProjectNameTextbox.Text.Length >0 && addTapeNameTextbox.Text.Length > 0 && addTagList.Count > 0)
+            if(addProjectIDTextbox.Text.Length > 0 && addTapeNameTextbox.Text.Length > 0 && addTagList.Count > 0)
             {
                 addTapeAddButton.Enabled = true;
             }else
@@ -761,7 +782,7 @@ namespace TNG_Database
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void editTextBoxes_TextChanged(object sender, EventArgs e)
         {
-            if (editProjectIDTextbox.Text.Length > 0 && editProjectNameTextbox.Text.Length > 0 && editTapeNameTextbox.Text.Length > 0 && editTagList.Count > 0)
+            if (editProjectIDTextbox.Text.Length > 0 && editTapeNameTextbox.Text.Length > 0 && editTagList.Count > 0)
             {
                 editTapeEditButton.Enabled = true;
             }
@@ -770,7 +791,43 @@ namespace TNG_Database
                 editTapeEditButton.Enabled = false;
             }
         }
-        
+
+        //Project label lost Focus
+        private void AddProjectIDTextbox_LostFocus(object sender, EventArgs e)
+        {
+            if(addProjectIDTextbox.Text.Length > 0)
+            {
+                string projectName = DataBaseControls.GetProjectNameFromNumber(addProjectIDTextbox.Text);
+                if(projectName != null)
+                {
+                    //A value was returned
+                    addTapeListProjectName.Text = projectName;
+                }else
+                {
+                    //no value was returned set Name to Tape Name Value
+                    addTapeListProjectName.Text = "";
+                }
+            }
+        }
+
+        //Project Label lost focus
+        private void EditProjectIDTextbox_LostFocus(object sender, EventArgs e)
+        {
+            if(editProjectIDTextbox.Text.Length > 0)
+            {
+                string projectName = DataBaseControls.GetProjectNameFromNumber(editProjectIDTextbox.Text);
+                if(projectName != null)
+                {
+                    //A value was returned
+                    editProjectNameLabel.Text = projectName;
+                }else
+                {
+                    //no value was returned set Name to Tape Name Value
+                    editProjectNameLabel.Text = "";
+                }
+            }
+        }
+
         #endregion
 
 

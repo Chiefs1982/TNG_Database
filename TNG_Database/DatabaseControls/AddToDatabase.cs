@@ -39,7 +39,7 @@ namespace TNG_Database
         /// </summary>
         /// <param name="tapeDBValues">Values of new entry in TapeDatabaseValuesClass</param>
         /// <returns>Boolean of success of database operation</returns>
-        public bool AddTapeDatabase(TapeDatabaseValues tapeDBValues)
+        public bool AddTapeDatabase(TapeDatabaseValues tapeDBValues, bool reenstate = false)
         {
             try
             {
@@ -75,6 +75,22 @@ namespace TNG_Database
                     if (command.ExecuteNonQuery() == 1)
                     {
                         //Entry inserts successfully
+                        
+                        //Delete entry from deleted database
+                        if (reenstate)
+                        {
+                            command.CommandText = "delete from DeleteTapeDatabase where id = @t_id";
+                            command.Parameters.AddWithValue("@t_id", tapeDBValues.ID);
+
+                            if(command.ExecuteNonQuery() == 1)
+                            {
+                                //Deleted from deleted db success
+                            }else
+                            {
+                                //Deleted from deleted db failure
+                            }
+                        }
+
                         CloseConnections(command, tapeDBConnection);
                         return true;
                     }
@@ -84,6 +100,8 @@ namespace TNG_Database
                         CloseConnections(command, tapeDBConnection);
                         return false;
                     }
+
+                    
 
 
                 }
@@ -811,7 +829,7 @@ namespace TNG_Database
         /// </summary>
         /// <param name="video">video to add</param>
         /// <returns>true if successful, false if it failed</returns>
-        public bool AddMasterArchiveVideo(MasterArchiveVideoValues video)
+        public bool AddMasterArchiveVideo(MasterTapeValues video)
         {
             try
             {
@@ -819,7 +837,20 @@ namespace TNG_Database
                 videoConnection.Open();
                 SQLiteCommand command = new SQLiteCommand(videoConnection);
 
+                command.CommandText = "insert or ignore into MasterList(master_archive, master_media) values (@m_archive, @m_media)";
+                command.Parameters.AddWithValue("@m_archive", video.MasterTape);
+                command.Parameters.AddWithValue("@m_media", 2);
+
+                if(command.ExecuteNonQuery() == 1)
+                {
+                    Console.WriteLine("Added master list success");
+                }else
+                {
+                    Console.WriteLine("Added master list did not happen");
+                }
+
                 //create sqlite query to check to see if name is already in database
+                command.Parameters.Clear();
                 command.CommandText = "select count(*) from MasterArchiveVideos where video_name = @v_name";
                 command.Parameters.AddWithValue("@v_name", video.VideoName);
                 Int32 check = Convert.ToInt32(command.ExecuteScalar());
@@ -829,7 +860,7 @@ namespace TNG_Database
                     //No matches, add entry to DB
                     command.Parameters.Clear();
                     command.CommandText = "insert into MasterArchiveVideos(project_id, video_name, master_tape, clip_number) values(@p_id, @v_name, @m_tape, @c_number)";
-                    command.Parameters.AddWithValue("@p_id", video.ProjectId);
+                    command.Parameters.AddWithValue("@p_id", video.ProjectID);
                     command.Parameters.AddWithValue("@v_name", video.VideoName);
                     command.Parameters.AddWithValue("@m_tape", video.MasterTape);
                     command.Parameters.AddWithValue("@c_number", video.ClipNumber);
@@ -866,7 +897,7 @@ namespace TNG_Database
         /// </summary>
         /// <param name="project">project to delete</param>
         /// <returns>true if successful, false if it failed</returns>
-        public bool DeleteMasterArchiveVideo(MasterArchiveVideoValues video)
+        public bool DeleteMasterArchiveVideo(MasterTapeValues video)
         {
             try
             {
@@ -876,7 +907,7 @@ namespace TNG_Database
 
                 //Insert delete entry into Delete Projects DB
                 command.CommandText = "insert into DeleteMasterArchiveVideos(project_id, video_name, master_tape, clip_number) values(@p_id, @v_name, @m_tape, @c_number)";
-                command.Parameters.AddWithValue("@p_id", video.ProjectId);
+                command.Parameters.AddWithValue("@p_id", video.ProjectID);
                 command.Parameters.AddWithValue("@v_name", video.VideoName);
                 command.Parameters.AddWithValue("@m_tape", video.MasterTape);
                 command.Parameters.AddWithValue("@c_number", video.ClipNumber);
@@ -922,7 +953,7 @@ namespace TNG_Database
         /// <param name="oldVideo">old project to update</param>
         /// <param name="newVideo">new values to update the old</param>
         /// <returns>true if successful, false if it failed</returns>
-        public bool EditMasterArchiveVideo(MasterArchiveVideoValues oldVideo, MasterArchiveVideoValues newVideo)
+        public bool EditMasterArchiveVideo(MasterTapeValues oldVideo, MasterTapeValues newVideo)
         {
             try
             {
@@ -939,7 +970,7 @@ namespace TNG_Database
                     //entry found to update
                     command.Parameters.Clear();
                     command.CommandText = "update MasterArchiveVideos set project_id = @p_id, video_name = @v_name, master_tape = @m_tape, clip_number = @c_number where id = @id";
-                    command.Parameters.AddWithValue("@p_id", newVideo.ProjectId);
+                    command.Parameters.AddWithValue("@p_id", newVideo.ProjectID);
                     command.Parameters.AddWithValue("@v_name", newVideo.VideoName);
                     command.Parameters.AddWithValue("@m_tape", newVideo.MasterTape);
                     command.Parameters.AddWithValue("@c_number", newVideo.ClipNumber);
