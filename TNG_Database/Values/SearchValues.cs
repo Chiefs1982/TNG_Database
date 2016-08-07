@@ -19,6 +19,7 @@ namespace TNG_Database.Values
         private string masterArchive = "";
         private string person = "";
         private string clip_num = "";
+        private string filterName = "";
 
         public SearchValues(int _id = 0)
         {
@@ -38,6 +39,7 @@ namespace TNG_Database.Values
             masterArchive = "";
             person = "";
             clip_num = "";
+            filterName = "";
         }
 
         public int ID
@@ -104,6 +106,12 @@ namespace TNG_Database.Values
         {
             get { return clip_num; }
             set { clip_num = value; }
+        }
+
+        public string FilterName
+        {
+            get { return filterName; }
+            set { filterName = value; }
         }
     }
 }

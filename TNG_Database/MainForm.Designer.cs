@@ -51,14 +51,16 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.masterArchiveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.usersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.projectsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.archiveVideosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.deletedDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.windowsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.searchTapeDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.applicationStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.mainFormProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.projectsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.archiveVideosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -185,19 +187,22 @@
             // copyToolStripMenuItem
             // 
             this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(102, 22);
+            this.copyToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.copyToolStripMenuItem.Text = "Copy";
             // 
             // cutToolStripMenuItem
             // 
             this.cutToolStripMenuItem.Name = "cutToolStripMenuItem";
-            this.cutToolStripMenuItem.Size = new System.Drawing.Size(102, 22);
+            this.cutToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
+            this.cutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.cutToolStripMenuItem.Text = "Cut";
             // 
             // pasteToolStripMenuItem
             // 
             this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
-            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(102, 22);
+            this.pasteToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
+            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.pasteToolStripMenuItem.Text = "Paste";
             // 
             // dataToolStripMenuItem
@@ -208,7 +213,9 @@
             this.masterArchiveToolStripMenuItem,
             this.usersToolStripMenuItem,
             this.projectsToolStripMenuItem,
-            this.archiveVideosToolStripMenuItem});
+            this.archiveVideosToolStripMenuItem,
+            this.toolStripSeparator4,
+            this.deletedDatabaseToolStripMenuItem});
             this.dataToolStripMenuItem.Name = "dataToolStripMenuItem";
             this.dataToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
             this.dataToolStripMenuItem.Text = "Data";
@@ -216,28 +223,54 @@
             // tapeDatabaseToolStripMenuItem
             // 
             this.tapeDatabaseToolStripMenuItem.Name = "tapeDatabaseToolStripMenuItem";
-            this.tapeDatabaseToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
+            this.tapeDatabaseToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.tapeDatabaseToolStripMenuItem.Text = "Tape Database";
             this.tapeDatabaseToolStripMenuItem.Click += new System.EventHandler(this.tapeDatabaseToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(150, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(162, 6);
             // 
             // masterArchiveToolStripMenuItem
             // 
             this.masterArchiveToolStripMenuItem.Name = "masterArchiveToolStripMenuItem";
-            this.masterArchiveToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
+            this.masterArchiveToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.masterArchiveToolStripMenuItem.Text = "Master Archive";
             this.masterArchiveToolStripMenuItem.Click += new System.EventHandler(this.masterArchiveToolStripMenuItem_Click);
             // 
             // usersToolStripMenuItem
             // 
             this.usersToolStripMenuItem.Name = "usersToolStripMenuItem";
-            this.usersToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
+            this.usersToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.usersToolStripMenuItem.Text = "Users";
             this.usersToolStripMenuItem.Click += new System.EventHandler(this.usersToolStripMenuItem_Click);
+            // 
+            // projectsToolStripMenuItem
+            // 
+            this.projectsToolStripMenuItem.Name = "projectsToolStripMenuItem";
+            this.projectsToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.projectsToolStripMenuItem.Text = "Projects";
+            this.projectsToolStripMenuItem.Click += new System.EventHandler(this.projectsToolStripMenuItem_Click);
+            // 
+            // archiveVideosToolStripMenuItem
+            // 
+            this.archiveVideosToolStripMenuItem.Name = "archiveVideosToolStripMenuItem";
+            this.archiveVideosToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.archiveVideosToolStripMenuItem.Text = "Archive Videos";
+            this.archiveVideosToolStripMenuItem.Click += new System.EventHandler(this.archiveVideosToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(162, 6);
+            // 
+            // deletedDatabaseToolStripMenuItem
+            // 
+            this.deletedDatabaseToolStripMenuItem.Name = "deletedDatabaseToolStripMenuItem";
+            this.deletedDatabaseToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.deletedDatabaseToolStripMenuItem.Text = "Deleted Database";
+            this.deletedDatabaseToolStripMenuItem.Click += new System.EventHandler(this.deletedDatabaseToolStripMenuItem_Click);
             // 
             // windowsToolStripMenuItem
             // 
@@ -252,6 +285,7 @@
             this.searchTapeDatabaseToolStripMenuItem.Name = "searchTapeDatabaseToolStripMenuItem";
             this.searchTapeDatabaseToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
             this.searchTapeDatabaseToolStripMenuItem.Text = "Search Tape Database";
+            this.searchTapeDatabaseToolStripMenuItem.Click += new System.EventHandler(this.searchTapeDatabaseToolStripMenuItem_Click);
             // 
             // statusStrip1
             // 
@@ -290,20 +324,6 @@
             this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
             this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
             this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
-            // 
-            // projectsToolStripMenuItem
-            // 
-            this.projectsToolStripMenuItem.Name = "projectsToolStripMenuItem";
-            this.projectsToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
-            this.projectsToolStripMenuItem.Text = "Projects";
-            this.projectsToolStripMenuItem.Click += new System.EventHandler(this.projectsToolStripMenuItem_Click);
-            // 
-            // archiveVideosToolStripMenuItem
-            // 
-            this.archiveVideosToolStripMenuItem.Name = "archiveVideosToolStripMenuItem";
-            this.archiveVideosToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
-            this.archiveVideosToolStripMenuItem.Text = "Archive Videos";
-            this.archiveVideosToolStripMenuItem.Click += new System.EventHandler(this.archiveVideosToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -361,6 +381,8 @@
         private System.Windows.Forms.ToolStripMenuItem xDCamMasterToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem projectsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem archiveVideosToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripMenuItem deletedDatabaseToolStripMenuItem;
     }
 }
 

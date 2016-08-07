@@ -238,11 +238,6 @@
             // cameraAddMasterCombo
             // 
             this.cameraAddMasterCombo.FormattingEnabled = true;
-            this.cameraAddMasterCombo.Items.AddRange(new object[] {
-            "Cannon",
-            "XDCam",
-            "Beta",
-            "DVC"});
             this.cameraAddMasterCombo.Location = new System.Drawing.Point(24, 104);
             this.cameraAddMasterCombo.Name = "cameraAddMasterCombo";
             this.cameraAddMasterCombo.Size = new System.Drawing.Size(121, 21);
@@ -312,11 +307,6 @@
             // 
             this.editCameraNewMasterDropdown.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.editCameraNewMasterDropdown.FormattingEnabled = true;
-            this.editCameraNewMasterDropdown.Items.AddRange(new object[] {
-            "Cannon",
-            "XDCam",
-            "Beta",
-            "DVC"});
             this.editCameraNewMasterDropdown.Location = new System.Drawing.Point(24, 136);
             this.editCameraNewMasterDropdown.MaxDropDownItems = 5;
             this.editCameraNewMasterDropdown.Name = "editCameraNewMasterDropdown";

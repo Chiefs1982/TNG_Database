@@ -360,8 +360,9 @@ namespace TNG_Database
             if(addMasterListNameTextbox.Text.Length > 0)
             {
                 AddToDatabase database = new AddToDatabase();
+                sendValues = new MasterListValues(addMasterListNameTextbox.Text, commonMethod.GetCameraNumber(cameraAddMasterCombo.GetItemText(cameraAddMasterCombo.SelectedItem)));
 
-                if (database.AddMasterList(addMasterListNameTextbox.Text, commonMethod.GetCameraNumber(cameraAddMasterCombo.GetItemText(cameraAddMasterCombo.SelectedItem))))
+                if (database.AddMasterList(sendValues))
                 {
                     //Add entry success
                     updateStatus.UpdateStatusBar("New Master Tape added to database", mainform);

@@ -289,7 +289,7 @@ namespace TNG_Database
             if (addArchiveIDTextBox.Text.Length > 0 && addArchiveNameTextBox.Text.Length > 0)
             {
                 //instatiate values and database class
-                MasterTapeValues addValues = new MasterTapeValues(addArchiveIDTextBox.Text, addArchiveNameTextBox.Text, addArchiveMasterTapeComboBox.Text, Convert.ToInt32(addArchiveClipNumberTextbox.Text).ToString("000"));
+                MasterArchiveVideoValues addValues = new MasterArchiveVideoValues(addArchiveIDTextBox.Text, addArchiveNameTextBox.Text, addArchiveMasterTapeComboBox.Text, Convert.ToInt32(addArchiveClipNumberTextbox.Text).ToString("000"));
                 AddToDatabase addDB = new AddToDatabase();
 
                 //add to database and check if successful
@@ -310,7 +310,7 @@ namespace TNG_Database
                     //give listview focus
                     archiveListView.Focus();
 
-                    updateStatus.UpdateStatusBar("Project " + addValues.ProjectID + " Added to Database", mainform);
+                    updateStatus.UpdateStatusBar("Project " + addValues.ProjectId + " Added to Database", mainform);
                 }
                 else
                 {

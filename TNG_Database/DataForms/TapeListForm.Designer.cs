@@ -107,6 +107,7 @@
             this.deleteProjectIDLabel = new System.Windows.Forms.Label();
             this.deleteProjectNameLabel = new System.Windows.Forms.Label();
             this.editTapeGroupbox = new System.Windows.Forms.GroupBox();
+            this.editProjectNameLabel = new System.Windows.Forms.Label();
             this.editTageFlowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.editTapeEditButton = new System.Windows.Forms.Button();
             this.editTapeCancelButton = new System.Windows.Forms.Button();
@@ -127,7 +128,6 @@
             this.editProjectIDTextbox = new System.Windows.Forms.TextBox();
             this.label24 = new System.Windows.Forms.Label();
             this.label25 = new System.Windows.Forms.Label();
-            this.editProjectNameLabel = new System.Windows.Forms.Label();
             this.defaultTapeGroupbox.SuspendLayout();
             this.defaultItemsPanel.SuspendLayout();
             this.addTapeGroupbox.SuspendLayout();
@@ -901,12 +901,21 @@
             this.editTapeGroupbox.Controls.Add(this.editProjectIDTextbox);
             this.editTapeGroupbox.Controls.Add(this.label24);
             this.editTapeGroupbox.Controls.Add(this.label25);
-            this.editTapeGroupbox.Location = new System.Drawing.Point(744, 116);
+            this.editTapeGroupbox.Location = new System.Drawing.Point(744, 114);
             this.editTapeGroupbox.Name = "editTapeGroupbox";
             this.editTapeGroupbox.Size = new System.Drawing.Size(726, 195);
             this.editTapeGroupbox.TabIndex = 7;
             this.editTapeGroupbox.TabStop = false;
             this.editTapeGroupbox.Text = "Edit Tape Entry";
+            // 
+            // editProjectNameLabel
+            // 
+            this.editProjectNameLabel.AutoSize = true;
+            this.editProjectNameLabel.Location = new System.Drawing.Point(83, 53);
+            this.editProjectNameLabel.Name = "editProjectNameLabel";
+            this.editProjectNameLabel.Size = new System.Drawing.Size(69, 13);
+            this.editProjectNameLabel.TabIndex = 21;
+            this.editProjectNameLabel.Text = "Project name";
             // 
             // editTageFlowLayoutPanel
             // 
@@ -1014,11 +1023,6 @@
             // editCameraDropdown
             // 
             this.editCameraDropdown.FormattingEnabled = true;
-            this.editCameraDropdown.Items.AddRange(new object[] {
-            "Canon",
-            "XDCam",
-            "Beta",
-            "DVC"});
             this.editCameraDropdown.Location = new System.Drawing.Point(86, 76);
             this.editCameraDropdown.MaxDropDownItems = 4;
             this.editCameraDropdown.Name = "editCameraDropdown";
@@ -1098,15 +1102,6 @@
             this.label25.Size = new System.Drawing.Size(57, 13);
             this.label25.TabIndex = 0;
             this.label25.Text = "Project ID:";
-            // 
-            // editProjectNameLabel
-            // 
-            this.editProjectNameLabel.AutoSize = true;
-            this.editProjectNameLabel.Location = new System.Drawing.Point(83, 53);
-            this.editProjectNameLabel.Name = "editProjectNameLabel";
-            this.editProjectNameLabel.Size = new System.Drawing.Size(69, 13);
-            this.editProjectNameLabel.TabIndex = 21;
-            this.editProjectNameLabel.Text = "Project name";
             // 
             // TapeListForm
             // 

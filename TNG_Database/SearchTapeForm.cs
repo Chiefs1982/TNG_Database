@@ -14,10 +14,20 @@ namespace TNG_Database
 {
     public partial class SearchTapeForm : Form
     {
+        //enum to determin filter by results
+        enum Filter
+        {
+            All,
+            Tapes,
+            Master,
+            Projects
+        }
+
         TNG_Database.MainForm mainForm;
-        private List<SearchValues> searchList;
+        private List<SearchValues> searchList = null;
         private SearchValues searchValues;
         private List<string> tagList = new List<string>();
+        private Filter currentFilter = Filter.All;
 
         //CommonMethod reference
         CommonMethods commonMethod = CommonMethods.Instance();
@@ -37,6 +47,11 @@ namespace TNG_Database
             searchListView.HideSelection = false;
 
             updateStatus.UpdateStatusBar("Tape Database Ready to Search", mainForm);
+
+            //Load filter combo with defaults
+            searchFilterCombo.Items.AddRange(new string[] { "All","Tapes","Master Archive","Projects" });
+            searchFilterCombo.SelectedIndex = 0;
+            searchFilterCombo.Cursor = Cursors.Default;
         }
 
         public SearchTapeForm()
@@ -48,6 +63,55 @@ namespace TNG_Database
         private void InitializeCompnent()
         {
             this.components = new System.ComponentModel.Container();
+        }
+
+        /// <summary>
+        /// Gets the enum Filter value.
+        /// </summary>
+        /// <param name="filter">The filter.</param>
+        /// <returns></returns>
+        private Filter GetFilterValue(string filter)
+        {
+            switch (filter.Replace(" ","").ToLower())
+            {
+                case "all":
+                    return Filter.All;
+                case "tapes":
+                    return Filter.Tapes;
+                case "masterarchive":
+                    return Filter.Master;
+                case "projects":
+                    return Filter.Master;
+                default:
+                    return Filter.All;
+            }
+        }
+
+        /// <summary>
+        /// What to filter.
+        /// </summary>
+        /// <param name="filter">The filter.</param>
+        /// <returns></returns>
+        private void WhatToFilter(Filter filter)
+        {
+            switch (filter)
+            {
+                case Filter.All:
+                    PopulateSearchView(searchList);
+                    break;
+                case Filter.Tapes:
+                    PopulateSearchView(searchList, "tapes");
+                    break;
+                case Filter.Master:
+                    PopulateSearchView(searchList, "archive");
+                    break;
+                case Filter.Projects:
+                    PopulateSearchView(searchList, "projects");
+                    break;
+                default:
+                    PopulateSearchView(searchList);
+                    break;
+            }
         }
 
         /// <summary>
@@ -70,16 +134,18 @@ namespace TNG_Database
             DataBaseControls dbControl = new DataBaseControls();
             searchList = dbControl.SearchAllDB(input.Split(' ')); ;
 
+            //populate search view with searchlist
             //Check if no entries where returned
             if (searchList.Count.Equals(0))
             {
                 //No entries returned
                 updateStatus.UpdateStatusBar("No Items Mathced Search, Try Again", mainForm);
                 Console.WriteLine("Nothing found");
-            }else
+            }
+            else
             {
                 //Entries returned, iterate over all entries and add them to list
-                foreach(SearchValues values in searchList)
+                foreach (SearchValues values in searchList)
                 {
                     searchListView.Items.Add(new ListViewItem(new string[] { values.ProjectID, values.ProjectName, values.TapeName, values.TapeNumber, values.Camera, values.TapeTags, values.DateShot, values.MasterArchive, values.Person, values.ClipNumber })).Tag = Convert.ToInt32(values.ID);
                 }
@@ -87,7 +153,7 @@ namespace TNG_Database
                 Console.WriteLine(searchList.Count + " item entries found");
             }
             //set entries returned number
-            if(searchList.Count != 1)
+            if (searchList.Count != 1)
             {
                 searchTotalFoundLabel.Text = "( " + searchList.Count + " ) entries found";
             }
@@ -95,9 +161,48 @@ namespace TNG_Database
             {
                 searchTotalFoundLabel.Text = "( " + searchList.Count + " ) entry found";
             }
-            
+
+            searchListView.Focus();
+        }
+
+        /// <summary>
+        /// Populates the search view from filter.
+        /// </summary>
+        /// <param name="list">The list.</param>
+        /// <param name="filter">The filter.</param>
+        private void PopulateSearchView(List<SearchValues> list, string filter = "")
+        {
+            //Check if no entries where returned
+            if (list == null)
+            {
+                //No entries returned
+                updateStatus.UpdateStatusBar("Nothing to filter", mainForm);
+            }
+            else
+            {
+                searchListView.Items.Clear();
+                //Entries returned, iterate over all entries and add them to list
+                foreach (SearchValues values in list)
+                {
+                    if (values.FilterName.Equals(filter) || filter.Equals(""))
+                    {
+                        searchListView.Items.Add(new ListViewItem(new string[] { values.ProjectID, values.ProjectName, values.TapeName, values.TapeNumber, values.Camera, values.TapeTags, values.DateShot, values.MasterArchive, values.Person, values.ClipNumber })).Tag = Convert.ToInt32(values.ID);
+                    }
+                }
+            }
+
             //set focus to the listview
             searchListView.Focus();
+        }
+
+        /// <summary>
+        /// Resets the search values and filter.
+        /// </summary>
+        private void ResetSearchValuesAndFilter()
+        {
+            currentFilter = Filter.All;
+            searchList = null;
+            searchFilterCombo.SelectedIndex = 0;
         }
 
         /// <summary>
@@ -217,6 +322,7 @@ namespace TNG_Database
             {
                 if(searchTextbox.Text.Length > 0 && !searchTextbox.Text.Equals(" "))
                 {
+                    ResetSearchValuesAndFilter();
                     PopulateSearchList(searchTextbox.Text.Trim());
                 }
                 e.Handled = true;
@@ -242,8 +348,51 @@ namespace TNG_Database
         {
             if (searchTextbox.Text.Length > 0)
             {
+                ResetSearchValuesAndFilter();
                 PopulateSearchList(searchTextbox.Text);
             }
         }
+
+        #region Filter Combobox
+
+        private void searchFilterCombo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(searchList != null)
+            {
+                switch (GetFilterValue(searchFilterCombo.Text))
+                {
+                    case Filter.All:
+                        currentFilter = Filter.All;
+                        break;
+                    case Filter.Tapes:
+                        currentFilter = Filter.Tapes;
+                        break;
+                    case Filter.Master:
+                        currentFilter = Filter.Master;
+                        break;
+                    case Filter.Projects:
+                        currentFilter = Filter.Projects;
+                        break;
+                    default:
+                        currentFilter = Filter.All;
+                        break;
+                }
+                WhatToFilter(currentFilter);
+            }
+        }
+
+        private void searchFilterCombo_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void searchFilterCombo_DropDownClosed(object sender, EventArgs e)
+        {
+            searchListView.Focus();
+        }
+
+        #endregion
+
+
     }
 }

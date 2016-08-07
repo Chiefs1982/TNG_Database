@@ -35,6 +35,51 @@ namespace TNG_Database
         }
 
         /// <summary>
+        /// Gets the project name using the number in the database.
+        /// </summary>
+        /// <param name="projectID">The project identifier.</param>
+        /// <returns></returns>
+        public static string GetProjectNameFromNumber(string projectID)
+        {
+            string projectName = "";
+
+            try
+            {
+                SQLiteConnection projectConnection = new SQLiteConnection(database);
+                projectConnection.Open();
+
+                SQLiteCommand command = new SQLiteCommand(projectConnection);
+
+                command.CommandText = "select project_name from Projects where project_id = @p_id limit 1";
+                command.Parameters.AddWithValue("@p_id", projectID);
+                SQLiteDataReader reader = command.ExecuteReader();
+
+                if (reader.HasRows)
+                {
+                    //data returned
+                    while (reader.Read())
+                    {
+                        projectName = reader["project_name"].ToString();
+                    }
+                }
+                else
+                {
+                    //nothing returned
+                    projectName = null;
+                }
+
+                CloseConnections(command, projectConnection);
+
+            }
+            catch (SQLiteException e)
+            {
+                MainForm.LogFile("SQLite Error: " + e.Message);
+            }
+
+            return projectName;
+        }
+
+        /// <summary>
         /// Gets all users in database
         /// </summary>
         /// <returns>A List of strings of all users</returns>
@@ -379,6 +424,7 @@ namespace TNG_Database
                     dbData.MasterArchive = reader["master_archive"].ToString();
                     dbData.Person = reader["person_entered"].ToString();
                     dbData.ID = Convert.ToInt32(reader["id"]);
+                    dbData.FilterName = "tapes";
 
                     tapeDBValues.Add(dbData);
                 }
@@ -432,6 +478,7 @@ namespace TNG_Database
                     dbData.ProjectID = reader["project_id"].ToString();
                     dbData.ProjectName = reader["project_name"].ToString();
                     dbData.ID = Convert.ToInt32(reader["id"]);
+                    dbData.FilterName = "projects";
 
                     tapeDBValues.Add(dbData);
                 }
@@ -487,6 +534,7 @@ namespace TNG_Database
                     dbData.MasterArchive = reader["master_tape"].ToString();
                     dbData.ClipNumber = reader["clip_number"].ToString();
                     dbData.ID = Convert.ToInt32(reader["id"]);
+                    dbData.FilterName = "archive";
 
                     tapeDBValues.Add(dbData);
                 }
@@ -750,44 +798,202 @@ namespace TNG_Database
 
         }
 
-        public static string GetProjectNameFromNumber(string projectID)
+        #region Get Deleted Values
+
+        public static List<TapeDatabaseValues> GetAllDeletedTapeValues()
         {
-            string projectName = "";
+            List<TapeDatabaseValues> tapeValues = new List<TapeDatabaseValues>();
 
             try
             {
-                SQLiteConnection projectConnection = new SQLiteConnection(database);
-                projectConnection.Open();
+                //open connection
+                SQLiteConnection tapeConnection = new SQLiteConnection(database);
+                tapeConnection.Open();
+                SQLiteCommand command = new SQLiteCommand(tapeConnection);
 
-                SQLiteCommand command = new SQLiteCommand(projectConnection);
-
-                command.CommandText = "select project_name from Projects where project_id = @p_id limit 1";
-                command.Parameters.AddWithValue("@p_id", projectID);
+                //Quuery for all reasults
+                command.CommandText = "select * from DeleteTapeDatabase";
                 SQLiteDataReader reader = command.ExecuteReader();
 
                 if (reader.HasRows)
                 {
-                    //data returned
+                    //rows returned
                     while (reader.Read())
                     {
-                        projectName = reader["project_name"].ToString();
+                        //Load List and return values
+                        tapeValues.Add(new TapeDatabaseValues(reader["tape_name"].ToString(), reader["tape_number"].ToString(), reader["project_id"].ToString(), reader["project_name"].ToString(), Convert.ToInt32(reader["camera"]), reader["tape_tags"].ToString(), reader["date_shot"].ToString(), reader["master_archive"].ToString(), reader["person_entered"].ToString(), Convert.ToInt32(reader["id"])));
                     }
                 }else
                 {
-                    //nothing returned
-                    projectName = null;
+                    //no rows returned
+                    tapeValues = null;
                 }
 
-                CloseConnections(command, projectConnection);
+            }
+            catch(SQLiteException e)
+            {
+                MainForm.LogFile("SQL Error: " + e.Message);
+            }
+
+            return tapeValues;
+        }
+
+        public static List<ProjectValues> GetAllDeletedProjectValues()
+        {
+            List<ProjectValues> projectValues = new List<ProjectValues>();
+
+            try
+            {
+                //open connection
+                SQLiteConnection tapeConnection = new SQLiteConnection(database);
+                tapeConnection.Open();
+                SQLiteCommand command = new SQLiteCommand(tapeConnection);
+
+                //Quuery for all reasults
+                command.CommandText = "select * from DeleteProjects";
+                SQLiteDataReader reader = command.ExecuteReader();
+
+                if (reader.HasRows)
+                {
+                    //rows returned
+                    while (reader.Read())
+                    {
+                        //Load List and return values
+                        projectValues.Add(new ProjectValues(reader["project_id"].ToString(), reader["project_name"].ToString(), Convert.ToInt32(reader["id"])));
+                    }
+                }
+                else
+                {
+                    //no rows returned
+                    projectValues = null;
+                }
 
             }
             catch (SQLiteException e)
             {
-                MainForm.LogFile("SQLite Error: " + e.Message);
+                MainForm.LogFile("SQL Error: " + e.Message);
             }
 
-            return projectName;
-            
+            return projectValues;
         }
+
+        public static List<PeopleValues> GetAllDeletedPeople()
+        {
+            List<PeopleValues> peopleValues = new List<PeopleValues>();
+
+            try
+            {
+                //open connection
+                SQLiteConnection peopleConnection = new SQLiteConnection(database);
+                peopleConnection.Open();
+                SQLiteCommand command = new SQLiteCommand(peopleConnection);
+
+                //Quuery for all reasults
+                command.CommandText = "select * from DeletePeople";
+                SQLiteDataReader reader = command.ExecuteReader();
+
+                if (reader.HasRows)
+                {
+                    //rows returned
+                    while (reader.Read())
+                    {
+                        //Load List and return values
+                        peopleValues.Add(new PeopleValues(reader["person_name"].ToString(), Convert.ToInt32(reader["id"])));
+                    }
+                }
+                else
+                {
+                    //no rows returned
+                    peopleValues = null;
+                }
+
+            }
+            catch (SQLiteException e)
+            {
+                MainForm.LogFile("SQL Error: " + e.Message);
+            }
+
+            return peopleValues;
+        }
+
+        public static List<MasterListValues> GetAllDeletedMasterListValues()
+        {
+            List<MasterListValues> masterListValues = new List<MasterListValues>();
+
+            try
+            {
+                //open connection
+                SQLiteConnection peopleConnection = new SQLiteConnection(database);
+                peopleConnection.Open();
+                SQLiteCommand command = new SQLiteCommand(peopleConnection);
+
+                //Quuery for all reasults
+                command.CommandText = "select * from DeleteMasterList";
+                SQLiteDataReader reader = command.ExecuteReader();
+
+                if (reader.HasRows)
+                {
+                    //rows returned
+                    while (reader.Read())
+                    {
+                        //Load List and return values
+                        masterListValues.Add(new MasterListValues(reader["master_archive"].ToString(), Convert.ToInt32(reader["master_media"]), Convert.ToInt32(reader["id"])));
+                    }
+                }
+                else
+                {
+                    //no rows returned
+                    masterListValues = null;
+                }
+
+            }
+            catch (SQLiteException e)
+            {
+                MainForm.LogFile("SQL Error: " + e.Message);
+            }
+
+            return masterListValues;
+        }
+
+        public static List<MasterArchiveVideoValues> GetAllDeletedMasterArchiveValues()
+        {
+            List<MasterArchiveVideoValues> masterArchiveValues = new List<MasterArchiveVideoValues>();
+
+            try
+            {
+                //open connection
+                SQLiteConnection peopleConnection = new SQLiteConnection(database);
+                peopleConnection.Open();
+                SQLiteCommand command = new SQLiteCommand(peopleConnection);
+
+                //Quuery for all reasults
+                command.CommandText = "select * from DeleteMasterArchiveVideos";
+                SQLiteDataReader reader = command.ExecuteReader();
+
+                if (reader.HasRows)
+                {
+                    //rows returned
+                    while (reader.Read())
+                    {
+                        //Load List and return values
+                        masterArchiveValues.Add(new MasterArchiveVideoValues(reader["project_id"].ToString(), reader["video_name"].ToString(), reader["master_tape"].ToString(), reader["clip_number"].ToString(), Convert.ToInt32(reader["id"])));
+                    }
+                }
+                else
+                {
+                    //no rows returned
+                    masterArchiveValues = null;
+                }
+
+            }
+            catch (SQLiteException e)
+            {
+                MainForm.LogFile("SQL Error: " + e.Message);
+            }
+
+            return masterArchiveValues;
+        }
+
+        #endregion
     }
 }

@@ -18,6 +18,14 @@ Ideas:
 * Be able to create a new listing for a master archive
 * Dropdown for person that entered in new listings
 * Add project add, update, delete form
+* Add function to update tapelist Master when mastered videos are imported or entered
+* Use Enum to create Deleted data retreival Form for all of the data that has deleted data
+* Create functions to load all deleted data for each deleted database
+* Create panel of each deleted database for the form
+* Add deletion of deleted entries once they have been reinstated
+* check dropdowns for camera and master list and delete default collection
+* Add MasterArchiveVideo add, update, delete form
+* Add filter to search listview
 
 
 - Create Layout for Input, Search, Edit, Stats (possibly in tabs or upper bar)
@@ -26,16 +34,10 @@ Ideas:
 - Add a backup feature that backs everything up every month or so
 - Add export and import feature for database
 - Be able to save the old databases and recall them if needed
-- Add MasterArchiveVideo add, update, delete form
 - Automatically add project name to project numbers from the projects DB
-- check dropdowns for camera and master list and delete default collection
-- Add function to update tapelist Master when mastered videos are imported or entered
-- Use Enum to create Deleted data retreival Form for all of the data that has deleted data
-- Create functions to load all deleted data for each deleted database
-- Create panel of each deleted database for the form
-- Add deletion of deleted entries once they have been reinstated
 - PUT TRY STATEMENTS AROUND SQL stuff
 
+60, 200, 120, 50, 50, 62, 78, 95, 60
 
 
 Database:

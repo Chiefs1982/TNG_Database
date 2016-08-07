@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SQLite;
+using TNG_Database.Values;
 
 namespace TNG_Database
 {
@@ -289,8 +290,9 @@ namespace TNG_Database
             if(addUserNameTextbox.Text.Length > 0)
             {
                 AddToDatabase addUser = new AddToDatabase();
+                PeopleValues peopleValues = new PeopleValues(addUserNameTextbox.Text);
                 //Add user to database
-                if (addUser.AddPerson(addUserNameTextbox.Text))
+                if (addUser.AddPerson(peopleValues))
                 {
                     //user added successfully
                     updateStatus.UpdateStatusBar(addUserNameTextbox.Text + " added successfully", mainform);

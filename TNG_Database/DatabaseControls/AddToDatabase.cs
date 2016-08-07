@@ -39,7 +39,7 @@ namespace TNG_Database
         /// </summary>
         /// <param name="tapeDBValues">Values of new entry in TapeDatabaseValuesClass</param>
         /// <returns>Boolean of success of database operation</returns>
-        public bool AddTapeDatabase(TapeDatabaseValues tapeDBValues, bool reenstate = false)
+        public bool AddTapeDatabase(TapeDatabaseValues tapeDBValues, bool reinstate = false)
         {
             try
             {
@@ -77,7 +77,7 @@ namespace TNG_Database
                         //Entry inserts successfully
                         
                         //Delete entry from deleted database
-                        if (reenstate)
+                        if (reinstate)
                         {
                             command.CommandText = "delete from DeleteTapeDatabase where id = @t_id";
                             command.Parameters.AddWithValue("@t_id", tapeDBValues.ID);
@@ -289,7 +289,7 @@ namespace TNG_Database
         /// <param name="name">Name of tape to add</param>
         /// <param name="camera">Camera number</param>
         /// <returns>Boolean of success of database operation</returns>
-        public bool AddMasterList(string name, int camera)
+        public bool AddMasterList(MasterListValues masterValues, bool reinstate = false)
         {
             try
             {
@@ -300,7 +300,7 @@ namespace TNG_Database
                 //create sqlite query to check to see if Master list name is already in database
                 string sql = "select count(*) from MasterList where lower(master_archive) = @m_name";
                 SQLiteCommand command = new SQLiteCommand(sql, masterConnection);
-                command.Parameters.AddWithValue("@m_name", name.ToLower());
+                command.Parameters.AddWithValue("@m_name", masterValues.MasterArchive.ToLower());
                 Int32 check = Convert.ToInt32(command.ExecuteScalar());
 
                 //If query returned has any rows of data then Master List is already in database
@@ -309,13 +309,29 @@ namespace TNG_Database
                     //No rows were returned, so entry can be added
                     command.Parameters.Clear();
                     command.CommandText = "insert into MasterList (master_archive, master_media) values (@m_newName, @m_newMedia)";
-                    command.Parameters.AddWithValue("@m_newName", name);
-                    command.Parameters.AddWithValue("@m_newMedia", camera);
+                    command.Parameters.AddWithValue("@m_newName", masterValues.MasterArchive);
+                    command.Parameters.AddWithValue("@m_newMedia", masterValues.MasterMedia);
 
                     //Execute Insert query and check if it was added
                     if (command.ExecuteNonQuery() == 1)
                     {
                         //Entry added to Master List database
+
+                        //Delete entry from deleted database
+                        if (reinstate)
+                        {
+                            command.CommandText = "delete from DeleteMasterList where id = @t_id";
+                            command.Parameters.AddWithValue("@t_id", masterValues.ID);
+
+                            if (command.ExecuteNonQuery() == 1)
+                            {
+                                //Deleted from deleted db success
+                            }
+                            else
+                            {
+                                //Deleted from deleted db failure
+                            }
+                        }
                         Console.WriteLine("Master list inserted correctly");
                         CloseConnections(command, masterConnection);
                         return true;
@@ -486,7 +502,7 @@ namespace TNG_Database
         /// </summary>
         /// <param name="name">Name of person to add to database</param>
         /// <returns>Boolean of success of database operation</returns>
-        public bool AddPerson(string name)
+        public bool AddPerson(PeopleValues peopleValues, bool reinstate = false)
         {
             try
             {
@@ -497,7 +513,7 @@ namespace TNG_Database
                 //create sqlite query to check to see if name is already in database
                 string sql = "select count(*) from People where lower(person_name) = @p_name";
                 SQLiteCommand command = new SQLiteCommand(sql, personConnection);
-                command.Parameters.AddWithValue("@p_name", name.ToLower());
+                command.Parameters.AddWithValue("@p_name", peopleValues.PersonName.ToLower());
                 Int32 check = Convert.ToInt32(command.ExecuteScalar());
 
                 //If query returned has any rows of data then name is already in database
@@ -505,12 +521,29 @@ namespace TNG_Database
                 {
                     //person is not in database and needs to be added
                     command.CommandText = "insert into People (person_name) values (@add_name)";
-                    command.Parameters.AddWithValue("@add_name", name);
+                    command.Parameters.AddWithValue("@add_name", peopleValues.PersonName);
 
                     //execute adding person query and check to see person was added
                     if (command.ExecuteNonQuery() == 1)
                     {
                         //add successful
+
+                        //Delete entry from deleted database
+                        if (reinstate)
+                        {
+                            command.CommandText = "delete from DeleteMasterList where id = @t_id";
+                            command.Parameters.AddWithValue("@t_id", peopleValues.ID);
+
+                            if (command.ExecuteNonQuery() == 1)
+                            {
+                                //Deleted from deleted db success
+                            }
+                            else
+                            {
+                                //Deleted from deleted db failure
+                            }
+                        }
+
                         CloseConnections(command, personConnection);
                         return true;
                     }
@@ -665,7 +698,7 @@ namespace TNG_Database
         /// </summary>
         /// <param name="project">project to add</param>
         /// <returns>true if successful, false if it failed</returns>
-        public bool AddProjects(ProjectValues project)
+        public bool AddProjects(ProjectValues project, bool reinstate = false)
         {
             try
             {
@@ -691,6 +724,23 @@ namespace TNG_Database
                     if (command.ExecuteNonQuery() == 1)
                     {
                         //insert successful
+
+                        //Delete entry from deleted database
+                        if (reinstate)
+                        {
+                            command.CommandText = "delete from DeleteMasterList where id = @t_id";
+                            command.Parameters.AddWithValue("@t_id", project.ID);
+
+                            if (command.ExecuteNonQuery() == 1)
+                            {
+                                //Deleted from deleted db success
+                            }
+                            else
+                            {
+                                //Deleted from deleted db failure
+                            }
+                        }
+
                         CloseConnections(command, projectsConnection);
                         return true;
                     }
@@ -829,7 +879,7 @@ namespace TNG_Database
         /// </summary>
         /// <param name="video">video to add</param>
         /// <returns>true if successful, false if it failed</returns>
-        public bool AddMasterArchiveVideo(MasterTapeValues video)
+        public bool AddMasterArchiveVideo(MasterArchiveVideoValues video, bool reinstate = false)
         {
             try
             {
@@ -843,9 +893,11 @@ namespace TNG_Database
 
                 if(command.ExecuteNonQuery() == 1)
                 {
+                    //new Master Tape added successfully
                     Console.WriteLine("Added master list success");
                 }else
                 {
+                    //new Master Tape added failure
                     Console.WriteLine("Added master list did not happen");
                 }
 
@@ -860,7 +912,7 @@ namespace TNG_Database
                     //No matches, add entry to DB
                     command.Parameters.Clear();
                     command.CommandText = "insert into MasterArchiveVideos(project_id, video_name, master_tape, clip_number) values(@p_id, @v_name, @m_tape, @c_number)";
-                    command.Parameters.AddWithValue("@p_id", video.ProjectID);
+                    command.Parameters.AddWithValue("@p_id", video.ProjectId);
                     command.Parameters.AddWithValue("@v_name", video.VideoName);
                     command.Parameters.AddWithValue("@m_tape", video.MasterTape);
                     command.Parameters.AddWithValue("@c_number", video.ClipNumber);
@@ -868,6 +920,23 @@ namespace TNG_Database
                     if (command.ExecuteNonQuery() == 1)
                     {
                         //insert successful
+
+                        //Delete entry from deleted database
+                        if (reinstate)
+                        {
+                            command.CommandText = "delete from DeleteMasterList where id = @t_id";
+                            command.Parameters.AddWithValue("@t_id", video.ID);
+
+                            if (command.ExecuteNonQuery() == 1)
+                            {
+                                //Deleted from deleted db success
+                            }
+                            else
+                            {
+                                //Deleted from deleted db failure
+                            }
+                        }
+
                         CloseConnections(command, videoConnection);
                         return true;
                     }

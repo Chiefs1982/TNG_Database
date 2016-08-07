@@ -43,7 +43,7 @@
             this.columnMaster = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnPerson = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnClip = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.searchFilterCombo = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.searchTotalFoundLabel = new System.Windows.Forms.Label();
             this.defaultTapeGroupbox = new System.Windows.Forms.GroupBox();
@@ -179,13 +179,16 @@
             // 
             this.columnClip.Text = "Clip";
             // 
-            // comboBox1
+            // searchFilterCombo
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(693, 52);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(139, 21);
-            this.comboBox1.TabIndex = 6;
+            this.searchFilterCombo.FormattingEnabled = true;
+            this.searchFilterCombo.Location = new System.Drawing.Point(693, 52);
+            this.searchFilterCombo.Name = "searchFilterCombo";
+            this.searchFilterCombo.Size = new System.Drawing.Size(139, 21);
+            this.searchFilterCombo.TabIndex = 6;
+            this.searchFilterCombo.SelectedIndexChanged += new System.EventHandler(this.searchFilterCombo_SelectedIndexChanged);
+            this.searchFilterCombo.DropDownClosed += new System.EventHandler(this.searchFilterCombo_DropDownClosed);
+            this.searchFilterCombo.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.searchFilterCombo_KeyPress);
             // 
             // label3
             // 
@@ -440,7 +443,7 @@
             this.Controls.Add(this.defaultTapeGroupbox);
             this.Controls.Add(this.searchTotalFoundLabel);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.searchFilterCombo);
             this.Controls.Add(this.searchListView);
             this.Controls.Add(this.searchButton);
             this.Controls.Add(this.label2);
@@ -478,7 +481,7 @@
         private System.Windows.Forms.ColumnHeader columnDate;
         private System.Windows.Forms.ColumnHeader columnMaster;
         private System.Windows.Forms.ColumnHeader columnPerson;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox searchFilterCombo;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label searchTotalFoundLabel;
         private System.Windows.Forms.GroupBox defaultTapeGroupbox;

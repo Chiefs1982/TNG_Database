@@ -21,6 +21,7 @@ namespace TNG_Database
         public TNG_Database.TapeListForm tapeListForm;
         public TNG_Database.ProjectsForm projectsForm;
         public TNG_Database.MasterArchiveVideosForm masterArchiveForm;
+        public TNG_Database.DeletedValuesForm deletedValuesForm;
 
         private string connect = DataBaseControls.GetDBName();
         OpenFileDialog ofd;
@@ -250,6 +251,19 @@ namespace TNG_Database
             masterArchiveForm.WindowState = FormWindowState.Maximized;
         }
 
+        private void deletedDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //Create new instance of form MasterListForm
+            deletedValuesForm = new TNG_Database.DeletedValuesForm(this);
+
+            //close chold of mdi if there is one active
+            if (ActiveMdiChild != null) { ActiveMdiChild.Close(); }
+
+            //show Master list form and maximize it instantly
+            deletedValuesForm.Show();
+            deletedValuesForm.WindowState = FormWindowState.Maximized;
+        }
+
         #endregion
 
         /// <summary>
@@ -444,6 +458,17 @@ namespace TNG_Database
             }
         }
 
-        
+        private void searchTapeDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //create new instance of form
+            searchTapeForm = new SearchTapeForm(this);
+
+            //close child of mdi if there is one active
+            if (ActiveMdiChild != null) { ActiveMdiChild.Close(); }
+
+            //Show people form and maximize it instantly
+            searchTapeForm.Show();
+            searchTapeForm.WindowState = FormWindowState.Maximized;
+        }
     }
 }
