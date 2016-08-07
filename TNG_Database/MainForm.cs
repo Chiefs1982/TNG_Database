@@ -23,6 +23,8 @@ namespace TNG_Database
         public TNG_Database.MasterArchiveVideosForm masterArchiveForm;
         public TNG_Database.DeletedValuesForm deletedValuesForm;
 
+        Form currentForm;
+
         private string connect = DataBaseControls.GetDBName();
         OpenFileDialog ofd;
 
@@ -31,8 +33,6 @@ namespace TNG_Database
 
         public MainForm()
         {
-            
-
             InitializeComponent();
             
             TNG_Database.SearchTapeForm child = new TNG_Database.SearchTapeForm(this);
@@ -40,6 +40,8 @@ namespace TNG_Database
             backgroundWorker1.WorkerSupportsCancellation = true;
             child.Show();
             child.WindowState = FormWindowState.Maximized;
+            searchTapeForm = child;
+            currentForm = searchTapeForm;
 
             //check to see if this is the first time the program has ran
             if (Properties.TNG_Settings.Default.FirstRun)
@@ -470,5 +472,90 @@ namespace TNG_Database
             searchTapeForm.Show();
             searchTapeForm.WindowState = FormWindowState.Maximized;
         }
+
+        #region Cut, Copy and Paste commands
+        //Copy Text from toolstrip selected
+        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //check if control is active
+            if(ActiveMdiChild.ActiveControl != null)
+            {
+                //set control to active control
+                Control ctrl = ActiveMdiChild.ActiveControl;
+
+                //check to see if control is null
+                if (ctrl != null)
+                {
+                    //control is a textbox
+                    if (ctrl is TextBox)
+                    {
+                        TextBox tb = (TextBox)ctrl;
+                        Clipboard.SetText(tb.SelectedText);
+                    }
+
+                    //control is a combobox
+                    if(ctrl is ComboBox)
+                    {
+                        ComboBox cb = (ComboBox)ctrl;
+                        Clipboard.SetText(cb.Text);
+                    }
+
+                    //control is a numeric up down
+                    if(ctrl is NumericUpDown)
+                    {
+                        NumericUpDown nud = (NumericUpDown)ctrl;
+                        Clipboard.SetText(nud.Value.ToString());
+                    }
+                }
+            }
+            
+        }
+
+        //Paste Text from toolstrip selected
+        private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //check if control is active
+            if (ActiveMdiChild.ActiveControl != null)
+            {
+                //set control to active control
+                Control ctrl = ActiveMdiChild.ActiveControl;
+
+                //check to see if control is null
+                if (ctrl != null)
+                {
+                    //control is a textbox
+                    if (ctrl is TextBox)
+                    {
+                        TextBox tb = (TextBox)ctrl;
+                        string paste = Clipboard.GetText();
+                        tb.Text = tb.Text.Insert(tb.SelectionStart, paste);
+                    }
+                }
+            }
+        }
+
+        //Cut Text from toolstrip selected
+        private void cutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //check if control is active
+            if (ActiveMdiChild.ActiveControl != null)
+            {
+                //set control to active control
+                Control ctrl = ActiveMdiChild.ActiveControl;
+
+                //check to see if control is null
+                if (ctrl != null)
+                {
+                    //control is a textbox
+                    if (ctrl is TextBox)
+                    {
+                        TextBox tb = (TextBox)ctrl;
+                        Clipboard.SetText(tb.SelectedText);
+                        tb.SelectedText = string.Empty;
+                    }
+                }
+            }
+        }
+        #endregion
     }
 }
