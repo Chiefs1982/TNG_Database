@@ -26,6 +26,8 @@ Ideas:
 * check dropdowns for camera and master list and delete default collection
 * Add MasterArchiveVideo add, update, delete form
 * Add filter to search listview
+* Add copy, cut, paste functions to toolstrip
+* Created Import for tapes using .csv
 
 
 - Create Layout for Input, Search, Edit, Stats (possibly in tabs or upper bar)
@@ -36,6 +38,11 @@ Ideas:
 - Be able to save the old databases and recall them if needed
 - Automatically add project name to project numbers from the projects DB
 - PUT TRY STATEMENTS AROUND SQL stuff
+- Create Preferences
+	- how often to backup database
+	- default export directory
+	- default import directory
+	- 
 
 60, 200, 120, 50, 50, 62, 78, 95, 60
 

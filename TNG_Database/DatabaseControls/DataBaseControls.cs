@@ -17,6 +17,9 @@ namespace TNG_Database
         //TapeDatabaseDB connection string
         private static string database = "Data Source=database/TNG_TapeDatabase.sqlite;Version=3;";
 
+        //Reference to CommonMethods
+        static CommonMethods commonMethod = CommonMethods.Instance();
+
         public static string GetDBName()
         {
             return database;
@@ -418,7 +421,7 @@ namespace TNG_Database
                     dbData.TapeNumber =  reader["tape_number"].ToString();
                     dbData.ProjectID = reader["project_id"].ToString();
                     dbData.ProjectName = reader["project_name"].ToString();
-                    dbData.Camera = reader["camera"].ToString();
+                    dbData.Camera = commonMethod.GetCameraName(Convert.ToInt32(reader["camera"]));
                     dbData.TapeTags = reader["tape_tags"].ToString();
                     dbData.DateShot = reader["date_shot"].ToString();
                     dbData.MasterArchive = reader["master_archive"].ToString();
@@ -796,6 +799,143 @@ namespace TNG_Database
             }
 
 
+        }
+
+        /// <summary>
+        /// Adds the tapes from file.
+        /// </summary>
+        /// <param name="worker">The worker.</param>
+        /// <param name="importStream">The import stream.</param>
+        /// <param name="ofd">The ofd.</param>
+        /// <returns>true if succeeded, false if failed</returns>
+        public static bool AddTapesFromFile(BackgroundWorker worker, Stream importStream, OpenFileDialog ofd)
+        {
+            List<TapeDatabaseValues> tapeList = new List<TapeDatabaseValues>();
+            TapeDatabaseValues tapeValues = new TapeDatabaseValues();
+
+            if ((importStream = ofd.OpenFile()) != null)
+            {
+
+                try
+                {
+                    //items for 
+                    string line;
+                    string newLine;
+                    char[] seperators = ",".ToCharArray();
+
+
+                    //streamReader to read csv file
+                    StreamReader textReader = new StreamReader(importStream);
+                    while ((line = textReader.ReadLine()) != null)
+                    {
+                        newLine = line.Replace("-", ",");
+                        string[] lineArray = newLine.Split(seperators, 8);
+
+                        //check to make sure there are 2 parts to each line
+                        if (lineArray.Length > 1)
+                        {
+                            lineArray[0] = lineArray[0].Trim();
+                            lineArray[1] = lineArray[1].Replace(',', '-').Trim();
+                            tapeValues = new TapeDatabaseValues(lineArray[0], lineArray[1], lineArray[2], lineArray[3], commonMethod.GetCameraNumber(lineArray[4]), lineArray[7], commonMethod.ConvertDateFromDropdownForDB(Convert.ToDateTime(lineArray[5])), lineArray[6], "Imported");
+                            tapeList.Add(tapeValues);
+                        }
+                        else
+                        {
+                            //only one part, it will not add this value to database
+                        }
+                    }
+
+
+                }
+                catch (Exception error)
+                {
+                    MainForm.LogFile(error.Message);
+                }
+            }
+
+            int counter = 0;
+            int progressCounter = 0;
+            float queryCounter = 100.0f / tapeList.Count;
+            float progress = 0.0f;
+            string projectName = "";
+
+            try
+            {
+                SQLiteConnection projectConnection = new SQLiteConnection(database);
+                projectConnection.Open();
+                SQLiteCommand command = new SQLiteCommand(projectConnection);
+
+                foreach (TapeDatabaseValues value in tapeList)
+                {
+                    command.CommandText = "select project_name from Projects where project_id = @pid limit 1";
+                    command.Parameters.AddWithValue("@pid", value.ProjectId);
+                    SQLiteDataReader reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            projectName = reader["project_name"].ToString();
+                        }
+                    }
+
+                    reader.Close();
+                    command.Parameters.Clear();
+                    command.CommandText = "insert into TapeDatabase (tape_name,tape_number,project_id, project_name,camera,tape_tags,date_shot,master_archive,person_entered) values (@tapeName,@tapeNumber,@projectID, @projectName,@camera,@tapeTags,@dateShot,@masterArchive,@person)";
+                    command.Parameters.AddWithValue("@tapeName", value.TapeName);
+                    command.Parameters.AddWithValue("@tapeNumber", value.TapeNumber);
+                    command.Parameters.AddWithValue("@projectID", value.ProjectId);
+                    if (projectName.Equals(""))
+                    {
+                        command.Parameters.AddWithValue("@projectName", value.ProjectName);
+                    }else
+                    {
+                        command.Parameters.AddWithValue("@projectName", projectName);
+                    }
+                    command.Parameters.AddWithValue("@camera", value.Camera);
+                    command.Parameters.AddWithValue("@tapeTags", value.TapeTags);
+                    command.Parameters.AddWithValue("@dateShot",value.DateShot);
+                    command.Parameters.AddWithValue("@masterArchive", value.MasterArchive);
+                    command.Parameters.AddWithValue("@person", value.PersonEntered);
+                    
+                    if (command.ExecuteNonQuery() == 1)
+                    {
+                        //Success
+                        counter++;
+                        progressCounter++;
+                        if ((progressCounter * queryCounter) >= 1)
+                        {
+
+                            progress += (queryCounter * progressCounter);
+                            progressCounter = 0;
+                            worker.ReportProgress(Convert.ToInt32(progress));
+                            Console.WriteLine("Added: " + value.ProjectId + ", Progress = " + progress);
+                        }
+                    }
+                    else
+                    {
+                        //Failure
+                    }
+                }
+
+                if (counter > 0)
+                {
+                    Console.WriteLine(counter + " items added to database");
+                    MainForm.LogFile(counter + " tapes added to database");
+                    projectConnection.Close();
+                    return true;
+                }
+                else
+                {
+                    Console.WriteLine("No Tapes added to database");
+                    projectConnection.Close();
+                    return false;
+                }
+            }
+            catch (SQLiteException e)
+            {
+                MainForm.LogFile("Import Tapes Error: " + e.Message);
+                return false;
+            }
         }
 
         #region Get Deleted Values

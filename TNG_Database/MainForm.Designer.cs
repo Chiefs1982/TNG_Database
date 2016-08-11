@@ -39,6 +39,9 @@
             this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.textFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.xDCamMasterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tapesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.convertToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tocsvToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.preferencesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -86,6 +89,7 @@
             this.toolStripSeparator1,
             this.addNewItemsToolStripMenuItem,
             this.importToolStripMenuItem,
+            this.convertToolStripMenuItem,
             this.toolStripSeparator3,
             this.preferencesToolStripMenuItem,
             this.exitToolStripMenuItem});
@@ -137,7 +141,8 @@
             // 
             this.importToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.textFileToolStripMenuItem,
-            this.xDCamMasterToolStripMenuItem});
+            this.xDCamMasterToolStripMenuItem,
+            this.tapesToolStripMenuItem});
             this.importToolStripMenuItem.Name = "importToolStripMenuItem";
             this.importToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.importToolStripMenuItem.Text = "Import";
@@ -155,6 +160,28 @@
             this.xDCamMasterToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
             this.xDCamMasterToolStripMenuItem.Text = "XDCam Master";
             this.xDCamMasterToolStripMenuItem.Click += new System.EventHandler(this.xDCamMasterToolStripMenuItem_Click);
+            // 
+            // tapesToolStripMenuItem
+            // 
+            this.tapesToolStripMenuItem.Name = "tapesToolStripMenuItem";
+            this.tapesToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
+            this.tapesToolStripMenuItem.Text = "Tapes";
+            this.tapesToolStripMenuItem.Click += new System.EventHandler(this.tapesToolStripMenuItem_Click);
+            // 
+            // convertToolStripMenuItem
+            // 
+            this.convertToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tocsvToolStripMenuItem});
+            this.convertToolStripMenuItem.Name = "convertToolStripMenuItem";
+            this.convertToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.convertToolStripMenuItem.Text = "Convert";
+            // 
+            // tocsvToolStripMenuItem
+            // 
+            this.tocsvToolStripMenuItem.Name = "tocsvToolStripMenuItem";
+            this.tocsvToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.tocsvToolStripMenuItem.Text = "txt -> csv";
+            this.tocsvToolStripMenuItem.Click += new System.EventHandler(this.tocsvToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
             // 
@@ -188,7 +215,7 @@
             // 
             this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
             this.copyToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.copyToolStripMenuItem.Text = "Copy";
             this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
             // 
@@ -196,7 +223,7 @@
             // 
             this.cutToolStripMenuItem.Name = "cutToolStripMenuItem";
             this.cutToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
-            this.cutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.cutToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.cutToolStripMenuItem.Text = "Cut";
             this.cutToolStripMenuItem.Click += new System.EventHandler(this.cutToolStripMenuItem_Click);
             // 
@@ -204,7 +231,7 @@
             // 
             this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
             this.pasteToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
-            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.pasteToolStripMenuItem.Text = "Paste";
             this.pasteToolStripMenuItem.Click += new System.EventHandler(this.pasteToolStripMenuItem_Click);
             // 
@@ -386,6 +413,9 @@
         private System.Windows.Forms.ToolStripMenuItem archiveVideosToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripMenuItem deletedDatabaseToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tapesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem convertToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tocsvToolStripMenuItem;
     }
 }
 

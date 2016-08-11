@@ -383,6 +383,72 @@ namespace TNG_Database
                         }
                     }
                     break;
+                case "tapes":
+                    //tapes file selected for import
+                    DataBaseControls.AddTapesFromFile(worker, importStream, ofd);
+                    break;
+                case "tocsv":
+                    if ((importStream = ofd.OpenFile()) != null)
+                    {
+
+                        try
+                        {
+                            //items for 
+                            string line;
+                            string newLine;
+                            string finalLine = "";
+                            List<string> lineList = new List<string>();
+                            char[] seperators = ",".ToCharArray();
+
+
+                            //streamReader to read csv file
+                            StreamReader textReader = new StreamReader(importStream);
+                            while ((line = textReader.ReadLine()) != null)
+                            {
+                                finalLine = "";
+                                lineList.Clear();
+                                newLine = line.Trim().Replace("\t", ",").Replace(",,",",").Replace(",,,",",");
+                                while(newLine[newLine.Length - 1].Equals(","))
+                                {
+                                    newLine = newLine.Remove(newLine.Length - 1, 1);
+                                }
+
+                                string[] lineArray = newLine.Split(seperators, 15);
+
+                                foreach(string value in lineArray)
+                                {
+                                    lineList.Add(value.Trim());
+                                }
+
+                                finalLine = string.Join(",", lineList);
+
+                                if (!File.Exists(@"outputs\" + Path.GetFileNameWithoutExtension(ofd.FileName) + "_Fixed.csv"))
+                                {
+                                    //Log file did not exist
+                                    Directory.CreateDirectory(@"outputs");
+                                    Console.WriteLine("Log files does not exist");
+                                    File.Create(@"outputs\" + Path.GetFileNameWithoutExtension(ofd.FileName) +"_Fixed.csv").Close();
+                                }
+
+                                //Write to log file
+                                using (StreamWriter csvWriter = File.AppendText(@"outputs\" + Path.GetFileNameWithoutExtension(ofd.FileName) + "_Fixed.csv"))
+                                {
+                                    //Log Format
+                                    csvWriter.WriteLine("{0}", finalLine);
+
+                                    csvWriter.Close();
+                                }
+                            }
+
+
+                        }
+                        catch (Exception error)
+                        {
+                            MainForm.LogFile(error.Message);
+                        }
+                    }
+                    System.Diagnostics.Process.Start(@"outputs");
+                    break;
             }
         }
 
@@ -460,6 +526,31 @@ namespace TNG_Database
             }
         }
 
+        //Import a tapes csv file
+        private void tapesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string importTapes = "tapes";
+            ofd = new OpenFileDialog();
+            ofd.InitialDirectory = Properties.TNG_Settings.Default.LastFolder;
+            ofd.Filter = "comma seperated files (*.csv)|*.csv";
+            ofd.RestoreDirectory = true;
+
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                if (ofd.OpenFile() != null)
+                {
+                    Properties.TNG_Settings.Default.LastFolder = Path.GetDirectoryName(ofd.FileName);
+                    Console.WriteLine(Properties.TNG_Settings.Default.LastFolder);
+                    if (backgroundWorker1.IsBusy != true)
+                    {
+                        mainFormProgressBar.Value = 0;
+                        backgroundWorker1.RunWorkerAsync(importTapes);
+                    }
+                }
+            }
+        }
+
+        //Open Search Tape Database
         private void searchTapeDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //create new instance of form
@@ -556,6 +647,33 @@ namespace TNG_Database
                 }
             }
         }
+
         #endregion
+
+        //Convert a txt to csv toolstrip click
+        private void tocsvToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //string to tell which button was clicked
+            string importMaster = "tocsv";
+            //open file dialog to ask user which file to convert
+            ofd = new OpenFileDialog();
+            ofd.InitialDirectory = Properties.TNG_Settings.Default.LastFolder;
+            ofd.Filter = "text file (*.txt)|*.txt";
+            ofd.RestoreDirectory = true;
+
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                if (ofd.OpenFile() != null)
+                {
+                    Properties.TNG_Settings.Default.LastFolder = Path.GetDirectoryName(ofd.FileName);
+                    Console.WriteLine(Properties.TNG_Settings.Default.LastFolder);
+                    if (backgroundWorker1.IsBusy != true)
+                    {
+                        mainFormProgressBar.Value = 0;
+                        backgroundWorker1.RunWorkerAsync(importMaster);
+                    }
+                }
+            }
+        }
     }
 }

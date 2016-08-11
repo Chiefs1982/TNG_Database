@@ -276,7 +276,14 @@ namespace TNG_Database
             searchProjectIDLabel.Text = searchValues.ProjectID;
             searchProjectNameLabel.Text = searchValues.ProjectName;
             searchTapeNameLabel.Text = searchValues.TapeName;
-            searchTapeNumberLabel.Text = searchValues.TapeNumber;
+            if (searchValues.TapeNumber.Equals(""))
+            {
+                searchTapeNumberLabel.Text = searchValues.TapeNumber;
+            }else
+            {
+                searchTapeNumberLabel.Text = searchValues.ProjectID+ "-" +searchValues.TapeNumber;
+            }
+            
             searchCameraLabel.Text = searchValues.Camera;
             searchDateLabel.Text = searchValues.DateShot;
             searchMasterArchiveLabel.Text = searchValues.MasterArchive;

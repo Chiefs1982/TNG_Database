@@ -73,15 +73,15 @@ namespace TNG_Database
         /// <returns>int of the camera to store in db</returns>
         public int GetCameraNumber(string camera)
         {
-            switch (camera)
+            switch (camera.ToLower())
             {
-                case "Cannon":
+                case "cannon":
                     return 2;
-                case "XDCam":
+                case "xdcam":
                     return 1;
-                case "Beta":
+                case "beta":
                     return 3;
-                case "DVC":
+                case "dvc":
                     return 4;
                 default:
                     return 0;
@@ -130,7 +130,7 @@ namespace TNG_Database
         {
             return date.ToString("MM/dd/yyyy");
         }
-
+        
         public DateTime ConvertDateForDatePicker(string dateFromDB)
         {
             if (DateTime.TryParseExact(dateFromDB, dbDatePattern, null,
