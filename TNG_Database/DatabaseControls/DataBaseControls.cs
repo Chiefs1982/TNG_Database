@@ -38,6 +38,30 @@ namespace TNG_Database
         }
 
         /// <summary>
+        /// Deletes the file.
+        /// </summary>
+        /// <param name="tmp">if set to <c>true</c> [temporary].</param>
+        /// <param name="ofd">The ofd.</param>
+        private static void DeleteFile(bool tmp,OpenFileDialog ofd, Stream fileStream)
+        {
+            try {
+                fileStream.Close();
+                if (tmp)
+                {
+                    
+                    if (File.Exists(Path.GetFullPath(ofd.FileName)))
+                    {
+                        File.Delete(Path.GetFullPath(ofd.FileName));
+                        Console.WriteLine("File Deleted");
+                    }
+                }
+            }catch(Exception e)
+            {
+                MainForm.LogFile("Error Deleting File: " + e.Message);
+            }
+}
+
+        /// <summary>
         /// Gets the project name using the number in the database.
         /// </summary>
         /// <param name="projectID">The project identifier.</param>
@@ -559,7 +583,7 @@ namespace TNG_Database
         /// <param name="importStream">Import Stream for file</param>
         /// <param name="ofd">The file returned from OpenFileDialog</param>
         /// <returns></returns>
-        public static bool AddMasterTapesFromFile(BackgroundWorker worker, Stream importStream, OpenFileDialog ofd, string masterArchive, int media)
+        public static bool AddMasterTapesFromFile(BackgroundWorker worker, Stream importStream, OpenFileDialog ofd, string masterArchive, int media, bool tmp = false)
         {
             //List of Projectvalues to send to database
             List<MasterTapeValues> projectList = new List<MasterTapeValues>();
@@ -601,9 +625,9 @@ namespace TNG_Database
 
 
                 }
-                catch (Exception error)
+                catch
                 {
-                    MainForm.LogFile(error.Message);
+                    //Index may be out of range, but that is supposed to happen if entry already exists
                 }
             }
 
@@ -670,6 +694,7 @@ namespace TNG_Database
                     Console.WriteLine(counter + " items added to database");
                     MainForm.LogFile(counter + " master archive(s) added to database");
                     masterConnection.Close();
+                    DeleteFile(tmp, ofd, importStream);
                     return true;
                 }
                 else
@@ -677,6 +702,7 @@ namespace TNG_Database
                     //No entries found
                     Console.WriteLine("No master archive(s) added to database");
                     masterConnection.Close();
+                    DeleteFile(tmp, ofd, importStream);
                     return false;
                 }
 
@@ -684,6 +710,7 @@ namespace TNG_Database
             catch (SQLiteException e)
             {
                 MainForm.LogFile("Import Projects Error: " + e.Message);
+                DeleteFile(tmp, ofd, importStream);
                 return false;
             }
         }
@@ -1135,5 +1162,82 @@ namespace TNG_Database
         }
 
         #endregion
+
+        public static void CreateSQLiteDatabase()
+        {
+            try
+            {
+                //create directory and file if they do not exist
+                Directory.CreateDirectory(@"database");
+                SQLiteConnection.CreateFile("database/TNG_TapeDatabase.sqlite");
+            }
+            catch (Exception e)
+            {
+                MainForm.LogFile(e.Message);
+            }
+
+            //create table strings
+            string createTapeTable = "CREATE TABLE `TapeDatabase` (" +
+               "`id` INTEGER PRIMARY KEY AUTOINCREMENT,`tape_name` TEXT,`tape_number` TEXT," +
+               "`project_id` TEXT, `project_name` TEXT, `camera` INTEGER, `tape_tags` TEXT," +
+               "`date_shot` TEXT, `master_archive` TEXT, `person_entered` TEXT)";
+
+            string createMasterTable = "CREATE TABLE `MasterList` (`id` INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "`master_archive` TEXT UNIQUE, `master_media` INTEGER)";
+
+            string createPeopleTable = "CREATE TABLE `People` (`id`	INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "`person_name` TEXT UNIQUE)";
+
+            string createProjectsTable = "CREATE TABLE `Projects` (`id`	INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "`project_id` TEXT UNIQUE, `project_name` TEXT)";
+
+            string createMasterArchiveVideos = "CREATE TABLE `MasterArchiveVideos` (`id` INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "`project_id` TEXT, `video_name` TEXT, `master_tape` TEXT, `clip_number` TEXT)";
+
+            string createDeleteTapeDatabase = "CREATE TABLE `DeleteTapeDatabase` (`id` INTEGER PRIMARY KEY AUTOINCREMENT,`tape_name` TEXT,`tape_number` TEXT,`project_id` TEXT, `project_name` TEXT, `camera` INTEGER, `tape_tags` TEXT,`date_shot` TEXT, `master_archive` TEXT, `person_entered` TEXT)";
+
+            string createDeleteProjects = "CREATE TABLE `DeleteProjects` (`id` INTEGER PRIMARY KEY AUTOINCREMENT,`project_id` TEXT, `project_name` TEXT)";
+
+            string createDeletePeople = "CREATE TABLE `DeletePeople` (`id` INTEGER PRIMARY KEY AUTOINCREMENT,`person_name` TEXT UNIQUE)";
+
+            string createDeleteMasterList = "CREATE TABLE `DeleteMasterList` (`id` INTEGER PRIMARY KEY AUTOINCREMENT,`master_archive` TEXT UNIQUE, `master_media` INTEGER)";
+
+            string createDeleteMasterArchiveVideos = "CREATE TABLE `DeleteMasterArchiveVideos` (`id` INTEGER PRIMARY KEY AUTOINCREMENT,`project_id` TEXT,`video_name` TEXT,`master_tape` TEXT,`clip_number` TEXT)";
+
+            //put all create strings into string array
+            string[] allCreates = { createTapeTable, createMasterTable, createPeopleTable, createProjectsTable, createMasterArchiveVideos, createDeleteTapeDatabase, createDeleteProjects, createDeletePeople, createDeleteMasterList, createDeleteMasterArchiveVideos };
+
+            //try to write tables to database
+            try
+            {
+                //connect to database
+                using (SQLiteConnection createConnection = new SQLiteConnection(DataBaseControls.GetDBName()))
+                {
+                    createConnection.Open();
+
+                    //iterate over all tables and add to database
+                    foreach (string query in allCreates)
+                    {
+                        SQLiteCommand command = new SQLiteCommand(query, createConnection);
+                        if (command.ExecuteNonQuery() == 0)
+                        {
+                            //success
+                            MainForm.LogFile("Database Default Table Created");
+                        }
+                        else
+                        {
+                            //failed
+                            MainForm.LogFile("Database Default Table Failed to be Created");
+                        }
+                    }
+                    createConnection.Close();
+                }
+
+            }
+            catch (SQLiteException e)
+            {
+                MainForm.LogFile(e.Message);
+            }
+        }
     }
 }

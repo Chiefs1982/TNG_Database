@@ -15,6 +15,7 @@ namespace TNG_Database
 {
     public partial class MainForm : Form
     {
+        //Form references to open each form
         public TNG_Database.SearchTapeForm searchTapeForm;
         public TNG_Database.PeopleForm peopleForm;
         public TNG_Database.MasterListForm masterListForm;
@@ -23,8 +24,10 @@ namespace TNG_Database
         public TNG_Database.MasterArchiveVideosForm masterArchiveForm;
         public TNG_Database.DeletedValuesForm deletedValuesForm;
 
+        //the current form
         Form currentForm;
 
+        //gets database name for db operations
         private string connect = DataBaseControls.GetDBName();
         OpenFileDialog ofd;
 
@@ -50,86 +53,22 @@ namespace TNG_Database
             }
         }
 
+        #region Class Methods
+
+        /// <summary>
+        /// Creates the SQL database.
+        /// </summary>
         private void CreateSQLDatabase()
         {
+            //check to see if database file exists
             if (!File.Exists(@"database\TNG_TapeDatabase.sqlite"))
             {
-                try
-                {
-                    //create directory and file if they do not exist
-                    Directory.CreateDirectory(@"database");
-                    SQLiteConnection.CreateFile("database/TNG_TapeDatabase.sqlite");
-                }catch(Exception e)
-                {
-                    LogFile(e.Message);
-                }
-
-                //create table strings
-                string createTapeTable = "CREATE TABLE `TapeDatabase` (" +
-                   "`id` INTEGER PRIMARY KEY AUTOINCREMENT,`tape_name` TEXT,`tape_number` TEXT," +
-                   "`project_id` TEXT, `project_name` TEXT, `camera` INTEGER, `tape_tags` TEXT," +
-                   "`date_shot` TEXT, `master_archive` TEXT, `person_entered` TEXT)";
-
-                string createMasterTable = "CREATE TABLE `MasterList` (`id` INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "`master_archive` TEXT UNIQUE, `master_media` INTEGER)";
-
-                string createPeopleTable = "CREATE TABLE `People` (`id`	INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "`person_name` TEXT UNIQUE)";
-
-                string createProjectsTable = "CREATE TABLE `Projects` (`id`	INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "`project_id` TEXT UNIQUE, `project_name` TEXT)";
-
-                string createMasterArchiveVideos = "CREATE TABLE `MasterArchiveVideos` (`id` INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "`project_id` TEXT, `video_name` TEXT, `master_tape` TEXT, `clip_number` TEXT)";
-
-                string createDeleteTapeDatabase = "CREATE TABLE `DeleteTapeDatabase` (`id` INTEGER PRIMARY KEY AUTOINCREMENT,`tape_name` TEXT,`tape_number` TEXT,`project_id` TEXT, `project_name` TEXT, `camera` INTEGER, `tape_tags` TEXT,`date_shot` TEXT, `master_archive` TEXT, `person_entered` TEXT)";
-
-                string createDeleteProjects = "CREATE TABLE `DeleteProjects` (`id` INTEGER PRIMARY KEY AUTOINCREMENT,`project_id` TEXT, `project_name` TEXT)";
-
-                string createDeletePeople = "CREATE TABLE `DeletePeople` (`id` INTEGER PRIMARY KEY AUTOINCREMENT,`person_name` TEXT UNIQUE)";
-
-                string createDeleteMasterList = "CREATE TABLE `DeleteMasterList` (`id` INTEGER PRIMARY KEY AUTOINCREMENT,`master_archive` TEXT UNIQUE, `master_media` INTEGER)";
-
-                string createDeleteMasterArchiveVideos = "CREATE TABLE `DeleteMasterArchiveVideos` (`id` INTEGER PRIMARY KEY AUTOINCREMENT,`project_id` TEXT,`video_name` TEXT,`master_tape` TEXT,`clip_number` TEXT)";
-
-                //put all create strings into string array
-                string[] allCreates = { createTapeTable, createMasterTable, createPeopleTable, createProjectsTable, createMasterArchiveVideos, createDeleteTapeDatabase, createDeleteProjects, createDeletePeople, createDeleteMasterList, createDeleteMasterArchiveVideos };
-                
-                //try to write tables to database
-                try
-                {
-                    //connect to database
-                    using (SQLiteConnection createConnection = new SQLiteConnection(DataBaseControls.GetDBName()))
-                    {
-                        createConnection.Open();
-                        
-                        //iterate over all tables and add to database
-                        foreach (string query in allCreates)
-                        {
-                            SQLiteCommand command = new SQLiteCommand(query, createConnection);
-                            if (command.ExecuteNonQuery() == 0)
-                            {
-                                //success
-                                LogFile("Database Default Table Created");
-                            }
-                            else
-                            {
-                                //failed
-                                LogFile("Database Default Table Failed to be Created");
-                            }
-                        }
-                        createConnection.Close();
-                    }
-                        
-                }catch(SQLiteException e)
-                {
-                    LogFile(e.Message);
-                }
-                
+                //Creates database if there is not one already
+                DataBaseControls.CreateSQLiteDatabase();
             }
             else
             {
-
+                //already a database file
             }
             //Set it so this won't run again
             Properties.TNG_Settings.Default.FirstRun = false;
@@ -171,6 +110,278 @@ namespace TNG_Database
         {
             applicationStatusLabel.Text = status;
         }
+
+        /// <summary>
+        /// Imports projects from file.
+        /// </summary>
+        /// <param name="worker">The worker.</param>
+        private void ImportProjects(BackgroundWorker worker)
+        {
+            Stream importStream = null;
+            DataBaseControls.AddProjectsFromFile(worker, importStream, ofd);
+        }
+
+        /// <summary>
+        /// Imports masters tapes from file.
+        /// </summary>
+        /// <param name="worker">The worker.</param>
+        /// <param name="e">The <see cref="DoWorkEventArgs"/> instance containing the event data.</param>
+        private void ImportMasters(BackgroundWorker worker, DoWorkEventArgs e)
+        {
+            Stream importStream = null;
+
+            //Master List import, has a popup to enter Master Tape to add to
+            List<MasterListValues> masterListValues = DataBaseControls.GetAllMasterListItems();
+            string[] cameraValues = commonMethod.CameraDropdownItems();
+            string masterTapeName = "";
+            string cameraMasterName = "";
+            bool addMasters = false;
+            //create a new form for user to enter tape name
+            Form masterPrompt = new Form();
+            masterPrompt.Height = 200;
+            masterPrompt.Width = 500;
+            masterPrompt.Text = "Enter Tape Name";
+
+            //Set up items to add to popup box
+            Label textLabel = new Label() { Left = 50, Top = 20, Text = "Master Archive to Import" };
+            ComboBox inputBox = new ComboBox() { Left = 50, Top = 50, Width = 400 };
+            //add items to combobox
+            foreach (MasterListValues values in masterListValues)
+            {
+                inputBox.Items.Add(values.MasterArchive);
+            }
+            inputBox.SelectedIndex = 0;
+            //add media combobox
+            ComboBox mediaCombo = new ComboBox() { Left = 50, Top = 75, Width = 200 };
+            foreach (string mediaValue in cameraValues)
+            {
+                mediaCombo.Items.Add(mediaValue);
+            }
+            mediaCombo.SelectedIndex = 1;
+            mediaCombo.KeyPress += (senderCombo, eCombo) => { eCombo.Handled = true; };
+            mediaCombo.SelectedIndexChanged += (senderCombo, eCombo) => { textLabel.Focus(); };
+            //Set up buttons to add
+            Button confirmation = new Button() { Text = "OK", Left = 240, Width = 100, Top = 120 };
+            Button cancelButton = new Button() { Text = "Cancel", Left = 350, Width = 100, Top = 120 };
+            //button actions
+            cancelButton.Click += (senderPrompt, ePrompt) => { addMasters = false; masterPrompt.Close(); };
+            confirmation.Click += (senderPrompt, ePrompt) => { addMasters = true; masterTapeName = inputBox.Text; cameraMasterName = mediaCombo.Text; masterPrompt.Close(); };
+            //Add items to form
+            masterPrompt.Controls.Add(textLabel);
+            masterPrompt.Controls.Add(inputBox);
+            masterPrompt.Controls.Add(mediaCombo);
+            masterPrompt.Controls.Add(confirmation);
+            masterPrompt.Controls.Add(cancelButton);
+            masterPrompt.ShowDialog();
+            //Add entries or Cancel depending on button clicked
+            if (addMasters)
+            {
+                switch (GetExtensionOfFile(ofd))
+                {
+                    case "csv":
+                        StatusUpdate("Importing " + masterTapeName + " Entries");
+                        DataBaseControls.AddMasterTapesFromFile(worker, importStream, ofd, masterTapeName, commonMethod.GetCameraNumber(cameraMasterName));
+                        break;
+                    case "txt":
+                        ofd.FileName = @"" + TempConvertToCSV(ofd);
+                        StatusUpdate("Importing " + masterTapeName + " Entries");
+                        DataBaseControls.AddMasterTapesFromFile(worker, importStream, ofd, masterTapeName, commonMethod.GetCameraNumber(cameraMasterName),true);
+                        break;
+                    default:
+                        Console.WriteLine("File was not a txt or a csv");
+                        break;
+                }
+                
+            }
+            else
+            {
+                worker.CancelAsync();
+                if (worker.CancellationPending)
+                {
+                    e.Cancel = true;
+                    return;
+                }
+            }
+        }
+
+        //
+        private void ImportTapes(BackgroundWorker worker)
+        {
+            Stream importStream = null;
+            DataBaseControls.AddTapesFromFile(worker, importStream, ofd);
+        }
+
+        /// <summary>
+        /// Gets the extension of file without the period.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <returns></returns>
+        private string GetExtensionOfFile(OpenFileDialog file)
+        {
+            //extension string to return
+            string extension = "";
+
+            if(file != null)
+            {
+                extension = Path.GetExtension(file.FileName).ToString().Replace(".", "");
+            }
+
+            return extension;
+        }
+
+        /// <summary>
+        /// Convert to temporary csv file
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <returns></returns>
+        private string TempConvertToCSV(OpenFileDialog file)
+        {
+            //string of the filename
+            string filename = "";
+
+            Stream importStream = null;
+
+            //Convert to csv
+            if ((importStream = file.OpenFile()) != null)
+            {
+                try
+                {
+                    //items for 
+                    filename = @"tmp\" + Path.GetFileNameWithoutExtension(file.FileName) + "_tmp.csv";
+                    string line;
+                    string newLine;
+                    string finalLine = "";
+                    List<string> lineList = new List<string>();
+                    char[] seperators = ",".ToCharArray();
+
+                    //check to see if file exists, if it does clear it
+                    if (!File.Exists(@"" + filename))
+                    {
+                        //Log file did not exist
+                        Directory.CreateDirectory(@"tmp");
+                        File.Create(@"" + filename).Close();
+                        Console.WriteLine("File doesn't exist");
+                    }
+                    else
+                    {
+                        //Clear File
+                        File.WriteAllText(@"" + filename, string.Empty);
+                        Console.WriteLine("File Cleared");
+                    }
+                    
+                    //streamReader to read csv file
+                    StreamReader textReader = new StreamReader(importStream);
+                    while ((line = textReader.ReadLine()) != null)
+                    {
+                        finalLine = "";
+                        lineList.Clear();
+                        newLine = line.Trim().Replace("\t", ",").Replace(",,", ",").Replace(",,,", ",");
+                        while (newLine[newLine.Length - 1].Equals(","))
+                        {
+                            newLine = newLine.Remove(newLine.Length - 1, 1);
+                        }
+
+                        string[] lineArray = newLine.Split(seperators, 15);
+
+                        foreach (string value in lineArray)
+                        {
+                            lineList.Add(value.Trim());
+                        }
+
+                        finalLine = string.Join(",", lineList);
+
+                        
+                        //Write to tmp file
+                        using (StreamWriter csvWriter = File.AppendText(@"" + filename))
+                        {
+                            //Log Format
+                            csvWriter.WriteLine("{0}", finalLine);
+
+                            csvWriter.Close();
+                        }
+                    }
+
+
+                }
+                catch (Exception error)
+                {
+                    MainForm.LogFile(error.Message);
+                }
+            }
+
+            return filename;
+        }
+
+        /// <summary>
+        /// Converts the text file to a CSV file.
+        /// </summary>
+        /// <param name="worker">The worker.</param>
+        /// <param name="file">The file.</param>
+        private void ConvertTextToCSVFile(BackgroundWorker worker, OpenFileDialog file)
+        {
+            Stream importStream = null;
+
+            if ((importStream = file.OpenFile()) != null)
+            {
+                try
+                {
+                    //items for 
+                    string line;
+                    string newLine;
+                    string finalLine = "";
+                    List<string> lineList = new List<string>();
+                    char[] seperators = ",".ToCharArray();
+
+
+                    //streamReader to read csv file
+                    StreamReader textReader = new StreamReader(importStream);
+                    while ((line = textReader.ReadLine()) != null)
+                    {
+                        finalLine = "";
+                        lineList.Clear();
+                        newLine = line.Trim().Replace("\t", ",").Replace(",,", ",").Replace(",,,", ",");
+                        while (newLine[newLine.Length - 1].Equals(","))
+                        {
+                            newLine = newLine.Remove(newLine.Length - 1, 1);
+                        }
+
+                        string[] lineArray = newLine.Split(seperators, 15);
+
+                        foreach (string value in lineArray)
+                        {
+                            lineList.Add(value.Trim());
+                        }
+
+                        finalLine = string.Join(",", lineList);
+
+                        if (!File.Exists(@"outputs\" + Path.GetFileNameWithoutExtension(file.FileName) + "_Fixed.csv"))
+                        {
+                            //Log file did not exist
+                            Directory.CreateDirectory(@"outputs");
+                            Console.WriteLine("Log files does not exist");
+                            File.Create(@"outputs\" + Path.GetFileNameWithoutExtension(file.FileName) + "_Fixed.csv").Close();
+                        }
+
+                        //Write to log file
+                        using (StreamWriter csvWriter = File.AppendText(@"outputs\" + Path.GetFileNameWithoutExtension(file.FileName) + "_Fixed.csv"))
+                        {
+                            //Log Format
+                            csvWriter.WriteLine("{0}", finalLine);
+
+                            csvWriter.Close();
+                        }
+                    }
+                }
+                catch (Exception error)
+                {
+                    MainForm.LogFile(error.Message);
+                }
+            }
+            //Opens file browser to folder of outputted file
+            System.Diagnostics.Process.Start(@"outputs");
+        }
+
+        #endregion
 
         //Click on Close
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -225,7 +436,7 @@ namespace TNG_Database
             
         }
 
-        //Open projects data from menu
+        //Open projects data form menu
         private void projectsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //Create new instance of form MasterListForm
@@ -239,7 +450,7 @@ namespace TNG_Database
             projectsForm.WindowState = FormWindowState.Maximized;
         }
 
-        //Open Archive videos data from menu
+        //Open Archive videos data form menu
         private void archiveVideosToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //Create new instance of form MasterListForm
@@ -253,6 +464,7 @@ namespace TNG_Database
             masterArchiveForm.WindowState = FormWindowState.Maximized;
         }
 
+        //Open Deleted Database data form
         private void deletedDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //Create new instance of form MasterListForm
@@ -316,138 +528,33 @@ namespace TNG_Database
         /// <param name="e">The <see cref="DoWorkEventArgs"/> instance containing the event data.</param>
         private void CheckImportFunction(BackgroundWorker worker, DoWorkEventArgs e)
         {
-            Stream importStream = null;
+            
 
             switch (e.Argument.ToString())
             {
                 case "projects":
-                    DataBaseControls.AddProjectsFromFile(worker, importStream, ofd);
+                    //Import Projects
+                    ImportProjects(worker);
                     break;
                 case "masters":
-                    //Master List import, has a popup to enter Master Tape to add to
-                    List<MasterListValues> masterListValues = DataBaseControls.GetAllMasterListItems();
-                    string[] cameraValues = commonMethod.CameraDropdownItems();
-                    string masterTapeName = "";
-                    string cameraMasterName = "";
-                    bool addMasters = false;
-                    //create a new form for user to enter tape name
-                    Form masterPrompt = new Form();
-                    masterPrompt.Height = 200;
-                    masterPrompt.Width = 500;
-                    masterPrompt.Text = "Enter Tape Name";
-
-                    //Set up items to add to popup box
-                    Label textLabel = new Label() { Left = 50, Top = 20, Text = "Master Archive to Import" };
-                    ComboBox inputBox = new ComboBox() { Left = 50, Top = 50, Width = 400 };
-                    //add items to combobox
-                    foreach (MasterListValues values in masterListValues)
-                    {
-                        inputBox.Items.Add(values.MasterArchive);
-                    }
-                    inputBox.SelectedIndex = 0;
-                    //add media combobox
-                    ComboBox mediaCombo = new ComboBox() { Left = 50, Top = 75, Width = 200 };
-                    foreach(string mediaValue in cameraValues)
-                    {
-                        mediaCombo.Items.Add(mediaValue);
-                    }
-                    mediaCombo.SelectedIndex = 1;
-                    mediaCombo.KeyPress += (senderCombo, eCombo) => { eCombo.Handled = true; };
-                    mediaCombo.SelectedIndexChanged += (senderCombo, eCombo) => { textLabel.Focus(); };
-                    //Set up buttons to add
-                    Button confirmation = new Button() { Text = "OK", Left = 240, Width = 100, Top = 120 };
-                    Button cancelButton = new Button() { Text = "Cancel", Left = 350, Width = 100, Top = 120 };
-                    //button actions
-                    cancelButton.Click += (senderPrompt, ePrompt) => { addMasters = false; masterPrompt.Close(); };
-                    confirmation.Click += (senderPrompt, ePrompt) => { addMasters = true; masterTapeName = inputBox.Text; cameraMasterName = mediaCombo.Text; masterPrompt.Close(); };
-                    //Add items to form
-                    masterPrompt.Controls.Add(textLabel);
-                    masterPrompt.Controls.Add(inputBox);
-                    masterPrompt.Controls.Add(mediaCombo);
-                    masterPrompt.Controls.Add(confirmation);
-                    masterPrompt.Controls.Add(cancelButton);
-                    masterPrompt.ShowDialog();
-                    //Add entries or Cancel depending on button clicked
-                    if (addMasters)
-                    {
-                        StatusUpdate("Importing " + masterTapeName + " Entries");
-                        DataBaseControls.AddMasterTapesFromFile(worker, importStream, ofd, masterTapeName, commonMethod.GetCameraNumber(cameraMasterName));
-                    }
-                    else
-                    {
-                        worker.CancelAsync();
-                        if (worker.CancellationPending)
-                        {
-                            e.Cancel = true;
-                            return;
-                        }
-                    }
+                    //Import Master Tapes
+                    ImportMasters(worker, e);
                     break;
                 case "tapes":
                     //tapes file selected for import
-                    DataBaseControls.AddTapesFromFile(worker, importStream, ofd);
+                    ImportTapes(worker);
                     break;
                 case "tocsv":
+                    ConvertTextToCSVFile(worker, ofd);
+                    break;
+                case "check":
+                    //TODO delete this before release
+                    Stream importStream = null;
+
                     if ((importStream = ofd.OpenFile()) != null)
                     {
-
-                        try
-                        {
-                            //items for 
-                            string line;
-                            string newLine;
-                            string finalLine = "";
-                            List<string> lineList = new List<string>();
-                            char[] seperators = ",".ToCharArray();
-
-
-                            //streamReader to read csv file
-                            StreamReader textReader = new StreamReader(importStream);
-                            while ((line = textReader.ReadLine()) != null)
-                            {
-                                finalLine = "";
-                                lineList.Clear();
-                                newLine = line.Trim().Replace("\t", ",").Replace(",,",",").Replace(",,,",",");
-                                while(newLine[newLine.Length - 1].Equals(","))
-                                {
-                                    newLine = newLine.Remove(newLine.Length - 1, 1);
-                                }
-
-                                string[] lineArray = newLine.Split(seperators, 15);
-
-                                foreach(string value in lineArray)
-                                {
-                                    lineList.Add(value.Trim());
-                                }
-
-                                finalLine = string.Join(",", lineList);
-
-                                if (!File.Exists(@"outputs\" + Path.GetFileNameWithoutExtension(ofd.FileName) + "_Fixed.csv"))
-                                {
-                                    //Log file did not exist
-                                    Directory.CreateDirectory(@"outputs");
-                                    Console.WriteLine("Log files does not exist");
-                                    File.Create(@"outputs\" + Path.GetFileNameWithoutExtension(ofd.FileName) +"_Fixed.csv").Close();
-                                }
-
-                                //Write to log file
-                                using (StreamWriter csvWriter = File.AppendText(@"outputs\" + Path.GetFileNameWithoutExtension(ofd.FileName) + "_Fixed.csv"))
-                                {
-                                    //Log Format
-                                    csvWriter.WriteLine("{0}", finalLine);
-
-                                    csvWriter.Close();
-                                }
-                            }
-
-
-                        }
-                        catch (Exception error)
-                        {
-                            MainForm.LogFile(error.Message);
-                        }
+                        Console.WriteLine(Path.GetExtension(ofd.FileName).ToString().Replace(".",""));
                     }
-                    System.Diagnostics.Process.Start(@"outputs");
                     break;
             }
         }
@@ -508,7 +615,7 @@ namespace TNG_Database
             string importMaster = "masters";
             ofd = new OpenFileDialog();
             ofd.InitialDirectory = Properties.TNG_Settings.Default.LastFolder;
-            ofd.Filter = "comma seperated files (*.csv)|*.csv";
+            ofd.Filter = "comma seperated files (*.csv)|*.csv|text files (*.txt)|*.txt";
             ofd.RestoreDirectory = true;
 
             if (ofd.ShowDialog() == DialogResult.OK)
@@ -675,5 +782,7 @@ namespace TNG_Database
                 }
             }
         }
+
+        
     }
 }
