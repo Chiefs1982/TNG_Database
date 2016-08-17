@@ -28,6 +28,8 @@ Ideas:
 * Add filter to search listview
 * Add copy, cut, paste functions to toolstrip
 * Created Import for tapes using .csv
+* Add import of txt or csv files for master
+* Add import conversion for word documents for master
 
 
 - Create Layout for Input, Search, Edit, Stats (possibly in tabs or upper bar)
@@ -43,6 +45,8 @@ Ideas:
 	- default export directory
 	- default import directory
 	- 
+- Add ability to read file for master name and update combobox accordingly
+
 
 60, 200, 120, 50, 50, 62, 78, 95, 60
 

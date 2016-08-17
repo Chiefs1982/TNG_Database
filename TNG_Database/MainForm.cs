@@ -10,6 +10,9 @@ using System.Windows.Forms;
 using System.Data.SQLite;
 using System.IO;
 using TNG_Database.Values;
+using Spire.Doc;
+using Spire.Doc.Documents;
+using System.Globalization;
 
 namespace TNG_Database
 {
@@ -160,6 +163,44 @@ namespace TNG_Database
             mediaCombo.SelectedIndex = 1;
             mediaCombo.KeyPress += (senderCombo, eCombo) => { eCombo.Handled = true; };
             mediaCombo.SelectedIndexChanged += (senderCombo, eCombo) => { textLabel.Focus(); };
+
+            try
+            {
+                //check to make sure there is something selected
+                if (!ofd.FileName.Equals(string.Empty))
+                {
+                    //get name of file without extension
+                    string nameFile = Path.GetFileNameWithoutExtension(ofd.FileName);
+                    //get index of the word master
+                    int index = nameFile.ToLower().IndexOf("master");
+                    
+                    //get substring to include "master ddd"
+                    nameFile = nameFile.Substring(index, 10);
+
+                    //check to make sure the last character is a digit
+                    while (!char.IsDigit(nameFile[nameFile.Length - 1]))
+                    {
+                        nameFile = nameFile.Remove(nameFile.Length - 1, 1);
+                    }
+
+                    //convert name to lowercasse and then camelcase
+                    TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+                    nameFile = textInfo.ToTitleCase(nameFile.ToLower());
+
+                    //add name of master tape if not included
+                    if (!inputBox.Items.Contains(nameFile))
+                    {
+                        inputBox.Items.Add(nameFile);
+                    }
+                    inputBox.Text = nameFile;
+                }
+            }
+            catch { }
+            
+
+            //Console.WriteLine("Selected Filename Outside: " + ofd.FileName);
+
+
             //Set up buttons to add
             Button confirmation = new Button() { Text = "OK", Left = 240, Width = 100, Top = 120 };
             Button cancelButton = new Button() { Text = "Cancel", Left = 350, Width = 100, Top = 120 };
@@ -186,6 +227,12 @@ namespace TNG_Database
                         ofd.FileName = @"" + TempConvertToCSV(ofd);
                         StatusUpdate("Importing " + masterTapeName + " Entries");
                         DataBaseControls.AddMasterTapesFromFile(worker, importStream, ofd, masterTapeName, commonMethod.GetCameraNumber(cameraMasterName),true);
+                        break;
+                    case "doc":
+                    case "docx":
+                        ofd.FileName = @"" + ConvertWordToCSVFile(ofd);
+                        StatusUpdate("Importing " + masterTapeName + " Entries");
+                        DataBaseControls.AddMasterTapesFromFile(worker, importStream, ofd, masterTapeName, commonMethod.GetCameraNumber(cameraMasterName), true);
                         break;
                     default:
                         Console.WriteLine("File was not a txt or a csv");
@@ -379,6 +426,119 @@ namespace TNG_Database
             }
             //Opens file browser to folder of outputted file
             System.Diagnostics.Process.Start(@"outputs");
+        }
+
+        private string ConvertWordToCSVFile(OpenFileDialog file)
+        {
+            string filename = "";
+            string newFilename = "";
+
+            if (file.OpenFile() != null)
+            {
+                //string for converted filename
+                filename = @"tmp\" + Path.GetFileNameWithoutExtension(file.FileName) + "_converted.txt";
+
+                //Start new document and load from selected file
+                Document doc = new Document();
+                doc.LoadFromFile(Path.GetFullPath(@"" + file.FileName));
+
+                //check to see if file exists, if it does clear it
+                if (!File.Exists(@"" + filename))
+                {
+                    //Log file did not exist
+                    Directory.CreateDirectory(@"tmp");
+                    File.Create(@"" + filename).Close();
+                    Console.WriteLine("File doesn't exist");
+                }
+                else
+                {
+                    //Clear File
+                    File.WriteAllText(@"" + filename, string.Empty);
+                    Console.WriteLine("File Cleared");
+                }
+
+                //save converted format to new text file
+                doc.SaveToFile(@"" + filename, FileFormat.Txt);
+            }
+
+            file.FileName = @"" + filename;
+
+            Stream convertFile = null;
+
+            if ((convertFile = file.OpenFile()) != null)
+            {
+                try
+                {
+                    //items for 
+                    string line;
+                    string newLine;
+                    string finalLine = "";
+                    List<string> lineList = new List<string>();
+                    char[] seperators = ",".ToCharArray();
+
+
+                    //streamReader to read csv file
+                    StreamReader textReader = new StreamReader(convertFile);
+                    while ((line = textReader.ReadLine()) != null)
+                    {
+                        //check if line is empty of if first character is a number
+                        if (!string.IsNullOrEmpty(line) && char.IsDigit(line[0]))
+                        {
+                            finalLine = "";
+                            lineList.Clear();
+                            newLine = line.Trim().Replace("\t", ",").Replace(",,", ",").Replace(",,,", ",");
+                            newFilename = @"tmp\" + Path.GetFileNameWithoutExtension(file.FileName) + "_import.csv";
+
+                            //if last character is a comma delete the comma
+                            while (newLine[newLine.Length - 1].Equals(","))
+                            {
+                                newLine = newLine.Remove(newLine.Length - 1, 1);
+                            }
+
+                            string[] lineArray = newLine.Split(seperators, 3);
+
+                            foreach (string value in lineArray)
+                            {
+                                lineList.Add(value.Trim());
+                            }
+
+                            //final line with commas seperating values
+                            finalLine = string.Join(",", lineList);
+
+                            if (!File.Exists(@"" + newFilename))
+                            {
+                                //Log file did not exist
+                                Directory.CreateDirectory(@"outputs");
+                                Console.WriteLine("Log files does not exist");
+                                File.Create(@"" + newFilename).Close();
+                            }
+
+                            //Write to log file
+                            using (StreamWriter csvWriter = File.AppendText(@"" + newFilename))
+                            {
+                                //Log Format
+                                csvWriter.WriteLine("{0}", finalLine);
+
+                                csvWriter.Close();
+                            }
+                        }
+                    }
+                    textReader.Close();
+                    convertFile.Close();
+                    //delete file after use
+                    if (File.Exists(Path.GetFullPath(filename)))
+                    {
+                        File.Delete(Path.GetFullPath(filename));
+                        Console.WriteLine("File Deleted");
+                    }
+                }
+                catch (Exception error)
+                {
+                    MainForm.LogFile(error.Message);
+                }
+                //TODO add to own function and add to master import
+            }
+            return newFilename;
         }
 
         #endregion
@@ -615,7 +775,7 @@ namespace TNG_Database
             string importMaster = "masters";
             ofd = new OpenFileDialog();
             ofd.InitialDirectory = Properties.TNG_Settings.Default.LastFolder;
-            ofd.Filter = "comma seperated files (*.csv)|*.csv|text files (*.txt)|*.txt";
+            ofd.Filter = "word document (*.doc)|*.doc;*.docx|comma seperated files (*.csv)|*.csv|text files (*.txt)|*.txt";
             ofd.RestoreDirectory = true;
 
             if (ofd.ShowDialog() == DialogResult.OK)
@@ -783,6 +943,9 @@ namespace TNG_Database
             }
         }
 
-        
+        private void wordTestToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            
+        }
     }
 }

@@ -64,6 +64,7 @@
             this.applicationStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.mainFormProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.wordTestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -171,7 +172,8 @@
             // convertToolStripMenuItem
             // 
             this.convertToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tocsvToolStripMenuItem});
+            this.tocsvToolStripMenuItem,
+            this.wordTestToolStripMenuItem});
             this.convertToolStripMenuItem.Name = "convertToolStripMenuItem";
             this.convertToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.convertToolStripMenuItem.Text = "Convert";
@@ -355,6 +357,13 @@
             this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
             this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
             // 
+            // wordTestToolStripMenuItem
+            // 
+            this.wordTestToolStripMenuItem.Name = "wordTestToolStripMenuItem";
+            this.wordTestToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.wordTestToolStripMenuItem.Text = "Word Test";
+            this.wordTestToolStripMenuItem.Click += new System.EventHandler(this.wordTestToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -416,6 +425,7 @@
         private System.Windows.Forms.ToolStripMenuItem tapesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem convertToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem tocsvToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem wordTestToolStripMenuItem;
     }
 }
 
