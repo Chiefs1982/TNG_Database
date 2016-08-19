@@ -174,32 +174,65 @@ namespace TNG_Database
                     //get index of the word master
                     int index = nameFile.ToLower().IndexOf("master");
                     
-                    //get substring to include "master ddd"
-                    nameFile = nameFile.Substring(index, 10);
-
-                    //check to make sure the last character is a digit
-                    while (!char.IsDigit(nameFile[nameFile.Length - 1]))
+                    if(index != -1)
                     {
-                        nameFile = nameFile.Remove(nameFile.Length - 1, 1);
-                    }
+                        //get substring to include "master ddd"
+                        nameFile = nameFile.Substring(index);
 
-                    //convert name to lowercasse and then camelcase
-                    TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-                    nameFile = textInfo.ToTitleCase(nameFile.ToLower());
+                        //check to make sure the last character is a digit
+                        while (!char.IsDigit(nameFile[nameFile.Length - 1]))
+                        {
+                            nameFile = nameFile.Remove(nameFile.Length - 1, 1);
+                        }
 
-                    //add name of master tape if not included
-                    if (!inputBox.Items.Contains(nameFile))
-                    {
-                        inputBox.Items.Add(nameFile);
+                        //convert name to lowercasse and then camelcase
+                        TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+                        nameFile = textInfo.ToTitleCase(nameFile.ToLower());
+
+                        //add name of master tape if not included
+                        if (!inputBox.Items.Contains(nameFile))
+                        {
+                            inputBox.Items.Add(nameFile);
+                        }
+                        inputBox.Text = nameFile;
                     }
-                    inputBox.Text = nameFile;
                 }
             }
-            catch { }
-            
+            catch { Console.WriteLine("Error in master gather"); }
 
-            //Console.WriteLine("Selected Filename Outside: " + ofd.FileName);
+            //check if there is a media defined in the name using all combobox items
+            try
+            {
+                //check to make sure there is something selected
+                if (!ofd.FileName.Equals(string.Empty))
+                {
+                    
+                    //get name of file without extension
+                    foreach (string obj in mediaCombo.Items)
+                    {
+                        Console.WriteLine("In media for loop");
+                        if (!obj.ToLower().Equals("other"))
+                        {
+                            Console.WriteLine("Does not equal other");
+                            //string[] mediaItems = mediaCombo.DataSource.t
+                            string nameFile = Path.GetFileNameWithoutExtension(ofd.FileName);
 
+                            //get index of the word master
+                            int index = nameFile.ToLower().IndexOf(obj.ToLower());
+
+                            //add name of master tape if not included
+                            if (index != -1)
+                            {
+                                Console.WriteLine("Does not equal -1");
+                                mediaCombo.Text = obj;
+                                break;
+                            }
+                        }
+                        
+                    }
+                }
+            }
+            catch { Console.WriteLine("Error in media gather"); }
 
             //Set up buttons to add
             Button confirmation = new Button() { Text = "OK", Left = 240, Width = 100, Top = 120 };
@@ -217,6 +250,7 @@ namespace TNG_Database
             //Add entries or Cancel depending on button clicked
             if (addMasters)
             {
+                //gets extension of the file and acts accordingly
                 switch (GetExtensionOfFile(ofd))
                 {
                     case "csv":
@@ -235,7 +269,7 @@ namespace TNG_Database
                         DataBaseControls.AddMasterTapesFromFile(worker, importStream, ofd, masterTapeName, commonMethod.GetCameraNumber(cameraMasterName), true);
                         break;
                     default:
-                        Console.WriteLine("File was not a txt or a csv");
+                        Console.WriteLine("File was not a txt, doc, docx, or csv");
                         break;
                 }
                 
@@ -251,7 +285,10 @@ namespace TNG_Database
             }
         }
 
-        //
+        /// <summary>
+        /// Imports the tapes from a file
+        /// </summary>
+        /// <param name="worker">The worker.</param>
         private void ImportTapes(BackgroundWorker worker)
         {
             Stream importStream = null;
@@ -268,6 +305,7 @@ namespace TNG_Database
             //extension string to return
             string extension = "";
 
+            //if file is not null get extension and cut off the period
             if(file != null)
             {
                 extension = Path.GetExtension(file.FileName).ToString().Replace(".", "");
@@ -323,6 +361,7 @@ namespace TNG_Database
                         finalLine = "";
                         lineList.Clear();
                         newLine = line.Trim().Replace("\t", ",").Replace(",,", ",").Replace(",,,", ",");
+                        //if the last character is a comma, delete the comma
                         while (newLine[newLine.Length - 1].Equals(","))
                         {
                             newLine = newLine.Remove(newLine.Length - 1, 1);
@@ -330,11 +369,13 @@ namespace TNG_Database
 
                         string[] lineArray = newLine.Split(seperators, 15);
 
+                        //iterate over each value and trim off white space
                         foreach (string value in lineArray)
                         {
                             lineList.Add(value.Trim());
                         }
 
+                        //join everything back together seperated by commas
                         finalLine = string.Join(",", lineList);
 
                         

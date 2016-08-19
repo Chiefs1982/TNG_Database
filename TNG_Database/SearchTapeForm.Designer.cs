@@ -47,30 +47,16 @@
             this.label3 = new System.Windows.Forms.Label();
             this.searchTotalFoundLabel = new System.Windows.Forms.Label();
             this.defaultTapeGroupbox = new System.Windows.Forms.GroupBox();
-            this.searchItemsPanel = new System.Windows.Forms.Panel();
-            this.searchClipNameLabel = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.searchTagFlowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
-            this.searchTapeNumberLabel = new System.Windows.Forms.Label();
-            this.searchTapeNameLabel = new System.Windows.Forms.Label();
-            this.searchMasterArchiveLabel = new System.Windows.Forms.Label();
-            this.searchPersonLabel = new System.Windows.Forms.Label();
-            this.searchDateLabel = new System.Windows.Forms.Label();
-            this.searchCameraLabel = new System.Windows.Forms.Label();
-            this.label34 = new System.Windows.Forms.Label();
-            this.label35 = new System.Windows.Forms.Label();
-            this.label36 = new System.Windows.Forms.Label();
-            this.label37 = new System.Windows.Forms.Label();
-            this.label38 = new System.Windows.Forms.Label();
-            this.label39 = new System.Windows.Forms.Label();
-            this.label40 = new System.Windows.Forms.Label();
-            this.label41 = new System.Windows.Forms.Label();
-            this.label42 = new System.Windows.Forms.Label();
-            this.searchProjectIDLabel = new System.Windows.Forms.Label();
-            this.searchProjectNameLabel = new System.Windows.Forms.Label();
-            this.searchNoItemSelectedLabel = new System.Windows.Forms.Label();
+            this.searchFlowPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.searchFlowPanel3 = new System.Windows.Forms.FlowLayoutPanel();
+            this.searchFlowPanel2 = new System.Windows.Forms.FlowLayoutPanel();
+            this.searchFlowPanel4 = new System.Windows.Forms.FlowLayoutPanel();
+            this.searchFlowPanel5 = new System.Windows.Forms.FlowLayoutPanel();
+            this.searchFlowPanel6 = new System.Windows.Forms.FlowLayoutPanel();
+            this.searchFlowPanel7 = new System.Windows.Forms.FlowLayoutPanel();
+            this.searchFlowPanel8 = new System.Windows.Forms.FlowLayoutPanel();
+            this.searchFlowPanel9 = new System.Windows.Forms.FlowLayoutPanel();
             this.defaultTapeGroupbox.SuspendLayout();
-            this.searchItemsPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -210,229 +196,83 @@
             // 
             // defaultTapeGroupbox
             // 
-            this.defaultTapeGroupbox.Controls.Add(this.searchItemsPanel);
-            this.defaultTapeGroupbox.Controls.Add(this.searchNoItemSelectedLabel);
+            this.defaultTapeGroupbox.Controls.Add(this.searchFlowPanel9);
+            this.defaultTapeGroupbox.Controls.Add(this.searchFlowPanel8);
+            this.defaultTapeGroupbox.Controls.Add(this.searchFlowPanel7);
+            this.defaultTapeGroupbox.Controls.Add(this.searchFlowPanel6);
+            this.defaultTapeGroupbox.Controls.Add(this.searchFlowPanel5);
+            this.defaultTapeGroupbox.Controls.Add(this.searchFlowPanel4);
+            this.defaultTapeGroupbox.Controls.Add(this.searchFlowPanel3);
+            this.defaultTapeGroupbox.Controls.Add(this.searchFlowPanel2);
+            this.defaultTapeGroupbox.Controls.Add(this.searchFlowPanel1);
             this.defaultTapeGroupbox.Location = new System.Drawing.Point(12, 335);
             this.defaultTapeGroupbox.Name = "defaultTapeGroupbox";
-            this.defaultTapeGroupbox.Size = new System.Drawing.Size(820, 195);
+            this.defaultTapeGroupbox.Size = new System.Drawing.Size(820, 251);
             this.defaultTapeGroupbox.TabIndex = 9;
             this.defaultTapeGroupbox.TabStop = false;
             // 
-            // searchItemsPanel
+            // searchFlowPanel1
             // 
-            this.searchItemsPanel.Controls.Add(this.searchClipNameLabel);
-            this.searchItemsPanel.Controls.Add(this.label5);
-            this.searchItemsPanel.Controls.Add(this.searchTagFlowLayoutPanel);
-            this.searchItemsPanel.Controls.Add(this.searchTapeNumberLabel);
-            this.searchItemsPanel.Controls.Add(this.searchTapeNameLabel);
-            this.searchItemsPanel.Controls.Add(this.searchMasterArchiveLabel);
-            this.searchItemsPanel.Controls.Add(this.searchPersonLabel);
-            this.searchItemsPanel.Controls.Add(this.searchDateLabel);
-            this.searchItemsPanel.Controls.Add(this.searchCameraLabel);
-            this.searchItemsPanel.Controls.Add(this.label34);
-            this.searchItemsPanel.Controls.Add(this.label35);
-            this.searchItemsPanel.Controls.Add(this.label36);
-            this.searchItemsPanel.Controls.Add(this.label37);
-            this.searchItemsPanel.Controls.Add(this.label38);
-            this.searchItemsPanel.Controls.Add(this.label39);
-            this.searchItemsPanel.Controls.Add(this.label40);
-            this.searchItemsPanel.Controls.Add(this.label41);
-            this.searchItemsPanel.Controls.Add(this.label42);
-            this.searchItemsPanel.Controls.Add(this.searchProjectIDLabel);
-            this.searchItemsPanel.Controls.Add(this.searchProjectNameLabel);
-            this.searchItemsPanel.Location = new System.Drawing.Point(15, 32);
-            this.searchItemsPanel.Name = "searchItemsPanel";
-            this.searchItemsPanel.Size = new System.Drawing.Size(799, 155);
-            this.searchItemsPanel.TabIndex = 45;
+            this.searchFlowPanel1.Location = new System.Drawing.Point(6, 22);
+            this.searchFlowPanel1.Name = "searchFlowPanel1";
+            this.searchFlowPanel1.Size = new System.Drawing.Size(808, 20);
+            this.searchFlowPanel1.TabIndex = 0;
             // 
-            // searchClipNameLabel
+            // searchFlowPanel3
             // 
-            this.searchClipNameLabel.AutoSize = true;
-            this.searchClipNameLabel.Location = new System.Drawing.Point(490, 135);
-            this.searchClipNameLabel.Name = "searchClipNameLabel";
-            this.searchClipNameLabel.Size = new System.Drawing.Size(118, 13);
-            this.searchClipNameLabel.TabIndex = 47;
-            this.searchClipNameLabel.Text = "Clip Number If Selected";
+            this.searchFlowPanel3.Location = new System.Drawing.Point(6, 62);
+            this.searchFlowPanel3.Name = "searchFlowPanel3";
+            this.searchFlowPanel3.Size = new System.Drawing.Size(808, 20);
+            this.searchFlowPanel3.TabIndex = 1;
             // 
-            // label5
+            // searchFlowPanel2
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(403, 135);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(67, 13);
-            this.label5.TabIndex = 46;
-            this.label5.Text = "Clip Number:";
+            this.searchFlowPanel2.Location = new System.Drawing.Point(6, 42);
+            this.searchFlowPanel2.Name = "searchFlowPanel2";
+            this.searchFlowPanel2.Size = new System.Drawing.Size(808, 20);
+            this.searchFlowPanel2.TabIndex = 1;
             // 
-            // searchTagFlowLayoutPanel
+            // searchFlowPanel4
             // 
-            this.searchTagFlowLayoutPanel.AutoScroll = true;
-            this.searchTagFlowLayoutPanel.AutoScrollMinSize = new System.Drawing.Size(353, 62);
-            this.searchTagFlowLayoutPanel.Location = new System.Drawing.Point(443, 62);
-            this.searchTagFlowLayoutPanel.Name = "searchTagFlowLayoutPanel";
-            this.searchTagFlowLayoutPanel.Size = new System.Drawing.Size(353, 62);
-            this.searchTagFlowLayoutPanel.TabIndex = 45;
+            this.searchFlowPanel4.Location = new System.Drawing.Point(6, 82);
+            this.searchFlowPanel4.Name = "searchFlowPanel4";
+            this.searchFlowPanel4.Size = new System.Drawing.Size(808, 20);
+            this.searchFlowPanel4.TabIndex = 1;
             // 
-            // searchTapeNumberLabel
+            // searchFlowPanel5
             // 
-            this.searchTapeNumberLabel.AutoSize = true;
-            this.searchTapeNumberLabel.Location = new System.Drawing.Point(490, 13);
-            this.searchTapeNumberLabel.Name = "searchTapeNumberLabel";
-            this.searchTapeNumberLabel.Size = new System.Drawing.Size(115, 13);
-            this.searchTapeNumberLabel.TabIndex = 44;
-            this.searchTapeNumberLabel.Text = "Tape Number selected";
+            this.searchFlowPanel5.Location = new System.Drawing.Point(6, 102);
+            this.searchFlowPanel5.Name = "searchFlowPanel5";
+            this.searchFlowPanel5.Size = new System.Drawing.Size(808, 20);
+            this.searchFlowPanel5.TabIndex = 1;
             // 
-            // searchTapeNameLabel
+            // searchFlowPanel6
             // 
-            this.searchTapeNameLabel.AutoSize = true;
-            this.searchTapeNameLabel.Location = new System.Drawing.Point(490, 37);
-            this.searchTapeNameLabel.Name = "searchTapeNameLabel";
-            this.searchTapeNameLabel.Size = new System.Drawing.Size(106, 13);
-            this.searchTapeNameLabel.TabIndex = 43;
-            this.searchTapeNameLabel.Text = "Tape Name selected";
+            this.searchFlowPanel6.Location = new System.Drawing.Point(6, 122);
+            this.searchFlowPanel6.Name = "searchFlowPanel6";
+            this.searchFlowPanel6.Size = new System.Drawing.Size(808, 20);
+            this.searchFlowPanel6.TabIndex = 1;
             // 
-            // searchMasterArchiveLabel
+            // searchFlowPanel7
             // 
-            this.searchMasterArchiveLabel.AutoSize = true;
-            this.searchMasterArchiveLabel.Location = new System.Drawing.Point(92, 135);
-            this.searchMasterArchiveLabel.Name = "searchMasterArchiveLabel";
-            this.searchMasterArchiveLabel.Size = new System.Drawing.Size(121, 13);
-            this.searchMasterArchiveLabel.TabIndex = 41;
-            this.searchMasterArchiveLabel.Text = "Master Archive selected";
+            this.searchFlowPanel7.Location = new System.Drawing.Point(6, 142);
+            this.searchFlowPanel7.Name = "searchFlowPanel7";
+            this.searchFlowPanel7.Size = new System.Drawing.Size(808, 20);
+            this.searchFlowPanel7.TabIndex = 2;
             // 
-            // searchPersonLabel
+            // searchFlowPanel8
             // 
-            this.searchPersonLabel.AutoSize = true;
-            this.searchPersonLabel.Location = new System.Drawing.Point(92, 111);
-            this.searchPersonLabel.Name = "searchPersonLabel";
-            this.searchPersonLabel.Size = new System.Drawing.Size(83, 13);
-            this.searchPersonLabel.TabIndex = 40;
-            this.searchPersonLabel.Text = "Person selected";
+            this.searchFlowPanel8.Location = new System.Drawing.Point(6, 162);
+            this.searchFlowPanel8.Name = "searchFlowPanel8";
+            this.searchFlowPanel8.Size = new System.Drawing.Size(808, 20);
+            this.searchFlowPanel8.TabIndex = 1;
             // 
-            // searchDateLabel
+            // searchFlowPanel9
             // 
-            this.searchDateLabel.AutoSize = true;
-            this.searchDateLabel.Location = new System.Drawing.Point(92, 87);
-            this.searchDateLabel.Name = "searchDateLabel";
-            this.searchDateLabel.Size = new System.Drawing.Size(73, 13);
-            this.searchDateLabel.TabIndex = 39;
-            this.searchDateLabel.Text = "Date selected";
-            // 
-            // searchCameraLabel
-            // 
-            this.searchCameraLabel.AutoSize = true;
-            this.searchCameraLabel.Location = new System.Drawing.Point(92, 63);
-            this.searchCameraLabel.Name = "searchCameraLabel";
-            this.searchCameraLabel.Size = new System.Drawing.Size(86, 13);
-            this.searchCameraLabel.TabIndex = 38;
-            this.searchCameraLabel.Text = "Camera selected";
-            // 
-            // label34
-            // 
-            this.label34.AutoSize = true;
-            this.label34.Location = new System.Drawing.Point(15, 135);
-            this.label34.Name = "label34";
-            this.label34.Size = new System.Drawing.Size(81, 13);
-            this.label34.TabIndex = 37;
-            this.label34.Text = "Master Archive:";
-            // 
-            // label35
-            // 
-            this.label35.AutoSize = true;
-            this.label35.Location = new System.Drawing.Point(403, 63);
-            this.label35.Name = "label35";
-            this.label35.Size = new System.Drawing.Size(34, 13);
-            this.label35.TabIndex = 36;
-            this.label35.Text = "Tags:";
-            // 
-            // label36
-            // 
-            this.label36.AutoSize = true;
-            this.label36.Location = new System.Drawing.Point(15, 111);
-            this.label36.Name = "label36";
-            this.label36.Size = new System.Drawing.Size(62, 13);
-            this.label36.TabIndex = 35;
-            this.label36.Text = "Entered By:";
-            // 
-            // label37
-            // 
-            this.label37.AutoSize = true;
-            this.label37.Location = new System.Drawing.Point(15, 87);
-            this.label37.Name = "label37";
-            this.label37.Size = new System.Drawing.Size(58, 13);
-            this.label37.TabIndex = 34;
-            this.label37.Text = "Date Shot:";
-            // 
-            // label38
-            // 
-            this.label38.AutoSize = true;
-            this.label38.Location = new System.Drawing.Point(15, 63);
-            this.label38.Name = "label38";
-            this.label38.Size = new System.Drawing.Size(46, 13);
-            this.label38.TabIndex = 33;
-            this.label38.Text = "Camera:";
-            // 
-            // label39
-            // 
-            this.label39.AutoSize = true;
-            this.label39.Location = new System.Drawing.Point(403, 37);
-            this.label39.Name = "label39";
-            this.label39.Size = new System.Drawing.Size(66, 13);
-            this.label39.TabIndex = 32;
-            this.label39.Text = "Tape Name:";
-            // 
-            // label40
-            // 
-            this.label40.AutoSize = true;
-            this.label40.Location = new System.Drawing.Point(403, 13);
-            this.label40.Name = "label40";
-            this.label40.Size = new System.Drawing.Size(75, 13);
-            this.label40.TabIndex = 31;
-            this.label40.Text = "Tape Number:";
-            // 
-            // label41
-            // 
-            this.label41.AutoSize = true;
-            this.label41.Location = new System.Drawing.Point(15, 37);
-            this.label41.Name = "label41";
-            this.label41.Size = new System.Drawing.Size(74, 13);
-            this.label41.TabIndex = 30;
-            this.label41.Text = "Project Name:";
-            // 
-            // label42
-            // 
-            this.label42.AutoSize = true;
-            this.label42.Location = new System.Drawing.Point(15, 13);
-            this.label42.Name = "label42";
-            this.label42.Size = new System.Drawing.Size(57, 13);
-            this.label42.TabIndex = 29;
-            this.label42.Text = "Project ID:";
-            // 
-            // searchProjectIDLabel
-            // 
-            this.searchProjectIDLabel.AutoSize = true;
-            this.searchProjectIDLabel.Location = new System.Drawing.Point(92, 13);
-            this.searchProjectIDLabel.Name = "searchProjectIDLabel";
-            this.searchProjectIDLabel.Size = new System.Drawing.Size(97, 13);
-            this.searchProjectIDLabel.TabIndex = 28;
-            this.searchProjectIDLabel.Text = "Project ID selected";
-            // 
-            // searchProjectNameLabel
-            // 
-            this.searchProjectNameLabel.AutoSize = true;
-            this.searchProjectNameLabel.Location = new System.Drawing.Point(92, 37);
-            this.searchProjectNameLabel.Name = "searchProjectNameLabel";
-            this.searchProjectNameLabel.Size = new System.Drawing.Size(112, 13);
-            this.searchProjectNameLabel.TabIndex = 27;
-            this.searchProjectNameLabel.Text = "Project name selected";
-            // 
-            // searchNoItemSelectedLabel
-            // 
-            this.searchNoItemSelectedLabel.AutoSize = true;
-            this.searchNoItemSelectedLabel.Location = new System.Drawing.Point(12, 16);
-            this.searchNoItemSelectedLabel.Name = "searchNoItemSelectedLabel";
-            this.searchNoItemSelectedLabel.Size = new System.Drawing.Size(200, 13);
-            this.searchNoItemSelectedLabel.TabIndex = 0;
-            this.searchNoItemSelectedLabel.Text = "Select an item from the list to view details";
+            this.searchFlowPanel9.Location = new System.Drawing.Point(6, 182);
+            this.searchFlowPanel9.Name = "searchFlowPanel9";
+            this.searchFlowPanel9.Size = new System.Drawing.Size(808, 20);
+            this.searchFlowPanel9.TabIndex = 3;
             // 
             // SearchTapeForm
             // 
@@ -457,9 +297,6 @@
             this.Text = "SearchTapeForm";
             this.TopMost = true;
             this.defaultTapeGroupbox.ResumeLayout(false);
-            this.defaultTapeGroupbox.PerformLayout();
-            this.searchItemsPanel.ResumeLayout(false);
-            this.searchItemsPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -485,28 +322,15 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label searchTotalFoundLabel;
         private System.Windows.Forms.GroupBox defaultTapeGroupbox;
-        private System.Windows.Forms.Panel searchItemsPanel;
-        private System.Windows.Forms.FlowLayoutPanel searchTagFlowLayoutPanel;
-        private System.Windows.Forms.Label searchTapeNumberLabel;
-        private System.Windows.Forms.Label searchTapeNameLabel;
-        private System.Windows.Forms.Label searchMasterArchiveLabel;
-        private System.Windows.Forms.Label searchPersonLabel;
-        private System.Windows.Forms.Label searchDateLabel;
-        private System.Windows.Forms.Label searchCameraLabel;
-        private System.Windows.Forms.Label label34;
-        private System.Windows.Forms.Label label35;
-        private System.Windows.Forms.Label label36;
-        private System.Windows.Forms.Label label37;
-        private System.Windows.Forms.Label label38;
-        private System.Windows.Forms.Label label39;
-        private System.Windows.Forms.Label label40;
-        private System.Windows.Forms.Label label41;
-        private System.Windows.Forms.Label label42;
-        private System.Windows.Forms.Label searchProjectIDLabel;
-        private System.Windows.Forms.Label searchProjectNameLabel;
-        private System.Windows.Forms.Label searchNoItemSelectedLabel;
-        private System.Windows.Forms.Label searchClipNameLabel;
-        private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ColumnHeader columnClip;
+        private System.Windows.Forms.FlowLayoutPanel searchFlowPanel9;
+        private System.Windows.Forms.FlowLayoutPanel searchFlowPanel8;
+        private System.Windows.Forms.FlowLayoutPanel searchFlowPanel7;
+        private System.Windows.Forms.FlowLayoutPanel searchFlowPanel6;
+        private System.Windows.Forms.FlowLayoutPanel searchFlowPanel5;
+        private System.Windows.Forms.FlowLayoutPanel searchFlowPanel4;
+        private System.Windows.Forms.FlowLayoutPanel searchFlowPanel3;
+        private System.Windows.Forms.FlowLayoutPanel searchFlowPanel2;
+        private System.Windows.Forms.FlowLayoutPanel searchFlowPanel1;
     }
 }

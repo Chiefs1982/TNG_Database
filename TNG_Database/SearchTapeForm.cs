@@ -23,11 +23,22 @@ namespace TNG_Database
             Projects
         }
 
+        //enum for current selection
+        enum Selection
+        {
+            Nothing,
+            Tapes,
+            Master,
+            Projects,
+            All
+        }
+
         TNG_Database.MainForm mainForm;
         private List<SearchValues> searchList = null;
         private SearchValues searchValues;
         private List<string> tagList = new List<string>();
         private Filter currentFilter = Filter.All;
+        private Selection currentSelection = Selection.Nothing;
 
         //CommonMethod reference
         CommonMethods commonMethod = CommonMethods.Instance();
@@ -40,8 +51,7 @@ namespace TNG_Database
             this.MdiParent = parent;
             mainForm = parent;
 
-            searchItemsPanel.Visible = false;
-            searchNoItemSelectedLabel.Visible = true;
+            NoValuesInListSelected();
 
             //keep items highlighted
             searchListView.HideSelection = false;
@@ -65,6 +75,21 @@ namespace TNG_Database
             this.components = new System.ComponentModel.Container();
         }
 
+        #region Class Methods
+
+        private void NoValuesInListSelected()
+        {
+            //Clear FlowLayoutPanels
+            ClearFlowLayouts();
+
+            //Create Default Nothing Selected Label
+            Label defaultLabel = new Label();
+            defaultLabel.Text = "Select a value to view the details";
+            defaultLabel.Width = 100;
+
+            searchFlowPanel1.Controls.Add(defaultLabel);
+        }
+
         /// <summary>
         /// Gets the enum Filter value.
         /// </summary>
@@ -81,7 +106,7 @@ namespace TNG_Database
                 case "masterarchive":
                     return Filter.Master;
                 case "projects":
-                    return Filter.Master;
+                    return Filter.Projects;
                 default:
                     return Filter.All;
             }
@@ -122,7 +147,9 @@ namespace TNG_Database
         {
             //Clear List items and returned list
             searchListView.Items.Clear();
-            if(searchList != null)
+            commonMethod.LoadSearchAllListView(searchListView);
+            
+            if (searchList != null)
             {
                 searchList.Clear();
             }
@@ -180,13 +207,52 @@ namespace TNG_Database
             }
             else
             {
+
                 searchListView.Items.Clear();
+                searchListView.Clear();
+                switch (currentFilter)
+                {
+                    case Filter.All:
+                    default:
+                        commonMethod.LoadSearchAllListView(searchListView);
+                        break;
+                    case Filter.Tapes:
+                        commonMethod.LoadTapeListView(searchListView);
+                        break;
+                    case Filter.Master:
+                        commonMethod.LoadMastersListView(searchListView);
+                        break;
+                    case Filter.Projects:
+                        commonMethod.LoadProjectsListView(searchListView);
+                        break;
+                }
+
                 //Entries returned, iterate over all entries and add them to list
                 foreach (SearchValues values in list)
                 {
+                    //if filter matches filter selected or if there is no filter selected
                     if (values.FilterName.Equals(filter) || filter.Equals(""))
                     {
-                        searchListView.Items.Add(new ListViewItem(new string[] { values.ProjectID, values.ProjectName, values.TapeName, values.TapeNumber, values.Camera, values.TapeTags, values.DateShot, values.MasterArchive, values.Person, values.ClipNumber })).Tag = Convert.ToInt32(values.ID);
+                        //only load values specific to the filter selected
+                        switch (currentFilter)
+                        {
+                            case Filter.All:
+                                searchListView.Items.Add(new ListViewItem(new string[] { values.ProjectID, values.ProjectName, values.TapeName, values.TapeNumber, values.Camera, values.TapeTags, values.DateShot, values.MasterArchive, values.Person, values.ClipNumber })).Tag = Convert.ToInt32(values.ID);
+                                break;
+                            case Filter.Tapes:
+                                searchListView.Items.Add(new ListViewItem(new string[] { values.ProjectID, values.ProjectName, values.TapeName, values.TapeNumber, values.Camera, values.TapeTags, values.DateShot, values.MasterArchive, values.Person })).Tag = Convert.ToInt32(values.ID);
+                                break;
+                            case Filter.Master:
+                                searchListView.Items.Add(new ListViewItem(new string[] { values.ProjectID, values.ProjectName, values.MasterArchive, values.ClipNumber })).Tag = Convert.ToInt32(values.ID);
+                                break;
+                            case Filter.Projects:
+                                searchListView.Items.Add(new ListViewItem(new string[] { values.ProjectID, values.ProjectName })).Tag = Convert.ToInt32(values.ID);
+                                break;
+                            default:
+                                searchListView.Items.Add(new ListViewItem(new string[] { values.ProjectID, values.ProjectName, values.TapeName, values.TapeNumber, values.Camera, values.TapeTags, values.DateShot, values.MasterArchive, values.Person, values.ClipNumber })).Tag = Convert.ToInt32(values.ID);
+                                break;
+                        }
+                        
                     }
                 }
             }
@@ -206,65 +272,55 @@ namespace TNG_Database
         }
 
         /// <summary>
-        /// Displays the tags.
-        /// </summary>
-        /// <param name="gb">groupbox target</param>
-        /// <param name="gbPanel">the FlowLayoutPanel to add items to</param>
-        /// <param name="tagList">the tag list to use</param>
-        private void DisplayTags(FlowLayoutPanel gbPanel, List<string> tagList)
-        {
-            //clear panel
-            gbPanel.Controls.Clear();
-
-            if(tagList.Count > 0 && !tagList[0].Equals(""))
-            {
-                //iterate over all items in list and add them to the panel
-                for (int i = 0; i < tagList.Count(); i++)
-                {
-                    //create Picturebox variable
-
-
-                    //Create FLP for individual tags, set properties
-                    FlowLayoutPanel flp = new FlowLayoutPanel();
-                    flp.AutoSize = true;
-                    flp.BackColor = Color.FromArgb(77, 77, 76);
-                    flp.ForeColor = Color.White;
-                    flp.Margin = new Padding(5, 1, 5, 1);
-                    flp.Padding = new Padding(2);
-
-                    //add Label of the tag and set properties
-                    Label addTagLabel = new Label();
-                    addTagLabel.Text = tagList[i].ToString();
-                    addTagLabel.Margin = new Padding(5, 0, 2, 0);
-                    addTagLabel.AutoSize = true;
-                    addTagLabel.Tag = i; //tag set to value of the index
-
-                    //add label to the FLP
-                    flp.Controls.Add(addTagLabel);
-
-                    //add the FLP to the larger FLP to display tags as seperate items
-                    gbPanel.Controls.Add(flp);
-                }
-            }
-        }
-
-        /// <summary>
         /// Adds the list item to values.
         /// </summary>
         private void AddListItemToValues()
         {
             searchValues = new SearchValues();
-            searchValues.ID = Convert.ToInt32(searchListView.SelectedItems[0].Tag);
-            searchValues.ProjectID = searchListView.SelectedItems[0].SubItems[0].Text;
-            searchValues.ProjectName = searchListView.SelectedItems[0].SubItems[1].Text;
-            searchValues.TapeName = searchListView.SelectedItems[0].SubItems[2].Text;
-            searchValues.TapeNumber = searchListView.SelectedItems[0].SubItems[3].Text;
-            searchValues.Camera = searchListView.SelectedItems[0].SubItems[4].Text;
-            searchValues.TapeTags = searchListView.SelectedItems[0].SubItems[5].Text;
-            searchValues.DateShot = searchListView.SelectedItems[0].SubItems[6].Text;
-            searchValues.MasterArchive = searchListView.SelectedItems[0].SubItems[7].Text;
-            searchValues.Person = searchListView.SelectedItems[0].SubItems[8].Text;
-            searchValues.ClipNumber = searchListView.SelectedItems[0].SubItems[9].Text;
+            
+            switch (currentFilter)
+            {
+                case Filter.Tapes:
+                    searchValues.ID = Convert.ToInt32(searchListView.SelectedItems[0].Tag);
+                    searchValues.ProjectID = searchListView.SelectedItems[0].SubItems[0].Text;
+                    searchValues.ProjectName = searchListView.SelectedItems[0].SubItems[1].Text;
+                    searchValues.TapeName = searchListView.SelectedItems[0].SubItems[2].Text;
+                    searchValues.TapeNumber = searchListView.SelectedItems[0].SubItems[3].Text;
+                    searchValues.Camera = searchListView.SelectedItems[0].SubItems[4].Text;
+                    searchValues.TapeTags = searchListView.SelectedItems[0].SubItems[5].Text;
+                    searchValues.DateShot = searchListView.SelectedItems[0].SubItems[6].Text;
+                    searchValues.MasterArchive = searchListView.SelectedItems[0].SubItems[7].Text;
+                    searchValues.Person = searchListView.SelectedItems[0].SubItems[8].Text;
+                    break;
+                case Filter.Master:
+                    searchValues.ID = Convert.ToInt32(searchListView.SelectedItems[0].Tag);
+                    searchValues.ProjectID = searchListView.SelectedItems[0].SubItems[0].Text;
+                    searchValues.ProjectName = searchListView.SelectedItems[0].SubItems[1].Text;
+                    searchValues.MasterArchive = searchListView.SelectedItems[0].SubItems[2].Text;
+                    searchValues.ClipNumber = searchListView.SelectedItems[0].SubItems[3].Text;
+                    break;
+                case Filter.Projects:
+                    searchValues.ID = Convert.ToInt32(searchListView.SelectedItems[0].Tag);
+                    searchValues.ProjectID = searchListView.SelectedItems[0].SubItems[0].Text;
+                    searchValues.ProjectName = searchListView.SelectedItems[0].SubItems[1].Text;
+                    break;
+                case Filter.All:
+                default:
+                    searchValues.ID = Convert.ToInt32(searchListView.SelectedItems[0].Tag);
+                    searchValues.ProjectID = searchListView.SelectedItems[0].SubItems[0].Text;
+                    searchValues.ProjectName = searchListView.SelectedItems[0].SubItems[1].Text;
+                    searchValues.TapeName = searchListView.SelectedItems[0].SubItems[2].Text;
+                    searchValues.TapeNumber = searchListView.SelectedItems[0].SubItems[3].Text;
+                    searchValues.Camera = searchListView.SelectedItems[0].SubItems[4].Text;
+                    searchValues.TapeTags = searchListView.SelectedItems[0].SubItems[5].Text;
+                    searchValues.DateShot = searchListView.SelectedItems[0].SubItems[6].Text;
+                    searchValues.MasterArchive = searchListView.SelectedItems[0].SubItems[7].Text;
+                    searchValues.Person = searchListView.SelectedItems[0].SubItems[8].Text;
+                    searchValues.ClipNumber = searchListView.SelectedItems[0].SubItems[9].Text;
+                    break;
+            }
+
+
         }
 
         /// <summary>
@@ -272,29 +328,46 @@ namespace TNG_Database
         /// </summary>
         private void AddValuesToLabels()
         {
-            //load values to user can see
-            searchProjectIDLabel.Text = searchValues.ProjectID;
-            searchProjectNameLabel.Text = searchValues.ProjectName;
-            searchTapeNameLabel.Text = searchValues.TapeName;
-            if (searchValues.TapeNumber.Equals(""))
+            ClearFlowLayouts();
+
+            //Load flow layouts depending on what values are selected in listview
+            if(currentSelection.Equals(Selection.Tapes) || currentFilter.Equals(Filter.Tapes))
             {
-                searchTapeNumberLabel.Text = searchValues.TapeNumber;
+                //Tapes selected
+                commonMethod.LoadTapesFlowValues(new FlowLayoutPanel[] { searchFlowPanel1, searchFlowPanel2, searchFlowPanel3, searchFlowPanel4, searchFlowPanel5, searchFlowPanel6, searchFlowPanel7, searchFlowPanel8, searchFlowPanel9 }, searchValues);
+            }else if(currentSelection.Equals(Selection.Master) || currentFilter.Equals(Filter.Master))
+            {
+                //Master Tapes selected
+                commonMethod.LoadMasterTapesFlowValues(new FlowLayoutPanel[] { searchFlowPanel1, searchFlowPanel2, searchFlowPanel3, searchFlowPanel4 }, searchValues);
+            }
+            else if(currentSelection.Equals(Selection.Projects) || currentFilter.Equals(Filter.Projects))
+            {
+                //Projects selected
+                commonMethod.LoadProjectsFlowValues(new FlowLayoutPanel[] { searchFlowPanel1, searchFlowPanel2 }, searchValues);
             }else
             {
-                searchTapeNumberLabel.Text = searchValues.ProjectID+ "-" +searchValues.TapeNumber;
+                //default show all values
+                commonMethod.LoadSearchAllFlowValues(new FlowLayoutPanel[] { searchFlowPanel1, searchFlowPanel2, searchFlowPanel3, searchFlowPanel4, searchFlowPanel5, searchFlowPanel6, searchFlowPanel7, searchFlowPanel8, searchFlowPanel9 }, searchValues);
             }
-            
-            searchCameraLabel.Text = searchValues.Camera;
-            searchDateLabel.Text = searchValues.DateShot;
-            searchMasterArchiveLabel.Text = searchValues.MasterArchive;
-            searchPersonLabel.Text = searchValues.Person;
-            searchClipNameLabel.Text = searchValues.ClipNumber;
-            //set to display tags
-            tagList = searchValues.TapeTags.Split(',').ToList();
-            DisplayTags(searchTagFlowLayoutPanel, tagList);
-            //make the right items display in groupbox
-            searchNoItemSelectedLabel.Visible = false;
-            searchItemsPanel.Visible = true;
+
+
+
+            /*
+            switch (currentFilter)
+            {
+                case Filter.All:
+                default:
+                    break;
+                case Filter.Tapes:
+                    commonMethod.LoadTapesFlowValues(new FlowLayoutPanel[] { searchFlowPanel1, searchFlowPanel2, searchFlowPanel3, searchFlowPanel4, searchFlowPanel5, searchFlowPanel6, searchFlowPanel7, searchFlowPanel8, searchFlowPanel9 }, searchValues);
+                    break;
+                case Filter.Master:
+                    break;
+                case Filter.Projects:
+                    commonMethod.LoadProjectsFlowValues(new FlowLayoutPanel[] { searchFlowPanel1,searchFlowPanel2 }, searchValues);
+                    break;
+            }
+            */
         }
 
         /// <summary>
@@ -302,26 +375,76 @@ namespace TNG_Database
         /// </summary>
         private void ClearLabels()
         {
-            searchProjectIDLabel.Text = "";
-            searchProjectNameLabel.Text = "";
-            searchTapeNameLabel.Text = "";
-            searchTapeNumberLabel.Text = "";
-            searchCameraLabel.Text = "";
-            searchDateLabel.Text = "";
-            searchMasterArchiveLabel.Text = "";
-            searchPersonLabel.Text = "";
-            searchClipNameLabel.Text = "";
-            searchTagFlowLayoutPanel.Controls.Clear();
             tagList.Clear();
             if(searchValues != null)
             {
                 searchValues.Clear();
             }
-            //Make appropriate items visible
-            searchItemsPanel.Visible = false;
-            searchNoItemSelectedLabel.Visible = true;
+            currentSelection = Selection.Nothing;
         }
 
+        /// <summary>
+        /// Clears the flow layouts.
+        /// </summary>
+        private void ClearFlowLayouts()
+        {
+            //Clear flow layout panels
+            searchFlowPanel1.Controls.Clear();
+            searchFlowPanel2.Controls.Clear();
+            searchFlowPanel3.Controls.Clear();
+            searchFlowPanel4.Controls.Clear();
+            searchFlowPanel5.Controls.Clear();
+            searchFlowPanel6.Controls.Clear();
+            searchFlowPanel7.Controls.Clear();
+            searchFlowPanel8.Controls.Clear();
+            searchFlowPanel9.Controls.Clear();
+        }
+
+        /// <summary>
+        /// Sets the current selection of the listview item.
+        /// </summary>
+        private void SetCurrentSelection()
+        {
+            switch (currentFilter)
+            {
+                case Filter.All:
+                    //find out based on values in selection which type of item is selected
+                    if (searchListView.SelectedItems[0].SubItems[9].Text.Equals("") && searchListView.SelectedItems[0].SubItems[2].Text.Length > 0)
+                    {
+                        //Tapes selected
+                        currentSelection = Selection.Tapes;
+                    }
+                    else if (searchListView.SelectedItems[0].SubItems[9].Text.Length > 0 && searchListView.SelectedItems[0].SubItems[7].Text.Length > 0)
+                    {
+                        //Master Tapes selected
+                        currentSelection = Selection.Master;
+                    }
+                    else if (searchListView.SelectedItems[0].SubItems[9].Text.Equals("") && searchListView.SelectedItems[0].SubItems[2].Text.Equals(""))
+                    {
+                        //Projects selected
+                        currentSelection = Selection.Projects;
+                    }
+                    else
+                    {
+                        currentSelection = Selection.All;
+                    }
+                    break;
+                case Filter.Master:
+                    currentSelection = Selection.Master;
+                    break;
+                case Filter.Projects:
+                    currentSelection = Selection.Projects;
+                    break;
+                case Filter.Tapes:
+                    currentSelection = Selection.Tapes;
+                    break;
+                default:
+                    currentSelection = Selection.Nothing;
+                    break;
+            }
+        }
+
+        #endregion
         //enter pressed in textbox
         private void searchTextbox_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -341,8 +464,10 @@ namespace TNG_Database
         {
             if (searchListView.SelectedItems.Count > 0)
             {
+                SetCurrentSelection();
                 AddListItemToValues();
                 AddValuesToLabels();
+
             }
             else
             {
@@ -369,6 +494,7 @@ namespace TNG_Database
                 switch (GetFilterValue(searchFilterCombo.Text))
                 {
                     case Filter.All:
+                    default:
                         currentFilter = Filter.All;
                         break;
                     case Filter.Tapes:
@@ -379,9 +505,6 @@ namespace TNG_Database
                         break;
                     case Filter.Projects:
                         currentFilter = Filter.Projects;
-                        break;
-                    default:
-                        currentFilter = Filter.All;
                         break;
                 }
                 WhatToFilter(currentFilter);

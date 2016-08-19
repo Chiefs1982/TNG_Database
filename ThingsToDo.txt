@@ -39,6 +39,7 @@ Ideas:
 - Add export and import feature for database
 - Be able to save the old databases and recall them if needed
 - Automatically add project name to project numbers from the projects DB
+- Automatically check for tapes that match project numbers from imports
 - PUT TRY STATEMENTS AROUND SQL stuff
 - Create Preferences
 	- how often to backup database
@@ -46,6 +47,11 @@ Ideas:
 	- default import directory
 	- 
 - Add ability to read file for master name and update combobox accordingly
+- Add changing of search listview when filter selections are made
+- Add changing of values shown on search panel like deleted panel
+- Clean up switch statements that have default the same as another
+- Add person to importing of files
+- Change Deleted page listview load and flowlayout build to common Methods
 
 
 60, 200, 120, 50, 50, 62, 78, 95, 60
