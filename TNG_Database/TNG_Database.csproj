@@ -193,6 +193,12 @@
     <Compile Include="Helpers\UpdateStatus.cs" />
     <Compile Include="Values\UserValues.cs" />
     <Compile Include="Values\SearchValues.cs" />
+    <Compile Include="DataForms\ViewMasterArchive.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DataForms\ViewMasterArchive.Designer.cs">
+      <DependentUpon>ViewMasterArchive.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="DataForms\DeletedValuesForm.resx">
       <DependentUpon>DeletedValuesForm.cs</DependentUpon>
     </EmbeddedResource>

@@ -31,6 +31,7 @@ Ideas:
 * Add import of txt or csv files for master
 * Add import conversion for word documents for master
 * Add automatic detection of master and media for master archive importing
+* Create static class that remembers information about the current user and their selections
 
 
 - Create Layout for Input, Search, Edit, Stats (possibly in tabs or upper bar)
@@ -53,8 +54,13 @@ Ideas:
 - Clean up switch statements that have default the same as another
 - Add person to importing of files
 - Change Deleted page listview load and flowlayout build to common Methods
-- Create static class that remembers information about the current user and their selections
+- Get current user for entries to add or update to db from ComputerInfo class
+- Put using statements around readers from database
+- Make sure tab order is correct for inputing information
+- In adding or updated tapes, get the master tapes from method
 
+
+1541918047
 
 60, 200, 120, 50, 50, 62, 78, 95, 60
 

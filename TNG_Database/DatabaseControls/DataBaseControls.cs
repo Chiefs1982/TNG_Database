@@ -9,6 +9,7 @@ using System.IO;
 using System.ComponentModel;
 using System.Windows.Forms;
 using TNG_Database.Values;
+using System.Collections;
 
 namespace TNG_Database
 {
@@ -59,7 +60,97 @@ namespace TNG_Database
             {
                 MainForm.LogFile("Error Deleting File: " + e.Message);
             }
-}
+        }
+
+        /// <summary>
+        /// Updates the tapes with master upon import.
+        /// </summary>
+        /// <param name="projectID">The project identifier.</param>
+        /// <param name="masterList">The master list.</param>
+        /// <param name="connect">The connect.</param>
+        private static void UpdateTapesWithMaster(string projectID, string masterList, SQLiteConnection connect)
+        {
+            Hashtable list = new Hashtable();
+
+            try
+            {
+                SQLiteCommand command = new SQLiteCommand(connect);
+
+                command.CommandText = "select master_archive from TapeDatabase where project_id = @pid";
+                command.Parameters.AddWithValue("@pid", projectID);
+
+                using (SQLiteDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            try
+                            {
+                                if (!reader["master_archive"].ToString().Equals(masterList))
+                                {
+                                    list.Add(projectID, reader["master_archive"].ToString() + "," + masterList);
+                                }
+                                
+                            }
+                            catch { }
+                        }
+                    }
+                }
+                
+                foreach(DictionaryEntry value in list)
+                {
+                    command.Parameters.Clear();
+                    command.CommandText = "update TapeDatabase set master_archive = @m_arch where project_id = @pid";
+                    command.Parameters.AddWithValue("@m_arch", value.Value);
+                    command.Parameters.AddWithValue("@pid", value.Key);
+
+                    command.ExecuteNonQuery();
+                }
+            }
+            catch { }
+
+            
+
+            
+        }
+
+        /// <summary>
+        /// Gets the master for tapes.
+        /// </summary>
+        /// <param name="projectID">The project identifier.</param>
+        /// <param name="connect">The connect.</param>
+        /// <returns></returns>
+        private static string GetMasterForTapes(string projectID, SQLiteConnection connect)
+        {
+            List<string> list = new List<string>();
+            
+            try
+            {
+                SQLiteCommand command = new SQLiteCommand(connect);
+
+                command.CommandText = "select master_tape from MasterArchiveVideos where project_id = @pid";
+                command.Parameters.AddWithValue("@pid", projectID);
+
+                using (SQLiteDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            if (!reader["master_tape"].ToString().Equals(string.Empty))
+                            {
+                                list.Add(reader["master_tape"].ToString());
+                            }
+                            
+                        }
+                    }
+                }
+            }
+            catch { }
+            
+            return String.Join(",", list);
+        }
 
         /// <summary>
         /// Gets the project name using the number in the database.
@@ -262,10 +353,6 @@ namespace TNG_Database
             return tapeList;
         }
 
-        /// <summary>
-        /// Gets all archive video values.
-        /// </summary>
-        /// <returns></returns>
         public static List<MasterTapeValues> GetAllArchiveVideoValues()
         {
             //declare values
@@ -382,11 +469,6 @@ namespace TNG_Database
             return masterList.ToArray();
         }
 
-        /// <summary>
-        /// Searches all database.
-        /// </summary>
-        /// <param name="input">The input.</param>
-        /// <returns></returns>
         public List<SearchValues> SearchAllDB(string[] input)
         {
             //declare values
@@ -676,6 +758,8 @@ namespace TNG_Database
                         progressCounter++;
                         if ((progressCounter * queryCounter) >= 1)
                         {
+                            UpdateTapesWithMaster(master.ProjectID, master.MasterTape, masterConnection);
+
                             progress += (queryCounter * progressCounter);
                             progressCounter = 0;
                             //update the progess bar
@@ -856,14 +940,14 @@ namespace TNG_Database
                     while ((line = textReader.ReadLine()) != null)
                     {
                         newLine = line.Replace("-", ",");
-                        string[] lineArray = newLine.Split(seperators, 8);
+                        string[] lineArray = newLine.Split(seperators, 7);
 
                         //check to make sure there are 2 parts to each line
                         if (lineArray.Length > 1)
                         {
                             lineArray[0] = lineArray[0].Trim();
                             lineArray[1] = lineArray[1].Replace(',', '-').Trim();
-                            tapeValues = new TapeDatabaseValues(lineArray[0], lineArray[1], lineArray[2], lineArray[3], commonMethod.GetCameraNumber(lineArray[4]), lineArray[7], commonMethod.ConvertDateFromDropdownForDB(Convert.ToDateTime(lineArray[5])), lineArray[6], "Imported");
+                            tapeValues = new TapeDatabaseValues(lineArray[0], lineArray[1], lineArray[2], lineArray[3], commonMethod.GetCameraNumber(lineArray[4]), lineArray[6], commonMethod.ConvertDateFromDropdownForDB(Convert.ToDateTime(lineArray[5])), "", "Imported");
                             tapeList.Add(tapeValues);
                         }
                         else
@@ -894,36 +978,62 @@ namespace TNG_Database
 
                 foreach (TapeDatabaseValues value in tapeList)
                 {
-                    command.CommandText = "select project_name from Projects where project_id = @pid limit 1";
+                    //list for the master list query
+                    List<string> masterList = new List<string>();
+                    //query db for names of masterlist for a project
+                    command.CommandText = "select master_tape from MasterArchiveVideos where project_id = @pid";
+                    command.Parameters.Clear();
                     command.Parameters.AddWithValue("@pid", value.ProjectId);
-                    SQLiteDataReader reader = command.ExecuteReader();
-                    if (reader.HasRows)
+
+                    //read results and add values if any to a comma seperated string
+                    using (SQLiteDataReader reader = command.ExecuteReader())
                     {
-                        while (reader.Read())
+                        if (reader.HasRows)
                         {
-                            projectName = reader["project_name"].ToString();
+                            while (reader.Read())
+                            {
+                                masterList.Add(reader["master_tape"].ToString());
+                            }
+                            value.MasterArchive = String.Join(",", masterList);
                         }
                     }
 
-                    reader.Close();
+                    //query db for the project name
+                    command.CommandText = "select project_name from Projects where project_id = @pid limit 1";
+                    command.Parameters.Clear();
+                    command.Parameters.AddWithValue("@pid", value.ProjectId);
+
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                projectName = reader["project_name"].ToString();
+                            }
+
+                            //add value for addition based on if empty or not
+                            if (!projectName.Equals(""))
+                            {
+
+                                value.ProjectName = projectName;
+                            }
+                        }
+                    }
+
+                    //add values into tape database table
                     command.Parameters.Clear();
                     command.CommandText = "insert into TapeDatabase (tape_name,tape_number,project_id, project_name,camera,tape_tags,date_shot,master_archive,person_entered) values (@tapeName,@tapeNumber,@projectID, @projectName,@camera,@tapeTags,@dateShot,@masterArchive,@person)";
                     command.Parameters.AddWithValue("@tapeName", value.TapeName);
                     command.Parameters.AddWithValue("@tapeNumber", value.TapeNumber);
                     command.Parameters.AddWithValue("@projectID", value.ProjectId);
-                    if (projectName.Equals(""))
-                    {
-                        command.Parameters.AddWithValue("@projectName", value.ProjectName);
-                    }else
-                    {
-                        command.Parameters.AddWithValue("@projectName", projectName);
-                    }
+                    command.Parameters.AddWithValue("@projectName", value.ProjectName);
                     command.Parameters.AddWithValue("@camera", value.Camera);
                     command.Parameters.AddWithValue("@tapeTags", value.TapeTags);
-                    command.Parameters.AddWithValue("@dateShot",value.DateShot);
+                    command.Parameters.AddWithValue("@dateShot", value.DateShot);
                     command.Parameters.AddWithValue("@masterArchive", value.MasterArchive);
-                    command.Parameters.AddWithValue("@person", value.PersonEntered);
-                    
+                    command.Parameters.AddWithValue("@person", ComputerInfo.ComputerUser);
+
                     if (command.ExecuteNonQuery() == 1)
                     {
                         //Success
@@ -942,6 +1052,7 @@ namespace TNG_Database
                     {
                         //Failure
                     }
+
                 }
 
                 if (counter > 0)
@@ -1163,9 +1274,6 @@ namespace TNG_Database
 
         #endregion
 
-        /// <summary>
-        /// Creates the sqlite database.
-        /// </summary>
         public static void CreateSQLiteDatabase()
         {
             try

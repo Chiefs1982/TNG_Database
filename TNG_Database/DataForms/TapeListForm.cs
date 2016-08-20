@@ -437,7 +437,7 @@ namespace TNG_Database
             MakeBoxesVisible("add");
             addCameraComboBox.SelectedIndex = 0;
             addTapeNumUpDown.Value = 1;
-            addTapePersonDropdown.SelectedIndex = 0;
+            addTapePersonDropdown.Text = ComputerInfo.ComputerUser;
             addTapeMasterArchiveDropdown.SelectedIndex = 0;
             
         }
