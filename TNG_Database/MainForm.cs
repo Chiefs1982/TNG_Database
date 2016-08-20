@@ -37,13 +37,25 @@ namespace TNG_Database
         //Reference to CommonMethods
         CommonMethods commonMethod = CommonMethods.Instance();
 
+        //Reference to ComputerInfo
+        ComputerInfo computerInfo = ComputerInfo.Instance();
+
+        //Context menu strip
+        private ContextMenuStrip peopleContext;
+
+        List<string> people;
+
         public MainForm()
         {
             InitializeComponent();
+
+            //set a new menu strip
+            peopleContext = new ContextMenuStrip();
             
             TNG_Database.SearchTapeForm child = new TNG_Database.SearchTapeForm(this);
             backgroundWorker1.WorkerReportsProgress = true;
             backgroundWorker1.WorkerSupportsCancellation = true;
+            //show the child form
             child.Show();
             child.WindowState = FormWindowState.Maximized;
             searchTapeForm = child;
@@ -54,9 +66,51 @@ namespace TNG_Database
             {
                 CreateSQLDatabase();
             }
+
+            //event for context menu
+            peopleContext.Opening += new System.ComponentModel.CancelEventHandler(cms_Opening);
+
+            //set dropdown to context menu
+            personStatusDropdown.DropDown = peopleContext;
+
+            //Set the context menu to people context
+            //this.ContextMenuStrip = peopleContext;
+
+            //Set all users to list
+            people = DataBaseControls.GetAllUsers();
+
+            //set the username at the bottom to current user
+            computerInfo.UpdateUserName(this);
         }
 
         #region Class Methods
+
+        /// <summary>
+        /// Handles the Opening event of the cms control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.ComponentModel.CancelEventArgs"/> instance containing the event data.</param>
+        void cms_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            //set control to the source that started the context menu
+            Control c = peopleContext.SourceControl as Control;
+            ToolStripDropDownItem dropItem = peopleContext.OwnerItem as ToolStripDropDownItem;
+
+            peopleContext.Items.Clear();
+            
+            //iterate over each person in list and make a part of the context menu
+            foreach(string person in people)
+            {
+                peopleContext.Items.Add(person).Click += (senderContext, eContext) => { computerInfo.UpdateUserInDB(person); };
+            }
+
+            e.Cancel = false;
+        }
+
+        public void UpdatePersonStatus(string name)
+        {
+            personStatusDropdown.Text = name;
+        }
 
         /// <summary>
         /// Creates the SQL database.
@@ -109,11 +163,6 @@ namespace TNG_Database
             }
         }
 
-        private void StatusUpdate(string status)
-        {
-            applicationStatusLabel.Text = status;
-        }
-
         /// <summary>
         /// Imports projects from file.
         /// </summary>
@@ -143,6 +192,9 @@ namespace TNG_Database
             Form masterPrompt = new Form();
             masterPrompt.Height = 200;
             masterPrompt.Width = 500;
+            masterPrompt.SizeGripStyle = SizeGripStyle.Hide;
+            masterPrompt.FormBorderStyle = FormBorderStyle.FixedSingle;
+            masterPrompt.StartPosition = FormStartPosition.CenterScreen;
             masterPrompt.Text = "Enter Tape Name";
 
             //Set up items to add to popup box
@@ -156,6 +208,7 @@ namespace TNG_Database
             inputBox.SelectedIndex = 0;
             //add media combobox
             ComboBox mediaCombo = new ComboBox() { Left = 50, Top = 75, Width = 200 };
+            //add items to combobox
             foreach (string mediaValue in cameraValues)
             {
                 mediaCombo.Items.Add(mediaValue);
@@ -163,7 +216,8 @@ namespace TNG_Database
             mediaCombo.SelectedIndex = 1;
             mediaCombo.KeyPress += (senderCombo, eCombo) => { eCombo.Handled = true; };
             mediaCombo.SelectedIndexChanged += (senderCombo, eCombo) => { textLabel.Focus(); };
-
+            //Check for names in the filename
+            #region Check for names in File
             try
             {
                 //check to make sure there is something selected
@@ -234,6 +288,8 @@ namespace TNG_Database
             }
             catch { Console.WriteLine("Error in media gather"); }
 
+            #endregion
+
             //Set up buttons to add
             Button confirmation = new Button() { Text = "OK", Left = 240, Width = 100, Top = 120 };
             Button cancelButton = new Button() { Text = "Cancel", Left = 350, Width = 100, Top = 120 };
@@ -254,18 +310,18 @@ namespace TNG_Database
                 switch (GetExtensionOfFile(ofd))
                 {
                     case "csv":
-                        StatusUpdate("Importing " + masterTapeName + " Entries");
+                        UpdateStatusBarBottom("Importing " + masterTapeName + " Entries");
                         DataBaseControls.AddMasterTapesFromFile(worker, importStream, ofd, masterTapeName, commonMethod.GetCameraNumber(cameraMasterName));
                         break;
                     case "txt":
                         ofd.FileName = @"" + TempConvertToCSV(ofd);
-                        StatusUpdate("Importing " + masterTapeName + " Entries");
-                        DataBaseControls.AddMasterTapesFromFile(worker, importStream, ofd, masterTapeName, commonMethod.GetCameraNumber(cameraMasterName),true);
+                        UpdateStatusBarBottom("Importing " + masterTapeName + " Entries");
+                        DataBaseControls.AddMasterTapesFromFile(worker, importStream, ofd, masterTapeName, commonMethod.GetCameraNumber(cameraMasterName), true);
                         break;
                     case "doc":
                     case "docx":
                         ofd.FileName = @"" + ConvertWordToCSVFile(ofd);
-                        StatusUpdate("Importing " + masterTapeName + " Entries");
+                        UpdateStatusBarBottom("Importing " + masterTapeName + " Entries");
                         DataBaseControls.AddMasterTapesFromFile(worker, importStream, ofd, masterTapeName, commonMethod.GetCameraNumber(cameraMasterName), true);
                         break;
                     default:
@@ -292,6 +348,7 @@ namespace TNG_Database
         private void ImportTapes(BackgroundWorker worker)
         {
             Stream importStream = null;
+            
             DataBaseControls.AddTapesFromFile(worker, importStream, ofd);
         }
 

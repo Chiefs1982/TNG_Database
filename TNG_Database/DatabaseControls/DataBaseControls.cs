@@ -110,7 +110,7 @@ namespace TNG_Database
         /// Gets all users in database
         /// </summary>
         /// <returns>A List of strings of all users</returns>
-        public List<string> GetAllUsers()
+        public static List<string> GetAllUsers()
         {
             List<string> userList;
 
@@ -1163,6 +1163,9 @@ namespace TNG_Database
 
         #endregion
 
+        /// <summary>
+        /// Creates the sqlite database.
+        /// </summary>
         public static void CreateSQLiteDatabase()
         {
             try
@@ -1239,5 +1242,110 @@ namespace TNG_Database
                 MainForm.LogFile(e.Message);
             }
         }
+
+        #region Computer Info Controls
+
+        /// <summary>
+        /// Checks the computer information.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="hash">The hash.</param>
+        public static string CheckComputerInfo(string name, string hash)
+        {
+            string userName = "Brendan Burghardt";
+
+            try
+            {
+                //new connection to sqlite database
+                SQLiteConnection computerConnection = new SQLiteConnection(database);
+                computerConnection.Open();
+                SQLiteCommand command = new SQLiteCommand(computerConnection);
+
+                //check to see if computer info is in database
+                command.CommandText = "Select * from ComputerInfo where computer_name = @c_name and computer_hash = @c_hash";
+                command.Parameters.AddWithValue("@c_name", name);
+                command.Parameters.AddWithValue("@c_hash", hash);
+                SQLiteDataReader reader = command.ExecuteReader();
+
+                //check for entry
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        userName = reader["computer_user"].ToString();
+                        break;
+                    }
+                }
+                else
+                {
+                    
+                    //nothing found in database
+                    string[] computers = new string[] { "editer1", "editer2", "editer3", "editer4", "editer5", "editer6" };
+                    string[] people = new string[] { "Brendan Burghardt", "Brett Snyder", "Jerome Rigoroso", "Aaron Primmer", "Kelcy Erbele" };
+
+                    foreach(string computer in computers)
+                    {
+                        int index = name.ToLower().IndexOf(computer);
+
+                        if (index != -1)
+                        {
+                            switch (computer.ToLower())
+                            {
+                                case "editer2":
+                                    userName = people[1];
+                                    break;
+                                case "editer3":
+                                    userName = people[2];
+                                    break;
+                                case "editer5":
+                                    userName = people[3];
+                                    break;
+                                case "editer6":
+                                    userName = people[4];
+                                    break;
+                                case "editer1":
+                                case "editer4":
+                                default:
+                                    userName = people[0];
+                                    break;
+                            }
+                        }
+                    }
+
+                    command.CommandText = "insert into ComputerInfo(computer_name, computer_hash, computer_user) values(@c_name, @c_hash, @c_user)";
+                    command.Parameters.Clear();
+                    command.Parameters.AddWithValue("@c_name", name);
+                    command.Parameters.AddWithValue("@c_hash", hash);
+                    command.Parameters.AddWithValue("@c_user", userName);
+                    command.ExecuteNonQuery();
+                }
+            }
+            catch { }
+            
+            return userName;
+        }
+
+
+        public static void UpdateCurrentUser(string name, string hash, string user)
+        {
+            try
+            {
+                //Establish db connection
+                SQLiteConnection compConnection = new SQLiteConnection(database);
+                compConnection.Open();
+                SQLiteCommand command = new SQLiteCommand(compConnection);
+
+                //Set up query and data to manipulate
+                command.CommandText = "update ComputerInfo set computer_user = @c_user where computer_name = @c_name and computer_hash = @c_hash";
+                command.Parameters.AddWithValue("@c_user", user);
+                command.Parameters.AddWithValue("@c_name", name);
+                command.Parameters.AddWithValue("@c_hash", hash);
+
+                command.ExecuteNonQuery();
+            }
+            catch { }
+        }
+
+        #endregion
     }
 }

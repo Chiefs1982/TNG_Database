@@ -118,6 +118,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\ComputerInfo.cs" />
     <Compile Include="DatabaseControls\AddToDatabase.cs" />
     <Compile Include="DataForms\DeletedValuesForm.cs">
       <SubType>Form</SubType>

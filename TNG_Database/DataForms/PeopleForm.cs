@@ -60,8 +60,7 @@ namespace TNG_Database
             peopleFormListBox.Items.Clear();
 
             //Create list and get all users returned to it
-            DataBaseControls dbControls = new DataBaseControls();
-            List<string> userList = dbControls.GetAllUsers();
+            List<string> userList = DataBaseControls.GetAllUsers();
 
             if(userList[0].Equals("No Users"))
             {

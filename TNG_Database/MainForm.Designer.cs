@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -42,6 +43,7 @@
             this.tapesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.convertToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tocsvToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.wordTestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.preferencesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -64,7 +66,7 @@
             this.applicationStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.mainFormProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.wordTestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.personStatusDropdown = new System.Windows.Forms.ToolStripDropDownButton();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -181,9 +183,16 @@
             // tocsvToolStripMenuItem
             // 
             this.tocsvToolStripMenuItem.Name = "tocsvToolStripMenuItem";
-            this.tocsvToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.tocsvToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
             this.tocsvToolStripMenuItem.Text = "txt -> csv";
             this.tocsvToolStripMenuItem.Click += new System.EventHandler(this.tocsvToolStripMenuItem_Click);
+            // 
+            // wordTestToolStripMenuItem
+            // 
+            this.wordTestToolStripMenuItem.Name = "wordTestToolStripMenuItem";
+            this.wordTestToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
+            this.wordTestToolStripMenuItem.Text = "Word Test";
+            this.wordTestToolStripMenuItem.Click += new System.EventHandler(this.wordTestToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
             // 
@@ -323,7 +332,8 @@
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.applicationStatusLabel,
-            this.mainFormProgressBar});
+            this.mainFormProgressBar,
+            this.personStatusDropdown});
             this.statusStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
             this.statusStrip1.Location = new System.Drawing.Point(0, 581);
             this.statusStrip1.Name = "statusStrip1";
@@ -357,12 +367,17 @@
             this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
             this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
             // 
-            // wordTestToolStripMenuItem
+            // personStatusDropdown
             // 
-            this.wordTestToolStripMenuItem.Name = "wordTestToolStripMenuItem";
-            this.wordTestToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.wordTestToolStripMenuItem.Text = "Word Test";
-            this.wordTestToolStripMenuItem.Click += new System.EventHandler(this.wordTestToolStripMenuItem_Click);
+            this.personStatusDropdown.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.personStatusDropdown.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.personStatusDropdown.Image = ((System.Drawing.Image)(resources.GetObject("personStatusDropdown.Image")));
+            this.personStatusDropdown.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.personStatusDropdown.Margin = new System.Windows.Forms.Padding(0, 2, 10, 0);
+            this.personStatusDropdown.Name = "personStatusDropdown";
+            this.personStatusDropdown.Size = new System.Drawing.Size(56, 20);
+            this.personStatusDropdown.Text = "Person";
+            this.personStatusDropdown.ToolTipText = "Select Person";
             // 
             // MainForm
             // 
@@ -371,6 +386,7 @@
             this.ClientSize = new System.Drawing.Size(837, 603);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.IsMdiContainer = true;
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
@@ -426,6 +442,7 @@
         private System.Windows.Forms.ToolStripMenuItem convertToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem tocsvToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem wordTestToolStripMenuItem;
+        private System.Windows.Forms.ToolStripDropDownButton personStatusDropdown;
     }
 }
 
