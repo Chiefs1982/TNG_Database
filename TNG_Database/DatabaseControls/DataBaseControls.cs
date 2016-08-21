@@ -121,12 +121,19 @@ namespace TNG_Database
         /// <param name="projectID">The project identifier.</param>
         /// <param name="connect">The connect.</param>
         /// <returns></returns>
-        private static string GetMasterForTapes(string projectID, SQLiteConnection connect)
+        public static string GetMasterForTapes(string projectID, SQLiteConnection connect)
         {
             List<string> list = new List<string>();
-            
+            bool toClose = false;
+
             try
             {
+                if(connect == null)
+                {
+                    connect = new SQLiteConnection(database);
+                    connect.Open();
+                    toClose = true;
+                }
                 SQLiteCommand command = new SQLiteCommand(connect);
 
                 command.CommandText = "select master_tape from MasterArchiveVideos where project_id = @pid";
@@ -142,12 +149,16 @@ namespace TNG_Database
                             {
                                 list.Add(reader["master_tape"].ToString());
                             }
-                            
                         }
                     }
                 }
+                if (toClose)
+                {
+                    CloseConnections(command, connect);
+                }
+                
             }
-            catch { }
+            catch(SQLiteException e) { Console.WriteLine("Error getting master from db: " + e.Message); }
             
             return String.Join(",", list);
         }
@@ -170,22 +181,24 @@ namespace TNG_Database
 
                 command.CommandText = "select project_name from Projects where project_id = @p_id limit 1";
                 command.Parameters.AddWithValue("@p_id", projectID);
-                SQLiteDataReader reader = command.ExecuteReader();
 
-                if (reader.HasRows)
+                using(SQLiteDataReader reader = command.ExecuteReader())
                 {
-                    //data returned
-                    while (reader.Read())
+                    if (reader.HasRows)
                     {
-                        projectName = reader["project_name"].ToString();
+                        //data returned
+                        while (reader.Read())
+                        {
+                            projectName = reader["project_name"].ToString();
+                        }
+                    }
+                    else
+                    {
+                        //nothing returned
+                        projectName = null;
                     }
                 }
-                else
-                {
-                    //nothing returned
-                    projectName = null;
-                }
-
+                
                 CloseConnections(command, projectConnection);
 
             }

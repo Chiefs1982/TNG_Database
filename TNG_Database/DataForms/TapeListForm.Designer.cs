@@ -70,7 +70,6 @@
             this.addTapeCancelButton = new System.Windows.Forms.Button();
             this.addTapePersonDropdown = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.addTapeMasterArchiveDropdown = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
             this.addDateDateTime = new System.Windows.Forms.DateTimePicker();
             this.label5 = new System.Windows.Forms.Label();
@@ -113,7 +112,6 @@
             this.editTapeCancelButton = new System.Windows.Forms.Button();
             this.editPersonDropdown = new System.Windows.Forms.ComboBox();
             this.label8 = new System.Windows.Forms.Label();
-            this.editMasterArchiveDropdown = new System.Windows.Forms.ComboBox();
             this.label9 = new System.Windows.Forms.Label();
             this.editDateShotDate = new System.Windows.Forms.DateTimePicker();
             this.label19 = new System.Windows.Forms.Label();
@@ -128,6 +126,8 @@
             this.editProjectIDTextbox = new System.Windows.Forms.TextBox();
             this.label24 = new System.Windows.Forms.Label();
             this.label25 = new System.Windows.Forms.Label();
+            this.addTapeMasterArchiveLabel = new System.Windows.Forms.Label();
+            this.editTapeMasterListLabel = new System.Windows.Forms.Label();
             this.defaultTapeGroupbox.SuspendLayout();
             this.defaultItemsPanel.SuspendLayout();
             this.addTapeGroupbox.SuspendLayout();
@@ -447,13 +447,13 @@
             // 
             // addTapeGroupbox
             // 
+            this.addTapeGroupbox.Controls.Add(this.addTapeMasterArchiveLabel);
             this.addTapeGroupbox.Controls.Add(this.addTapeListProjectName);
             this.addTapeGroupbox.Controls.Add(this.addTagDisplayFlowLayout);
             this.addTapeGroupbox.Controls.Add(this.addTapeAddButton);
             this.addTapeGroupbox.Controls.Add(this.addTapeCancelButton);
             this.addTapeGroupbox.Controls.Add(this.addTapePersonDropdown);
             this.addTapeGroupbox.Controls.Add(this.label7);
-            this.addTapeGroupbox.Controls.Add(this.addTapeMasterArchiveDropdown);
             this.addTapeGroupbox.Controls.Add(this.label6);
             this.addTapeGroupbox.Controls.Add(this.addDateDateTime);
             this.addTapeGroupbox.Controls.Add(this.label5);
@@ -470,7 +470,7 @@
             this.addTapeGroupbox.Controls.Add(this.addIDLabel);
             this.addTapeGroupbox.Location = new System.Drawing.Point(744, 317);
             this.addTapeGroupbox.Name = "addTapeGroupbox";
-            this.addTapeGroupbox.Size = new System.Drawing.Size(726, 195);
+            this.addTapeGroupbox.Size = new System.Drawing.Size(726, 218);
             this.addTapeGroupbox.TabIndex = 5;
             this.addTapeGroupbox.TabStop = false;
             this.addTapeGroupbox.Text = "Add New Tape";
@@ -495,7 +495,7 @@
             // 
             // addTapeAddButton
             // 
-            this.addTapeAddButton.Location = new System.Drawing.Point(549, 155);
+            this.addTapeAddButton.Location = new System.Drawing.Point(549, 176);
             this.addTapeAddButton.Name = "addTapeAddButton";
             this.addTapeAddButton.Size = new System.Drawing.Size(75, 23);
             this.addTapeAddButton.TabIndex = 10;
@@ -505,7 +505,7 @@
             // 
             // addTapeCancelButton
             // 
-            this.addTapeCancelButton.Location = new System.Drawing.Point(630, 155);
+            this.addTapeCancelButton.Location = new System.Drawing.Point(630, 176);
             this.addTapeCancelButton.Name = "addTapeCancelButton";
             this.addTapeCancelButton.Size = new System.Drawing.Size(75, 23);
             this.addTapeCancelButton.TabIndex = 11;
@@ -531,16 +531,6 @@
             this.label7.Size = new System.Drawing.Size(62, 13);
             this.label7.TabIndex = 16;
             this.label7.Text = "Entered By:";
-            // 
-            // addTapeMasterArchiveDropdown
-            // 
-            this.addTapeMasterArchiveDropdown.FormattingEnabled = true;
-            this.addTapeMasterArchiveDropdown.Location = new System.Drawing.Point(86, 155);
-            this.addTapeMasterArchiveDropdown.Name = "addTapeMasterArchiveDropdown";
-            this.addTapeMasterArchiveDropdown.Size = new System.Drawing.Size(188, 21);
-            this.addTapeMasterArchiveDropdown.TabIndex = 6;
-            this.addTapeMasterArchiveDropdown.DropDownClosed += new System.EventHandler(this.addTapeMasterArchiveDropdown_DropDownClosed);
-            this.addTapeMasterArchiveDropdown.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.addTapeMasterArchiveDropdown_KeyPress);
             // 
             // label6
             // 
@@ -880,13 +870,13 @@
             // 
             // editTapeGroupbox
             // 
+            this.editTapeGroupbox.Controls.Add(this.editTapeMasterListLabel);
             this.editTapeGroupbox.Controls.Add(this.editProjectNameLabel);
             this.editTapeGroupbox.Controls.Add(this.editTageFlowLayoutPanel);
             this.editTapeGroupbox.Controls.Add(this.editTapeEditButton);
             this.editTapeGroupbox.Controls.Add(this.editTapeCancelButton);
             this.editTapeGroupbox.Controls.Add(this.editPersonDropdown);
             this.editTapeGroupbox.Controls.Add(this.label8);
-            this.editTapeGroupbox.Controls.Add(this.editMasterArchiveDropdown);
             this.editTapeGroupbox.Controls.Add(this.label9);
             this.editTapeGroupbox.Controls.Add(this.editDateShotDate);
             this.editTapeGroupbox.Controls.Add(this.label19);
@@ -901,7 +891,7 @@
             this.editTapeGroupbox.Controls.Add(this.editProjectIDTextbox);
             this.editTapeGroupbox.Controls.Add(this.label24);
             this.editTapeGroupbox.Controls.Add(this.label25);
-            this.editTapeGroupbox.Location = new System.Drawing.Point(744, 114);
+            this.editTapeGroupbox.Location = new System.Drawing.Point(27, 102);
             this.editTapeGroupbox.Name = "editTapeGroupbox";
             this.editTapeGroupbox.Size = new System.Drawing.Size(726, 195);
             this.editTapeGroupbox.TabIndex = 7;
@@ -964,16 +954,6 @@
             this.label8.Size = new System.Drawing.Size(62, 13);
             this.label8.TabIndex = 16;
             this.label8.Text = "Entered By:";
-            // 
-            // editMasterArchiveDropdown
-            // 
-            this.editMasterArchiveDropdown.FormattingEnabled = true;
-            this.editMasterArchiveDropdown.Location = new System.Drawing.Point(86, 157);
-            this.editMasterArchiveDropdown.Name = "editMasterArchiveDropdown";
-            this.editMasterArchiveDropdown.Size = new System.Drawing.Size(188, 21);
-            this.editMasterArchiveDropdown.TabIndex = 6;
-            this.editMasterArchiveDropdown.DropDownClosed += new System.EventHandler(this.editMasterArchiveDropdown_DropDownClosed);
-            this.editMasterArchiveDropdown.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.editMasterArchiveDropdown_KeyPress);
             // 
             // label9
             // 
@@ -1103,6 +1083,24 @@
             this.label25.TabIndex = 0;
             this.label25.Text = "Project ID:";
             // 
+            // addTapeMasterArchiveLabel
+            // 
+            this.addTapeMasterArchiveLabel.AutoSize = true;
+            this.addTapeMasterArchiveLabel.Location = new System.Drawing.Point(93, 158);
+            this.addTapeMasterArchiveLabel.Name = "addTapeMasterArchiveLabel";
+            this.addTapeMasterArchiveLabel.Size = new System.Drawing.Size(124, 13);
+            this.addTapeMasterArchiveLabel.TabIndex = 22;
+            this.addTapeMasterArchiveLabel.Text = "Master Archives from DB";
+            // 
+            // editTapeMasterListLabel
+            // 
+            this.editTapeMasterListLabel.AutoSize = true;
+            this.editTapeMasterListLabel.Location = new System.Drawing.Point(92, 160);
+            this.editTapeMasterListLabel.Name = "editTapeMasterListLabel";
+            this.editTapeMasterListLabel.Size = new System.Drawing.Size(41, 13);
+            this.editTapeMasterListLabel.TabIndex = 22;
+            this.editTapeMasterListLabel.Text = "label26";
+            // 
             // TapeListForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1171,7 +1169,6 @@
         private System.Windows.Forms.Label addIDLabel;
         private System.Windows.Forms.ComboBox addTapePersonDropdown;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.ComboBox addTapeMasterArchiveDropdown;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button addTapeAddButton;
         private System.Windows.Forms.Button addTapeCancelButton;
@@ -1200,7 +1197,6 @@
         private System.Windows.Forms.Button editTapeCancelButton;
         private System.Windows.Forms.ComboBox editPersonDropdown;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.ComboBox editMasterArchiveDropdown;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.DateTimePicker editDateShotDate;
         private System.Windows.Forms.Label label19;
@@ -1241,5 +1237,7 @@
         private System.Windows.Forms.FlowLayoutPanel defaultTagFlowLayoutPanel;
         private System.Windows.Forms.Label addTapeListProjectName;
         private System.Windows.Forms.Label editProjectNameLabel;
+        private System.Windows.Forms.Label addTapeMasterArchiveLabel;
+        private System.Windows.Forms.Label editTapeMasterListLabel;
     }
 }

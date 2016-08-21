@@ -1,4 +1,6 @@
 Ideas:
+
+DONE
 * Create database for tape archives
 * Be able to create, update, delete people list
 * Create Add, Delete and Update for every database
@@ -32,32 +34,34 @@ Ideas:
 * Add import conversion for word documents for master
 * Add automatic detection of master and media for master archive importing
 * Create static class that remembers information about the current user and their selections
+* In adding or updated tapes, get the master tapes from method
+* Add ability to read file for master name and update combobox accordingly
+* Add person to importing of files
+* Add changing of search listview when filter selections are made
+* Add changing of values shown on search panel like deleted panel
+* Status updated at the bottom of the window as method
+* Automatically add project name to project numbers from the projects DB
+* Automatically check for tapes that match project numbers from imports
 
 
-- Create Layout for Input, Search, Edit, Stats (possibly in tabs or upper bar)
+TODO
+- PUT TRY & USING STATEMENTS AROUND SQL stuff
 - Create way to select Master from dropdown and display all projects on media
-- Status updated at the bottom of the window as interface
-- Add a backup feature that backs everything up every month or so
-- Add export and import feature for database
-- Be able to save the old databases and recall them if needed
-- Automatically add project name to project numbers from the projects DB
-- Automatically check for tapes that match project numbers from imports
-- PUT TRY STATEMENTS AROUND SQL stuff
 - Create Preferences
 	- how often to backup database
 	- default export directory
 	- default import directory
 	- 
-- Add ability to read file for master name and update combobox accordingly
-- Add changing of search listview when filter selections are made
-- Add changing of values shown on search panel like deleted panel
+- Create Layout for Input, Search, Edit, Stats (possibly in tabs or upper bar)
+- Add a backup feature that backs everything up every month or so
+- Add export and import feature for database file
+- Be able to save the old databases and recall them if needed
 - Clean up switch statements that have default the same as another
-- Add person to importing of files
 - Change Deleted page listview load and flowlayout build to common Methods
 - Get current user for entries to add or update to db from ComputerInfo class
-- Put using statements around readers from database
 - Make sure tab order is correct for inputing information
-- In adding or updated tapes, get the master tapes from method
+- Be able to update tapes if dropdown or date changes
+- Get rid of Hyperlinks to close groupboxes
 
 
 1541918047

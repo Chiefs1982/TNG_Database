@@ -248,7 +248,6 @@ namespace TNG_Database
         {
             //Set up method in Control Database to get person and master list to populate dropdowns
             string[] people = DataBaseControls.GetPersonListForDropdown();
-            string[] masterTapes = DataBaseControls.GetMasterListForDropdown();
             string[] cameraDropdowns = commonMethod.CameraDropdownItems();
 
             //load values into camera dropdowns
@@ -257,9 +256,6 @@ namespace TNG_Database
             //load values into person dropdowns
             addTapePersonDropdown.Items.AddRange(people);
             editPersonDropdown.Items.AddRange(people);
-            //load values into master list dropdowns
-            addTapeMasterArchiveDropdown.Items.AddRange(masterTapes);
-            editMasterArchiveDropdown.Items.AddRange(masterTapes);
         }
 
         /// <summary>
@@ -273,7 +269,7 @@ namespace TNG_Database
             addTagsTextbox.Clear();
             addTapeNumUpDown.Value = 1;
             addCameraComboBox.SelectedIndex = 0;
-            addTapeMasterArchiveDropdown.SelectedIndex = 0;
+            addTapeMasterArchiveLabel.Text = "";
             addTapePersonDropdown.SelectedIndex = 0;
             addTagList.Clear();
             addTagDisplayFlowLayout.Controls.Clear();
@@ -290,7 +286,7 @@ namespace TNG_Database
             editTagsTextbox.Clear();
             editTapeNumberUpDown.Value = 1;
             editCameraDropdown.SelectedIndex = 0;
-            editMasterArchiveDropdown.SelectedIndex = 0;
+            editTapeMasterListLabel.Text = "";
             editPersonDropdown.SelectedIndex = 0;
             editTageFlowLayoutPanel.Controls.Clear();
         }
@@ -438,8 +434,6 @@ namespace TNG_Database
             addCameraComboBox.SelectedIndex = 0;
             addTapeNumUpDown.Value = 1;
             addTapePersonDropdown.Text = ComputerInfo.ComputerUser;
-            addTapeMasterArchiveDropdown.SelectedIndex = 0;
-            
         }
 
         //Edit entry button pressed
@@ -458,7 +452,7 @@ namespace TNG_Database
             editTagList = tapeValues.TapeTags.Split(',').ToList();
             DisplayTags("edit", editTageFlowLayoutPanel, editTagList);
             editDateShotDate.Value = commonMethod.ConvertDateForDatePicker(tapeValues.DateShot);
-            editMasterArchiveDropdown.Text = tapeValues.MasterArchive;
+            editTapeMasterListLabel.Text = tapeValues.MasterArchive;
             editPersonDropdown.Text = tapeValues.PersonEntered;
         }
 
@@ -512,7 +506,7 @@ namespace TNG_Database
                 tapeValues.TapeNumber = addTapeNumUpDown.Value.ToString();
                 tapeValues.Camera = commonMethod.GetCameraNumber(addCameraComboBox.Text);
                 tapeValues.TapeTags = String.Join(",", addTagList);
-                tapeValues.MasterArchive = addTapeMasterArchiveDropdown.Text;
+                tapeValues.MasterArchive = addTapeMasterArchiveLabel.Text;
                 tapeValues.DateShot = commonMethod.ConvertDateFromDropdownForDB(addDateDateTime.Value);
                 tapeValues.PersonEntered = addTapePersonDropdown.Text;
 
@@ -600,7 +594,7 @@ namespace TNG_Database
             TapeDatabaseValues newTapeValues = new TapeDatabaseValues(
                 editTapeNameTextbox.Text,editTapeNumberUpDown.Value.ToString(),editProjectIDTextbox.Text, projectNameEdit,
                 commonMethod.GetCameraNumber(editCameraDropdown.Text),String.Join(",",editTagList),commonMethod.ConvertDateFromDropdownForDB(editDateShotDate.Value),
-                editMasterArchiveDropdown.Text,editPersonDropdown.Text);
+                editTapeMasterListLabel.Text,editPersonDropdown.Text);
 
             //Check if user made a change
             if (CompareOldEditValues(newTapeValues))
@@ -807,6 +801,9 @@ namespace TNG_Database
                     //no value was returned set Name to Tape Name Value
                     addTapeListProjectName.Text = "";
                 }
+
+                //Make Master list label
+                addTapeMasterArchiveLabel.Text = DataBaseControls.GetMasterForTapes(addProjectIDTextbox.Text, null);
             }
         }
 
@@ -825,6 +822,8 @@ namespace TNG_Database
                     //no value was returned set Name to Tape Name Value
                     editProjectNameLabel.Text = "";
                 }
+
+                editTapeMasterListLabel.Text = DataBaseControls.GetMasterForTapes(addProjectIDTextbox.Text, null);
             }
         }
 
