@@ -35,7 +35,6 @@
             this.editUserPeopleButton = new System.Windows.Forms.Button();
             this.deleteUserPeopleButton = new System.Windows.Forms.Button();
             this.editUserGroupBox = new System.Windows.Forms.GroupBox();
-            this.editCloseLinkLabel = new System.Windows.Forms.LinkLabel();
             this.editUserEditButton = new System.Windows.Forms.Button();
             this.editUserCancelButton = new System.Windows.Forms.Button();
             this.editUserPeopleTB = new System.Windows.Forms.TextBox();
@@ -43,13 +42,11 @@
             this.editPersonNewNameLabel = new System.Windows.Forms.Label();
             this.editUserOldNameLabel = new System.Windows.Forms.Label();
             this.addUserGroupBox = new System.Windows.Forms.GroupBox();
-            this.addUserCloseLinkLabel = new System.Windows.Forms.LinkLabel();
             this.addUserCancelButton = new System.Windows.Forms.Button();
             this.addUserAddButton = new System.Windows.Forms.Button();
             this.addUserLabel = new System.Windows.Forms.Label();
             this.addUserNameTextbox = new System.Windows.Forms.TextBox();
             this.deleteUserGroupBox = new System.Windows.Forms.GroupBox();
-            this.deleteUserCloseLinkLabel = new System.Windows.Forms.LinkLabel();
             this.deleteUserCancelButton = new System.Windows.Forms.Button();
             this.deleteUserDeleteButton = new System.Windows.Forms.Button();
             this.deleteUserNameLabel = new System.Windows.Forms.Label();
@@ -121,7 +118,6 @@
             // 
             // editUserGroupBox
             // 
-            this.editUserGroupBox.Controls.Add(this.editCloseLinkLabel);
             this.editUserGroupBox.Controls.Add(this.editUserEditButton);
             this.editUserGroupBox.Controls.Add(this.editUserCancelButton);
             this.editUserGroupBox.Controls.Add(this.editUserPeopleTB);
@@ -135,17 +131,6 @@
             this.editUserGroupBox.TabStop = false;
             this.editUserGroupBox.Text = "Edit User:";
             this.editUserGroupBox.Visible = false;
-            // 
-            // editCloseLinkLabel
-            // 
-            this.editCloseLinkLabel.AutoSize = true;
-            this.editCloseLinkLabel.Location = new System.Drawing.Point(383, 9);
-            this.editCloseLinkLabel.Name = "editCloseLinkLabel";
-            this.editCloseLinkLabel.Size = new System.Drawing.Size(54, 13);
-            this.editCloseLinkLabel.TabIndex = 6;
-            this.editCloseLinkLabel.TabStop = true;
-            this.editCloseLinkLabel.Text = "Edit Close";
-            this.editCloseLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.editCloseLinkLabel_LinkClicked);
             // 
             // editUserEditButton
             // 
@@ -206,7 +191,6 @@
             // 
             // addUserGroupBox
             // 
-            this.addUserGroupBox.Controls.Add(this.addUserCloseLinkLabel);
             this.addUserGroupBox.Controls.Add(this.addUserCancelButton);
             this.addUserGroupBox.Controls.Add(this.addUserAddButton);
             this.addUserGroupBox.Controls.Add(this.addUserLabel);
@@ -218,17 +202,6 @@
             this.addUserGroupBox.TabStop = false;
             this.addUserGroupBox.Text = "Add User:";
             this.addUserGroupBox.Visible = false;
-            // 
-            // addUserCloseLinkLabel
-            // 
-            this.addUserCloseLinkLabel.AutoSize = true;
-            this.addUserCloseLinkLabel.Location = new System.Drawing.Point(382, 9);
-            this.addUserCloseLinkLabel.Name = "addUserCloseLinkLabel";
-            this.addUserCloseLinkLabel.Size = new System.Drawing.Size(55, 13);
-            this.addUserCloseLinkLabel.TabIndex = 4;
-            this.addUserCloseLinkLabel.TabStop = true;
-            this.addUserCloseLinkLabel.Text = "Add Close";
-            this.addUserCloseLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.addUserCloseLinkLabel_LinkClicked);
             // 
             // addUserCancelButton
             // 
@@ -271,7 +244,6 @@
             // 
             // deleteUserGroupBox
             // 
-            this.deleteUserGroupBox.Controls.Add(this.deleteUserCloseLinkLabel);
             this.deleteUserGroupBox.Controls.Add(this.deleteUserCancelButton);
             this.deleteUserGroupBox.Controls.Add(this.deleteUserDeleteButton);
             this.deleteUserGroupBox.Controls.Add(this.deleteUserNameLabel);
@@ -283,17 +255,6 @@
             this.deleteUserGroupBox.TabStop = false;
             this.deleteUserGroupBox.Text = "Delete User:";
             this.deleteUserGroupBox.Visible = false;
-            // 
-            // deleteUserCloseLinkLabel
-            // 
-            this.deleteUserCloseLinkLabel.AutoSize = true;
-            this.deleteUserCloseLinkLabel.Location = new System.Drawing.Point(370, 9);
-            this.deleteUserCloseLinkLabel.Name = "deleteUserCloseLinkLabel";
-            this.deleteUserCloseLinkLabel.Size = new System.Drawing.Size(67, 13);
-            this.deleteUserCloseLinkLabel.TabIndex = 4;
-            this.deleteUserCloseLinkLabel.TabStop = true;
-            this.deleteUserCloseLinkLabel.Text = "Delete Close";
-            this.deleteUserCloseLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.deleteUserCloseLinkLabel_LinkClicked);
             // 
             // deleteUserCancelButton
             // 
@@ -400,15 +361,12 @@
         private System.Windows.Forms.Label editUserOldPersonName;
         private System.Windows.Forms.Label editPersonNewNameLabel;
         private System.Windows.Forms.Label editUserOldNameLabel;
-        private System.Windows.Forms.LinkLabel editCloseLinkLabel;
         private System.Windows.Forms.GroupBox addUserGroupBox;
         private System.Windows.Forms.Button addUserCancelButton;
         private System.Windows.Forms.Button addUserAddButton;
         private System.Windows.Forms.Label addUserLabel;
         private System.Windows.Forms.TextBox addUserNameTextbox;
         private System.Windows.Forms.GroupBox deleteUserGroupBox;
-        private System.Windows.Forms.LinkLabel addUserCloseLinkLabel;
-        private System.Windows.Forms.LinkLabel deleteUserCloseLinkLabel;
         private System.Windows.Forms.Button deleteUserCancelButton;
         private System.Windows.Forms.Button deleteUserDeleteButton;
         private System.Windows.Forms.Label deleteUserNameLabel;

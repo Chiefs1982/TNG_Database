@@ -36,19 +36,19 @@
             this.projectsUpdateButton = new System.Windows.Forms.Button();
             this.projectsDeleteButton = new System.Windows.Forms.Button();
             this.projectsDefaultGroupBox = new System.Windows.Forms.GroupBox();
-            this.defaultLabel = new System.Windows.Forms.Label();
             this.defaultLabelPanel = new System.Windows.Forms.Panel();
-            this.label20 = new System.Windows.Forms.Label();
-            this.defaultProjectIDLabel = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
             this.defaultProjectNameLabel = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.defaultProjectIDLabel = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
+            this.defaultLabel = new System.Windows.Forms.Label();
             this.projectAddGroupBox = new System.Windows.Forms.GroupBox();
+            this.addProjectCancelButton = new System.Windows.Forms.Button();
+            this.addProjectAddButton = new System.Windows.Forms.Button();
+            this.addProjectNameTextBox = new System.Windows.Forms.TextBox();
+            this.addProjectIDTextBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.addProjectIDTextBox = new System.Windows.Forms.TextBox();
-            this.addProjectNameTextBox = new System.Windows.Forms.TextBox();
-            this.addProjectAddButton = new System.Windows.Forms.Button();
-            this.addProjectCancelButton = new System.Windows.Forms.Button();
             this.editProjectsGroupBox = new System.Windows.Forms.GroupBox();
             this.editProjectCancelButton = new System.Windows.Forms.Button();
             this.editProjectEditButton = new System.Windows.Forms.Button();
@@ -57,12 +57,12 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.deleteProjectsGroupBox = new System.Windows.Forms.GroupBox();
+            this.deleteProjectNameLabel = new System.Windows.Forms.Label();
+            this.deleteProjectIDLabel = new System.Windows.Forms.Label();
             this.deleteProjectCancelButton = new System.Windows.Forms.Button();
             this.deleteProjectDeleteButton = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
-            this.deleteProjectNameLabel = new System.Windows.Forms.Label();
-            this.deleteProjectIDLabel = new System.Windows.Forms.Label();
             this.projectsDefaultGroupBox.SuspendLayout();
             this.defaultLabelPanel.SuspendLayout();
             this.projectAddGroupBox.SuspendLayout();
@@ -143,15 +143,6 @@
             this.projectsDefaultGroupBox.TabIndex = 5;
             this.projectsDefaultGroupBox.TabStop = false;
             // 
-            // defaultLabel
-            // 
-            this.defaultLabel.AutoSize = true;
-            this.defaultLabel.Location = new System.Drawing.Point(16, 16);
-            this.defaultLabel.Name = "defaultLabel";
-            this.defaultLabel.Size = new System.Drawing.Size(173, 13);
-            this.defaultLabel.TabIndex = 0;
-            this.defaultLabel.Text = "Select item from list to edit or delete";
-            // 
             // defaultLabelPanel
             // 
             this.defaultLabelPanel.Controls.Add(this.defaultProjectNameLabel);
@@ -163,23 +154,14 @@
             this.defaultLabelPanel.Size = new System.Drawing.Size(389, 111);
             this.defaultLabelPanel.TabIndex = 1;
             // 
-            // label20
+            // defaultProjectNameLabel
             // 
-            this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(10, 16);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(57, 13);
-            this.label20.TabIndex = 0;
-            this.label20.Text = "Project ID:";
-            // 
-            // defaultProjectIDLabel
-            // 
-            this.defaultProjectIDLabel.AutoSize = true;
-            this.defaultProjectIDLabel.Location = new System.Drawing.Point(100, 16);
-            this.defaultProjectIDLabel.Name = "defaultProjectIDLabel";
-            this.defaultProjectIDLabel.Size = new System.Drawing.Size(99, 13);
-            this.defaultProjectIDLabel.TabIndex = 1;
-            this.defaultProjectIDLabel.Text = "Selected Project ID";
+            this.defaultProjectNameLabel.AutoSize = true;
+            this.defaultProjectNameLabel.Location = new System.Drawing.Point(100, 47);
+            this.defaultProjectNameLabel.Name = "defaultProjectNameLabel";
+            this.defaultProjectNameLabel.Size = new System.Drawing.Size(116, 13);
+            this.defaultProjectNameLabel.TabIndex = 3;
+            this.defaultProjectNameLabel.Text = "Selected Project Name";
             // 
             // label3
             // 
@@ -190,14 +172,32 @@
             this.label3.TabIndex = 2;
             this.label3.Text = "Project Name:";
             // 
-            // defaultProjectNameLabel
+            // defaultProjectIDLabel
             // 
-            this.defaultProjectNameLabel.AutoSize = true;
-            this.defaultProjectNameLabel.Location = new System.Drawing.Point(100, 47);
-            this.defaultProjectNameLabel.Name = "defaultProjectNameLabel";
-            this.defaultProjectNameLabel.Size = new System.Drawing.Size(116, 13);
-            this.defaultProjectNameLabel.TabIndex = 3;
-            this.defaultProjectNameLabel.Text = "Selected Project Name";
+            this.defaultProjectIDLabel.AutoSize = true;
+            this.defaultProjectIDLabel.Location = new System.Drawing.Point(100, 16);
+            this.defaultProjectIDLabel.Name = "defaultProjectIDLabel";
+            this.defaultProjectIDLabel.Size = new System.Drawing.Size(99, 13);
+            this.defaultProjectIDLabel.TabIndex = 1;
+            this.defaultProjectIDLabel.Text = "Selected Project ID";
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(10, 16);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(57, 13);
+            this.label20.TabIndex = 0;
+            this.label20.Text = "Project ID:";
+            // 
+            // defaultLabel
+            // 
+            this.defaultLabel.AutoSize = true;
+            this.defaultLabel.Location = new System.Drawing.Point(16, 16);
+            this.defaultLabel.Name = "defaultLabel";
+            this.defaultLabel.Size = new System.Drawing.Size(173, 13);
+            this.defaultLabel.TabIndex = 0;
+            this.defaultLabel.Text = "Select item from list to edit or delete";
             // 
             // projectAddGroupBox
             // 
@@ -213,6 +213,40 @@
             this.projectAddGroupBox.TabIndex = 6;
             this.projectAddGroupBox.TabStop = false;
             this.projectAddGroupBox.Text = "Add Project";
+            // 
+            // addProjectCancelButton
+            // 
+            this.addProjectCancelButton.Location = new System.Drawing.Point(312, 101);
+            this.addProjectCancelButton.Name = "addProjectCancelButton";
+            this.addProjectCancelButton.Size = new System.Drawing.Size(75, 23);
+            this.addProjectCancelButton.TabIndex = 8;
+            this.addProjectCancelButton.Text = "Cancel";
+            this.addProjectCancelButton.UseVisualStyleBackColor = true;
+            this.addProjectCancelButton.Click += new System.EventHandler(this.addProjectCancelButton_Click);
+            // 
+            // addProjectAddButton
+            // 
+            this.addProjectAddButton.Location = new System.Drawing.Point(227, 101);
+            this.addProjectAddButton.Name = "addProjectAddButton";
+            this.addProjectAddButton.Size = new System.Drawing.Size(75, 23);
+            this.addProjectAddButton.TabIndex = 7;
+            this.addProjectAddButton.Text = "Add";
+            this.addProjectAddButton.UseVisualStyleBackColor = true;
+            this.addProjectAddButton.Click += new System.EventHandler(this.addProjectAddButton_Click);
+            // 
+            // addProjectNameTextBox
+            // 
+            this.addProjectNameTextBox.Location = new System.Drawing.Point(104, 60);
+            this.addProjectNameTextBox.Name = "addProjectNameTextBox";
+            this.addProjectNameTextBox.Size = new System.Drawing.Size(291, 20);
+            this.addProjectNameTextBox.TabIndex = 6;
+            // 
+            // addProjectIDTextBox
+            // 
+            this.addProjectIDTextBox.Location = new System.Drawing.Point(104, 31);
+            this.addProjectIDTextBox.Name = "addProjectIDTextBox";
+            this.addProjectIDTextBox.Size = new System.Drawing.Size(109, 20);
+            this.addProjectIDTextBox.TabIndex = 5;
             // 
             // label2
             // 
@@ -231,40 +265,6 @@
             this.label4.Size = new System.Drawing.Size(57, 13);
             this.label4.TabIndex = 3;
             this.label4.Text = "Project ID:";
-            // 
-            // addProjectIDTextBox
-            // 
-            this.addProjectIDTextBox.Location = new System.Drawing.Point(104, 31);
-            this.addProjectIDTextBox.Name = "addProjectIDTextBox";
-            this.addProjectIDTextBox.Size = new System.Drawing.Size(109, 20);
-            this.addProjectIDTextBox.TabIndex = 5;
-            // 
-            // addProjectNameTextBox
-            // 
-            this.addProjectNameTextBox.Location = new System.Drawing.Point(104, 60);
-            this.addProjectNameTextBox.Name = "addProjectNameTextBox";
-            this.addProjectNameTextBox.Size = new System.Drawing.Size(291, 20);
-            this.addProjectNameTextBox.TabIndex = 6;
-            // 
-            // addProjectAddButton
-            // 
-            this.addProjectAddButton.Location = new System.Drawing.Point(227, 101);
-            this.addProjectAddButton.Name = "addProjectAddButton";
-            this.addProjectAddButton.Size = new System.Drawing.Size(75, 23);
-            this.addProjectAddButton.TabIndex = 7;
-            this.addProjectAddButton.Text = "Add";
-            this.addProjectAddButton.UseVisualStyleBackColor = true;
-            this.addProjectAddButton.Click += new System.EventHandler(this.addProjectAddButton_Click);
-            // 
-            // addProjectCancelButton
-            // 
-            this.addProjectCancelButton.Location = new System.Drawing.Point(312, 101);
-            this.addProjectCancelButton.Name = "addProjectCancelButton";
-            this.addProjectCancelButton.Size = new System.Drawing.Size(75, 23);
-            this.addProjectCancelButton.TabIndex = 8;
-            this.addProjectCancelButton.Text = "Cancel";
-            this.addProjectCancelButton.UseVisualStyleBackColor = true;
-            this.addProjectCancelButton.Click += new System.EventHandler(this.addProjectCancelButton_Click);
             // 
             // editProjectsGroupBox
             // 
@@ -348,6 +348,24 @@
             this.deleteProjectsGroupBox.TabStop = false;
             this.deleteProjectsGroupBox.Text = "Delete Project";
             // 
+            // deleteProjectNameLabel
+            // 
+            this.deleteProjectNameLabel.AutoSize = true;
+            this.deleteProjectNameLabel.Location = new System.Drawing.Point(95, 65);
+            this.deleteProjectNameLabel.Name = "deleteProjectNameLabel";
+            this.deleteProjectNameLabel.Size = new System.Drawing.Size(162, 13);
+            this.deleteProjectNameLabel.TabIndex = 10;
+            this.deleteProjectNameLabel.Text = "Selected Project Name to Delete";
+            // 
+            // deleteProjectIDLabel
+            // 
+            this.deleteProjectIDLabel.AutoSize = true;
+            this.deleteProjectIDLabel.Location = new System.Drawing.Point(95, 34);
+            this.deleteProjectIDLabel.Name = "deleteProjectIDLabel";
+            this.deleteProjectIDLabel.Size = new System.Drawing.Size(145, 13);
+            this.deleteProjectIDLabel.TabIndex = 9;
+            this.deleteProjectIDLabel.Text = "Selected Project ID to Delete";
+            // 
             // deleteProjectCancelButton
             // 
             this.deleteProjectCancelButton.Location = new System.Drawing.Point(312, 101);
@@ -385,24 +403,6 @@
             this.label8.Size = new System.Drawing.Size(57, 13);
             this.label8.TabIndex = 3;
             this.label8.Text = "Project ID:";
-            // 
-            // deleteProjectNameLabel
-            // 
-            this.deleteProjectNameLabel.AutoSize = true;
-            this.deleteProjectNameLabel.Location = new System.Drawing.Point(95, 65);
-            this.deleteProjectNameLabel.Name = "deleteProjectNameLabel";
-            this.deleteProjectNameLabel.Size = new System.Drawing.Size(162, 13);
-            this.deleteProjectNameLabel.TabIndex = 10;
-            this.deleteProjectNameLabel.Text = "Selected Project Name to Delete";
-            // 
-            // deleteProjectIDLabel
-            // 
-            this.deleteProjectIDLabel.AutoSize = true;
-            this.deleteProjectIDLabel.Location = new System.Drawing.Point(95, 34);
-            this.deleteProjectIDLabel.Name = "deleteProjectIDLabel";
-            this.deleteProjectIDLabel.Size = new System.Drawing.Size(145, 13);
-            this.deleteProjectIDLabel.TabIndex = 9;
-            this.deleteProjectIDLabel.Text = "Selected Project ID to Delete";
             // 
             // ProjectsForm
             // 

@@ -202,12 +202,6 @@ namespace TNG_Database
         //--------EDIT USER GROUP BOX CONTROLS--------------------
         //--------------------------------------------------------
         
-        //Close Edit box link label click
-        private void editCloseLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            CloseOpenGroupBox("edit");
-        }
-
         //Edit user button clicked
         private void editUserEditButton_Click(object sender, EventArgs e)
         {
@@ -277,12 +271,6 @@ namespace TNG_Database
         //--------ADD USER GROUP BOX CONTROLS---------------------
         //--------------------------------------------------------
 
-        //Add user close link label clicked
-        private void addUserCloseLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            CloseOpenGroupBox("add");
-        }
-
         //add user add button clicked
         private void addUserAddButton_Click(object sender, EventArgs e)
         {
@@ -341,12 +329,6 @@ namespace TNG_Database
         //--------------------------------------------------------
         //--------DELETE USER GROUP BOX CONTROLS------------------
         //--------------------------------------------------------
-
-        //delete user close link label clicked
-        private void deleteUserCloseLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            CloseOpenGroupBox("delete");
-        }
 
         //delete user Delete button clicked
         private void deleteUserDeleteButton_Click(object sender, EventArgs e)

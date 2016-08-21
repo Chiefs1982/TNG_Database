@@ -70,6 +70,9 @@ namespace TNG_Database
             addProjectIDTextbox.TextChanged += addTextBoxes_TextChanged;
             addTapeNameTextbox.TextChanged += addTextBoxes_TextChanged;
             addTagsTextbox.TextChanged += addTextBoxes_TextChanged;
+            addCameraComboBox.SelectedIndexChanged += addTextBoxes_TextChanged;
+            addTapeNumUpDown.ValueChanged += addTextBoxes_TextChanged;
+            addDateDateTime.ValueChanged += addTextBoxes_TextChanged;
 
             //Project ID lost focus
             addProjectIDTextbox.LostFocus += AddProjectIDTextbox_LostFocus;
@@ -79,6 +82,9 @@ namespace TNG_Database
             editProjectIDTextbox.TextChanged += editTextBoxes_TextChanged;
             editTapeNameTextbox.TextChanged += editTextBoxes_TextChanged;
             editTagsTextbox.TextChanged += editTextBoxes_TextChanged;
+            editCameraDropdown.SelectedIndexChanged += editTextBoxes_TextChanged;
+            editTapeNumberUpDown.ValueChanged += editTextBoxes_TextChanged;
+            editDateShotDate.ValueChanged += editTextBoxes_TextChanged;
 
             //Tell user the database is ready for use
             updateStatus.UpdateStatusBar("Database is Loaded and Ready", mainform);
@@ -760,7 +766,7 @@ namespace TNG_Database
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void addTextBoxes_TextChanged(object sender, EventArgs e)
         {
-            if(addProjectIDTextbox.Text.Length > 0 && addTapeNameTextbox.Text.Length > 0 && addTagList.Count > 0)
+            if(addProjectIDTextbox.Text.Length > 0 && addTapeNameTextbox.Text.Length > 0 && addTagList.Count > 0 && addTapeNumUpDown.Value > 0 && !addDateDateTime.Value.Equals(string.Empty) && !addCameraComboBox.Text.Equals(string.Empty))
             {
                 addTapeAddButton.Enabled = true;
             }else
@@ -776,7 +782,7 @@ namespace TNG_Database
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void editTextBoxes_TextChanged(object sender, EventArgs e)
         {
-            if (editProjectIDTextbox.Text.Length > 0 && editTapeNameTextbox.Text.Length > 0 && editTagList.Count > 0)
+            if (editProjectIDTextbox.Text.Length > 0 && editTapeNameTextbox.Text.Length > 0 && editTagList.Count > 0 && editTapeNumberUpDown.Value > 0 && !editDateShotDate.Value.Equals(string.Empty) && !editCameraDropdown.Text.Equals(string.Empty))
             {
                 editTapeEditButton.Enabled = true;
             }
