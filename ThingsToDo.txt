@@ -62,6 +62,7 @@ TODO
 - Make sure tab order is correct for inputing information
 - Be able to update tapes if dropdown or date changes
 - Get rid of Hyperlinks to close groupboxes
+- Automatically add tapes master to tapes import
 
 
 1541918047
