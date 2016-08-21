@@ -26,6 +26,7 @@ namespace TNG_Database
         public TNG_Database.ProjectsForm projectsForm;
         public TNG_Database.MasterArchiveVideosForm masterArchiveForm;
         public TNG_Database.DeletedValuesForm deletedValuesForm;
+        public TNG_Database.ViewMasterArchiveForm viewMasterArchiveForm;
 
         //the current form
         Form currentForm;

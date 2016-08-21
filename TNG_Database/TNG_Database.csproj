@@ -193,11 +193,11 @@
     <Compile Include="Helpers\UpdateStatus.cs" />
     <Compile Include="Values\UserValues.cs" />
     <Compile Include="Values\SearchValues.cs" />
-    <Compile Include="DataForms\ViewMasterArchive.cs">
+    <Compile Include="DataForms\ViewMasterArchiveForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DataForms\ViewMasterArchive.Designer.cs">
-      <DependentUpon>ViewMasterArchive.cs</DependentUpon>
+    <Compile Include="DataForms\ViewMasterArchiveForm.Designer.cs">
+      <DependentUpon>ViewMasterArchiveForm.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="DataForms\DeletedValuesForm.resx">
       <DependentUpon>DeletedValuesForm.cs</DependentUpon>
@@ -207,6 +207,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DataForms\ProjectsForm.resx">
       <DependentUpon>ProjectsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataForms\ViewMasterArchiveForm.resx">
+      <DependentUpon>ViewMasterArchiveForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

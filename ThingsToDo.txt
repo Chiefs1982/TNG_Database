@@ -43,6 +43,7 @@ DONE
 * Automatically add project name to project numbers from the projects DB
 * Automatically check for tapes that match project numbers from imports
 * Get rid of Hyperlinks to close groupboxes
+* Be able to update tapes if dropdown or date changes
 
 
 TODO
@@ -61,7 +62,6 @@ TODO
 - Change Deleted page listview load and flowlayout build to common Methods
 - Get current user for entries to add or update to db from ComputerInfo class
 - Make sure tab order is correct for inputing information
-- Be able to update tapes if dropdown or date changes
 - Add tooltips to everything
 - Add something to let user know about tags and commas
 
