@@ -20,9 +20,7 @@ namespace TNG_Database
         //CommonMethod reference
         CommonMethods commonMethod = CommonMethods.Instance();
         UpdateStatus updateStatus = UpdateStatus.Instance();
-
-        int sortColumn = -1;
-
+        
         public ViewMasterArchiveForm(TNG_Database.MainForm parent)
         {
             InitializeComponent();
@@ -32,7 +30,9 @@ namespace TNG_Database
 
             PopulateListBox();
 
-            viewMasterListView.ColumnClick += new ColumnClickEventHandler(ViewMasterListView_ColumnClick);
+            //Event for sorting each column
+            CommonMethods.ListViewItemComparer.SortColumn = -1;
+            viewMasterListView.ColumnClick += new ColumnClickEventHandler(CommonMethods.ListViewItemComparer.SearchListView_ColumnClick);
         }
 
         #region Class Methods
@@ -81,60 +81,6 @@ namespace TNG_Database
             {
                 viewMasterListView.Items.Clear();
             }
-        }
-
-        private void ViewMasterListView_ColumnClick(object sender, System.Windows.Forms.ColumnClickEventArgs e)
-        {
-            
-            // Determine whether the column is the same as the last column clicked.
-            if (e.Column != sortColumn)
-            {
-                // Set the sort column to the new column.
-                sortColumn = e.Column;
-                // Set the sort order to ascending by default.
-                viewMasterListView.Sorting = SortOrder.Ascending;
-            }
-            else
-            {
-                // Determine what the last sort order was and change it.
-                if (viewMasterListView.Sorting == SortOrder.Ascending)
-                    viewMasterListView.Sorting = SortOrder.Descending;
-                else
-                    viewMasterListView.Sorting = SortOrder.Ascending;
-            }
-            // Set the ListViewItemSorter property to a new ListViewItemComparer object.
-            viewMasterListView.ListViewItemSorter = new ListViewItemComparer(e.Column, viewMasterListView.Sorting);
-            // Call the sort method to manually sort.
-            viewMasterListView.Sort();
-        }
-
-        // Implements the manual sorting of items by column.
-        class ListViewItemComparer : IComparer
-        {
-            private int col;
-            private SortOrder order;
-            public ListViewItemComparer()
-            {
-                col = 0;
-                order = SortOrder.Ascending;
-            }
-            public ListViewItemComparer(int column, SortOrder order)
-            {
-                col = column;
-                this.order = order;
-            }
-            public int Compare(object x, object y)
-            {
-                int returnVal = -1;
-                returnVal = String.Compare(((ListViewItem)x).SubItems[col].Text,
-                                        ((ListViewItem)y).SubItems[col].Text);
-                // Determine whether the sort order is descending.
-                if (order == SortOrder.Descending)
-                    // Invert the value returned by String.Compare.
-                    returnVal *= -1;
-                return returnVal;
-            }
-
         }
     }
 }

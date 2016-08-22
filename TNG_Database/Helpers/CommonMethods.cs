@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
@@ -647,6 +648,74 @@ namespace TNG_Database
 
         #endregion
 
+
+
+        
+        /// <summary>
+        /// Implements the manual sorting of items by column.     
+        /// </summary>
+        /// <seealso cref="System.Collections.IComparer" />
+        public class ListViewItemComparer : IComparer
+        {
+            private int col;
+            private SortOrder order;
+            private static int sortColumn;
+
+            //int to keep sort column info
+            public static int SortColumn
+            {
+                get { return sortColumn; }
+                set { sortColumn = value; }
+            }
+            public ListViewItemComparer()
+            {
+                col = 0;
+                order = SortOrder.Ascending;
+            }
+            public ListViewItemComparer(int column, SortOrder order)
+            {
+                col = column;
+                this.order = order;
+            }
+            public int Compare(object x, object y)
+            {
+                int returnVal = -1;
+                returnVal = String.Compare(((ListViewItem)x).SubItems[col].Text,
+                                        ((ListViewItem)y).SubItems[col].Text);
+                // Determine whether the sort order is descending.
+                if (order == SortOrder.Descending)
+                    // Invert the value returned by String.Compare.
+                    returnVal *= -1;
+                return returnVal;
+            }
+
+            public static void SearchListView_ColumnClick(object sender, System.Windows.Forms.ColumnClickEventArgs e)
+            {
+                ListView listView = (ListView)sender;
+
+                // Determine whether the column is the same as the last column clicked.
+                if (e.Column != SortColumn)
+                {
+                    // Set the sort column to the new column.
+                    SortColumn = e.Column;
+                    // Set the sort order to ascending by default.
+                    listView.Sorting = SortOrder.Ascending;
+                }
+                else
+                {
+                    // Determine what the last sort order was and change it.
+                    if (listView.Sorting == SortOrder.Ascending)
+                        listView.Sorting = SortOrder.Descending;
+                    else
+                        listView.Sorting = SortOrder.Ascending;
+                }
+                // Set the ListViewItemSorter property to a new ListViewItemComparer object.
+                listView.ListViewItemSorter = new CommonMethods.ListViewItemComparer(e.Column, listView.Sorting);
+                // Call the sort method to manually sort.
+                listView.Sort();
+            }
+
+        }
 
     }
 }

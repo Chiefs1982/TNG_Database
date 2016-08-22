@@ -44,7 +44,6 @@ namespace TNG_Database
         CommonMethods commonMethod = CommonMethods.Instance();
         UpdateStatus updateStatus = UpdateStatus.Instance();
         
-
         public SearchTapeForm(TNG_Database.MainForm parent)
         {
             InitializeComponent();
@@ -62,6 +61,11 @@ namespace TNG_Database
             searchFilterCombo.Items.AddRange(new string[] { "All","Tapes","Master Archive","Projects" });
             searchFilterCombo.SelectedIndex = 0;
             searchFilterCombo.Cursor = Cursors.Default;
+
+            //Event for sorting each column & set column to -1
+            CommonMethods.ListViewItemComparer.SortColumn = -1;
+            searchListView.ColumnClick += new ColumnClickEventHandler(CommonMethods.ListViewItemComparer.SearchListView_ColumnClick);
+            
         }
 
         public SearchTapeForm()
@@ -522,7 +526,6 @@ namespace TNG_Database
         }
 
         #endregion
-
-
+        
     }
 }

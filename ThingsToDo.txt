@@ -44,6 +44,8 @@ DONE
 * Automatically check for tapes that match project numbers from imports
 * Get rid of Hyperlinks to close groupboxes
 * Be able to update tapes if dropdown or date changes
+* Update paste function to paste properly
+* Add sorting to all listviews
 
 
 TODO

@@ -82,6 +82,9 @@ namespace TNG_Database
 
             //set the username at the bottom to current user
             computerInfo.UpdateUserName(this);
+
+            pasteToolStripMenuItem.Enabled = false;
+            
         }
 
         #region Class Methods
@@ -995,6 +998,14 @@ namespace TNG_Database
                     }
                 }
             }
+
+            if (Clipboard.ContainsText())
+            {
+                pasteToolStripMenuItem.Enabled = true;
+            }else
+            {
+                pasteToolStripMenuItem.Enabled = false;
+            }
             
         }
 
@@ -1015,7 +1026,14 @@ namespace TNG_Database
                     {
                         TextBox tb = (TextBox)ctrl;
                         string paste = Clipboard.GetText();
-                        tb.Text = tb.Text.Insert(tb.SelectionStart, paste);
+                        int tbLength = tb.SelectionLength;
+                        int tbStart = tb.SelectionStart;
+                        if (tb.SelectionLength > 0)
+                        {
+                            tb.Text = tb.Text.Remove(tbStart, tbLength);
+                        }
+                        tb.Text = tb.Text.Insert(tbStart, paste);
+                        tb.SelectionStart = (tb.SelectionStart+paste.Length);
                     }
                 }
             }

@@ -60,6 +60,10 @@ namespace TNG_Database
 
             //load default tape list values into listview
             PopulateTapeValuesInList();
+
+            //Event for sorting each column
+            CommonMethods.ListViewItemComparer.SortColumn = -1;
+            databaseListView.ColumnClick += new ColumnClickEventHandler(CommonMethods.ListViewItemComparer.SearchListView_ColumnClick);
         }
 
         //-----------------------------------------------------
@@ -137,6 +141,7 @@ namespace TNG_Database
             databaseListView.Clear();
             databaseListView.Items.Clear();
             ButtonInvisibleAndDisabled();
+            CommonMethods.ListViewItemComparer.SortColumn = -1;
 
             //Load COlumns
             ColumnHeader colTapePID = new ColumnHeader();
@@ -198,6 +203,7 @@ namespace TNG_Database
             databaseListView.Clear();
             databaseListView.Items.Clear();
             ButtonInvisibleAndDisabled();
+            CommonMethods.ListViewItemComparer.SortColumn = -1;
 
             //Creat columns:
             ColumnHeader colProjectsPID = new ColumnHeader();
@@ -226,6 +232,7 @@ namespace TNG_Database
             databaseListView.Clear();
             databaseListView.Items.Clear();
             ButtonInvisibleAndDisabled();
+            CommonMethods.ListViewItemComparer.SortColumn = -1;
 
             //Load Coluns
             ColumnHeader colPeopleName = new ColumnHeader();
@@ -248,6 +255,7 @@ namespace TNG_Database
             databaseListView.Clear();
             databaseListView.Items.Clear();
             ButtonInvisibleAndDisabled();
+            CommonMethods.ListViewItemComparer.SortColumn = -1;
 
             //Creat columns:
             ColumnHeader colMasterListPID = new ColumnHeader();
@@ -275,6 +283,7 @@ namespace TNG_Database
             databaseListView.Clear();
             databaseListView.Items.Clear();
             ButtonInvisibleAndDisabled();
+            CommonMethods.ListViewItemComparer.SortColumn = -1;
 
             //Load COlumns
             ColumnHeader colMasterPID = new ColumnHeader();

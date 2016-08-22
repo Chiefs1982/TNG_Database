@@ -49,6 +49,10 @@ namespace TNG_Database
 
             //close all groupboxes
             CloseGroupBox();
+
+            //Event for sorting each column
+            CommonMethods.ListViewItemComparer.SortColumn = -1;
+            projectsListView.ColumnClick += new ColumnClickEventHandler(CommonMethods.ListViewItemComparer.SearchListView_ColumnClick);
         }
 
         private void AddProjectTextBox_TextChanged(object sender, EventArgs e)

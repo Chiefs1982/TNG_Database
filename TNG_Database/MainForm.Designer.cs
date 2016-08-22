@@ -31,6 +31,9 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.homeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.archiveListsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.importDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -67,9 +70,6 @@
             this.mainFormProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.personStatusDropdown = new System.Windows.Forms.ToolStripDropDownButton();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.archiveListsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
-            this.homeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -83,7 +83,7 @@
             this.windowsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(837, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(846, 24);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -105,6 +105,25 @@
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
+            // 
+            // homeToolStripMenuItem
+            // 
+            this.homeToolStripMenuItem.Name = "homeToolStripMenuItem";
+            this.homeToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.homeToolStripMenuItem.Text = "Home";
+            this.homeToolStripMenuItem.Click += new System.EventHandler(this.homeToolStripMenuItem_Click);
+            // 
+            // archiveListsToolStripMenuItem
+            // 
+            this.archiveListsToolStripMenuItem.Name = "archiveListsToolStripMenuItem";
+            this.archiveListsToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.archiveListsToolStripMenuItem.Text = "Archive Lists";
+            this.archiveListsToolStripMenuItem.Click += new System.EventHandler(this.archiveListsToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(158, 6);
             // 
             // importDatabaseToolStripMenuItem
             // 
@@ -341,9 +360,9 @@
             this.mainFormProgressBar,
             this.personStatusDropdown});
             this.statusStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
-            this.statusStrip1.Location = new System.Drawing.Point(0, 581);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 624);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(837, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(846, 22);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -385,37 +404,18 @@
             this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
             this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
             // 
-            // archiveListsToolStripMenuItem
-            // 
-            this.archiveListsToolStripMenuItem.Name = "archiveListsToolStripMenuItem";
-            this.archiveListsToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
-            this.archiveListsToolStripMenuItem.Text = "Archive Lists";
-            this.archiveListsToolStripMenuItem.Click += new System.EventHandler(this.archiveListsToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator5
-            // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(158, 6);
-            // 
-            // homeToolStripMenuItem
-            // 
-            this.homeToolStripMenuItem.Name = "homeToolStripMenuItem";
-            this.homeToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
-            this.homeToolStripMenuItem.Text = "Home";
-            this.homeToolStripMenuItem.Click += new System.EventHandler(this.homeToolStripMenuItem_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(837, 603);
+            this.ClientSize = new System.Drawing.Size(846, 646);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.IsMdiContainer = true;
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(853, 642);
+            this.MinimumSize = new System.Drawing.Size(800, 600);
             this.Name = "MainForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

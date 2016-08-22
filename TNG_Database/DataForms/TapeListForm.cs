@@ -96,6 +96,10 @@ namespace TNG_Database
             ClearAddControls();
             ClearDeleteLabels();
             ClearDeleteLabels();
+
+            //Event for sorting each column
+            CommonMethods.ListViewItemComparer.SortColumn = -1;
+            tapeListListView.ColumnClick += new ColumnClickEventHandler(CommonMethods.ListViewItemComparer.SearchListView_ColumnClick);
         }
 
         
