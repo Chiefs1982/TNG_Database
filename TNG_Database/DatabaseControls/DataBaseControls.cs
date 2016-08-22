@@ -366,6 +366,10 @@ namespace TNG_Database
             return tapeList;
         }
 
+        /// <summary>
+        /// Gets all archive video values.
+        /// </summary>
+        /// <returns></returns>
         public static List<MasterTapeValues> GetAllArchiveVideoValues()
         {
             //declare values
@@ -406,6 +410,40 @@ namespace TNG_Database
                 MainForm.LogFile("SQLite Error: " + e.Message);
             }
             return mList;
+        }
+
+        public static List<MasterArchiveVideoValues> GetAllMasterListValues(string masterList)
+        {
+            List<MasterArchiveVideoValues> values = new List<MasterArchiveVideoValues>();
+
+            try
+            {
+                //Open connection to DB
+                SQLiteConnection connect = new SQLiteConnection(database);
+                connect.Open();
+                SQLiteCommand command = new SQLiteCommand(connect);
+
+                //Set up command to query db
+                command.CommandText = "select * from MasterArchiveVideos where master_tape = @m_tape";
+                command.Parameters.AddWithValue("@m_tape", masterList);
+
+                //query the db
+                using(SQLiteDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            //add values to list to return
+                            MasterArchiveVideoValues videos = new MasterArchiveVideoValues(reader["project_id"].ToString(),reader["video_name"].ToString(),reader["master_tape"].ToString(),reader["clip_number"].ToString(),Convert.ToInt32(reader["id"]));
+                            values.Add(videos);
+                        }
+                    }
+                }
+            }
+            catch { }
+
+            return values;
         }
 
         //----------------------------------------------        

@@ -65,8 +65,11 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.applicationStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.mainFormProgressBar = new System.Windows.Forms.ToolStripProgressBar();
-            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.personStatusDropdown = new System.Windows.Forms.ToolStripDropDownButton();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.archiveListsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.homeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -87,6 +90,9 @@
             // fileToolStripMenuItem
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.homeToolStripMenuItem,
+            this.archiveListsToolStripMenuItem,
+            this.toolStripSeparator5,
             this.importDatabaseToolStripMenuItem,
             this.exportDatabaseToolStripMenuItem,
             this.toolStripSeparator1,
@@ -359,14 +365,6 @@
             this.mainFormProgressBar.Size = new System.Drawing.Size(100, 16);
             this.mainFormProgressBar.Step = 1;
             // 
-            // backgroundWorker1
-            // 
-            this.backgroundWorker1.WorkerReportsProgress = true;
-            this.backgroundWorker1.WorkerSupportsCancellation = true;
-            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
-            this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
-            this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
-            // 
             // personStatusDropdown
             // 
             this.personStatusDropdown.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
@@ -378,6 +376,33 @@
             this.personStatusDropdown.Size = new System.Drawing.Size(56, 20);
             this.personStatusDropdown.Text = "Person";
             this.personStatusDropdown.ToolTipText = "Select Person";
+            // 
+            // backgroundWorker1
+            // 
+            this.backgroundWorker1.WorkerReportsProgress = true;
+            this.backgroundWorker1.WorkerSupportsCancellation = true;
+            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+            this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
+            this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
+            // 
+            // archiveListsToolStripMenuItem
+            // 
+            this.archiveListsToolStripMenuItem.Name = "archiveListsToolStripMenuItem";
+            this.archiveListsToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.archiveListsToolStripMenuItem.Text = "Archive Lists";
+            this.archiveListsToolStripMenuItem.Click += new System.EventHandler(this.archiveListsToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(158, 6);
+            // 
+            // homeToolStripMenuItem
+            // 
+            this.homeToolStripMenuItem.Name = "homeToolStripMenuItem";
+            this.homeToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.homeToolStripMenuItem.Text = "Home";
+            this.homeToolStripMenuItem.Click += new System.EventHandler(this.homeToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -443,6 +468,9 @@
         private System.Windows.Forms.ToolStripMenuItem tocsvToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem wordTestToolStripMenuItem;
         private System.Windows.Forms.ToolStripDropDownButton personStatusDropdown;
+        private System.Windows.Forms.ToolStripMenuItem homeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem archiveListsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
     }
 }
 

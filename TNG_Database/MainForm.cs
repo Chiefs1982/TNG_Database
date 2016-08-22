@@ -737,6 +737,48 @@ namespace TNG_Database
             deletedValuesForm.WindowState = FormWindowState.Maximized;
         }
 
+        //Open Archive Lists data form
+        private void archiveListsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //Go to ViewMasterArchiveForm
+            //Create new instance of form MasterListForm
+            viewMasterArchiveForm = new TNG_Database.ViewMasterArchiveForm(this);
+
+            //close chold of mdi if there is one active
+            if (ActiveMdiChild != null) { ActiveMdiChild.Close(); }
+
+            //show Master list form and maximize it instantly
+            viewMasterArchiveForm.Show();
+            viewMasterArchiveForm.WindowState = FormWindowState.Maximized;
+
+        }
+
+        //Open to Home data form
+        private void homeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //Goto Search Page
+            OpenSearchPage();
+        }
+
+        //Open Search Tape Database
+        private void searchTapeDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenSearchPage();
+        }
+
+        private void OpenSearchPage()
+        {
+            //create new instance of form
+            searchTapeForm = new SearchTapeForm(this);
+
+            //close child of mdi if there is one active
+            if (ActiveMdiChild != null) { ActiveMdiChild.Close(); }
+
+            //Show people form and maximize it instantly
+            searchTapeForm.Show();
+            searchTapeForm.WindowState = FormWindowState.Maximized;
+        }
+
         #endregion
 
         /// <summary>
@@ -916,19 +958,7 @@ namespace TNG_Database
             }
         }
 
-        //Open Search Tape Database
-        private void searchTapeDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            //create new instance of form
-            searchTapeForm = new SearchTapeForm(this);
-
-            //close child of mdi if there is one active
-            if (ActiveMdiChild != null) { ActiveMdiChild.Close(); }
-
-            //Show people form and maximize it instantly
-            searchTapeForm.Show();
-            searchTapeForm.WindowState = FormWindowState.Maximized;
-        }
+        
 
         #region Cut, Copy and Paste commands
         //Copy Text from toolstrip selected
@@ -1046,5 +1076,7 @@ namespace TNG_Database
         {
             
         }
+
+        
     }
 }

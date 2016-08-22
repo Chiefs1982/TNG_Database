@@ -30,10 +30,11 @@
         {
             this.viewMasterListBox = new System.Windows.Forms.ListBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.viewMasterListView = new System.Windows.Forms.ListView();
             this.viewMasterListMainLabel = new System.Windows.Forms.Label();
-            this.viewMastersFlowPanel = new System.Windows.Forms.FlowLayoutPanel();
-            this.panel1.SuspendLayout();
+            this.columnID = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnClip = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // viewMasterListBox
@@ -43,6 +44,7 @@
             this.viewMasterListBox.Name = "viewMasterListBox";
             this.viewMasterListBox.Size = new System.Drawing.Size(233, 446);
             this.viewMasterListBox.TabIndex = 0;
+            this.viewMasterListBox.SelectedIndexChanged += new System.EventHandler(this.viewMasterListBox_SelectedIndexChanged);
             // 
             // label1
             // 
@@ -53,30 +55,44 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "View Master Archive Lists";
             // 
-            // panel1
+            // viewMasterListView
             // 
-            this.panel1.Controls.Add(this.viewMastersFlowPanel);
-            this.panel1.Controls.Add(this.viewMasterListMainLabel);
-            this.panel1.Location = new System.Drawing.Point(285, 53);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(465, 446);
-            this.panel1.TabIndex = 2;
+            this.viewMasterListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnID,
+            this.columnName,
+            this.columnClip});
+            this.viewMasterListView.FullRowSelect = true;
+            this.viewMasterListView.Location = new System.Drawing.Point(304, 53);
+            this.viewMasterListView.MultiSelect = false;
+            this.viewMasterListView.Name = "viewMasterListView";
+            this.viewMasterListView.Size = new System.Drawing.Size(456, 446);
+            this.viewMasterListView.TabIndex = 1;
+            this.viewMasterListView.UseCompatibleStateImageBehavior = false;
+            this.viewMasterListView.View = System.Windows.Forms.View.Details;
             // 
             // viewMasterListMainLabel
             // 
             this.viewMasterListMainLabel.AutoSize = true;
-            this.viewMasterListMainLabel.Location = new System.Drawing.Point(3, 0);
+            this.viewMasterListMainLabel.Location = new System.Drawing.Point(301, 32);
             this.viewMasterListMainLabel.Name = "viewMasterListMainLabel";
-            this.viewMasterListMainLabel.Size = new System.Drawing.Size(35, 13);
+            this.viewMasterListMainLabel.Size = new System.Drawing.Size(58, 13);
             this.viewMasterListMainLabel.TabIndex = 0;
-            this.viewMasterListMainLabel.Text = "label2";
+            this.viewMasterListMainLabel.Text = "Master List";
             // 
-            // viewMastersFlowPanel
+            // columnID
             // 
-            this.viewMastersFlowPanel.Location = new System.Drawing.Point(6, 16);
-            this.viewMastersFlowPanel.Name = "viewMastersFlowPanel";
-            this.viewMastersFlowPanel.Size = new System.Drawing.Size(456, 427);
-            this.viewMastersFlowPanel.TabIndex = 1;
+            this.columnID.Text = "Project ID";
+            this.columnID.Width = 80;
+            // 
+            // columnName
+            // 
+            this.columnName.Text = "Project Name";
+            this.columnName.Width = 200;
+            // 
+            // columnClip
+            // 
+            this.columnClip.Text = "Clip #";
+            this.columnClip.Width = 100;
             // 
             // ViewMasterArchiveForm
             // 
@@ -84,15 +100,14 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(844, 587);
             this.ControlBox = false;
-            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.viewMasterListMainLabel);
+            this.Controls.Add(this.viewMasterListView);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.viewMasterListBox);
             this.Name = "ViewMasterArchiveForm";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.Text = "ViewMasterArchiveForm";
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -102,8 +117,10 @@
 
         private System.Windows.Forms.ListBox viewMasterListBox;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.FlowLayoutPanel viewMastersFlowPanel;
         private System.Windows.Forms.Label viewMasterListMainLabel;
+        private System.Windows.Forms.ListView viewMasterListView;
+        private System.Windows.Forms.ColumnHeader columnID;
+        private System.Windows.Forms.ColumnHeader columnName;
+        private System.Windows.Forms.ColumnHeader columnClip;
     }
 }
