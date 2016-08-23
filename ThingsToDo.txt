@@ -49,6 +49,9 @@ DONE
 * Create way to select Master from dropdown and display all projects on media
 * Add something to let user know about tags and commas
 * Make sure tab order is correct for inputing information
+* Clean up switch statements that have default the same as another
+* Change Deleted page listview load and flowlayout build to common Methods
+* Get current user for entries to add or update to db from ComputerInfo class
 
 
 TODO
@@ -62,11 +65,9 @@ TODO
 - Add a backup feature that backs everything up every month or so
 - Add export and import feature for database file
 - Be able to save the old databases and recall them if needed
-- Clean up switch statements that have default the same as another
-- Change Deleted page listview load and flowlayout build to common Methods
-- Get current user for entries to add or update to db from ComputerInfo class
 - Add tooltips to everything
 - Add ability to delete multiple selected items in a list
+- Make sure all project IDs can evaluate to numbers
 
 
 1541918047

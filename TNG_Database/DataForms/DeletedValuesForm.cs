@@ -137,59 +137,12 @@ namespace TNG_Database
         private void LoadTapeDBPage()
         {
             //Clear Database of colummns
-            databaseListView.Clear();
-            databaseListView.Items.Clear();
             ButtonInvisibleAndDisabled();
             CommonMethods.ListViewItemComparer.SortColumn = -1;
 
-            //Load COlumns
-            ColumnHeader colTapePID = new ColumnHeader();
-            colTapePID.Text = "Project ID";
-            colTapePID.Width = 60;
-            colTapePID.TextAlign = HorizontalAlignment.Left;
-
-            ColumnHeader colTapePN = new ColumnHeader();
-            colTapePN.Text = "Project Name";
-            colTapePN.Width = 200;
-            colTapePN.TextAlign = HorizontalAlignment.Left;
-
-            ColumnHeader colTapeTN = new ColumnHeader();
-            colTapeTN.Text = "Tape Name";
-            colTapeTN.Width = 120;
-            colTapeTN.TextAlign = HorizontalAlignment.Left;
-
-            ColumnHeader colTapeTNum = new ColumnHeader();
-            colTapeTNum.Text = "Tape #";
-            colTapeTNum.Width = 50;
-            colTapeTNum.TextAlign = HorizontalAlignment.Left;
-
-            ColumnHeader colTapeCam = new ColumnHeader();
-            colTapeCam.Text = "Camera";
-            colTapeCam.Width = 50;
-            colTapeCam.TextAlign = HorizontalAlignment.Left;
-
-            ColumnHeader colTapeTags = new ColumnHeader();
-            colTapeTags.Text = "Tags";
-            colTapeTags.Width = 62;
-            colTapeTags.TextAlign = HorizontalAlignment.Left;
-
-            ColumnHeader colTapeDate = new ColumnHeader();
-            colTapeDate.Text = "Date Shot";
-            colTapeDate.Width = 78;
-            colTapeDate.TextAlign = HorizontalAlignment.Left;
-
-            ColumnHeader colTapeMaster = new ColumnHeader();
-            colTapeMaster.Text = "Master Archive";
-            colTapeMaster.Width = 95;
-            colTapeMaster.TextAlign = HorizontalAlignment.Left;
-
-            ColumnHeader colTapePerson = new ColumnHeader();
-            colTapePerson.Text = "Entered By";
-            colTapePerson.Width = 60;
-            colTapePerson.TextAlign = HorizontalAlignment.Left;
-
-            databaseListView.Columns.AddRange(new ColumnHeader[] { colTapePID, colTapePN, colTapeTN, colTapeTNum, colTapeCam, colTapeTags, colTapeDate, colTapeMaster, colTapePerson });
-
+            //Load listview values
+            commonMethod.LoadTapeListView(databaseListView);
+            
             //load list values
             PopulateTapeValuesInList();
 
@@ -199,23 +152,11 @@ namespace TNG_Database
         private void LoadProjectsPage()
         {
             //Clear Database of colummns
-            databaseListView.Clear();
-            databaseListView.Items.Clear();
             ButtonInvisibleAndDisabled();
             CommonMethods.ListViewItemComparer.SortColumn = -1;
 
-            //Creat columns:
-            ColumnHeader colProjectsPID = new ColumnHeader();
-            colProjectsPID.Text = "Project ID";
-            colProjectsPID.Width = 100;
-            colProjectsPID.TextAlign = HorizontalAlignment.Left;
-
-            ColumnHeader colProjectsPN = new ColumnHeader();
-            colProjectsPN.Text = "Project Name";
-            colProjectsPN.Width = 300;
-            colProjectsPN.TextAlign = HorizontalAlignment.Left;
-
-            databaseListView.Columns.AddRange(new ColumnHeader[] { colProjectsPID, colProjectsPN });
+            //Load listview values
+            commonMethod.LoadProjectsListView(databaseListView);
 
             //load values into list view
             PopulateProjectValuesInList();
@@ -284,28 +225,8 @@ namespace TNG_Database
             ButtonInvisibleAndDisabled();
             CommonMethods.ListViewItemComparer.SortColumn = -1;
 
-            //Load COlumns
-            ColumnHeader colMasterPID = new ColumnHeader();
-            colMasterPID.Text = "Project ID";
-            colMasterPID.Width = 100;
-            colMasterPID.TextAlign = HorizontalAlignment.Left;
-
-            ColumnHeader colMasterVN = new ColumnHeader();
-            colMasterVN.Text = "Video Name";
-            colMasterVN.Width = 300;
-            colMasterVN.TextAlign = HorizontalAlignment.Left;
-
-            ColumnHeader colMasterMT = new ColumnHeader();
-            colMasterMT.Text = "Master Archive";
-            colMasterMT.Width = 300;
-            colMasterMT.TextAlign = HorizontalAlignment.Left;
-
-            ColumnHeader colMasterClip = new ColumnHeader();
-            colMasterClip.Text = "Tape #";
-            colMasterClip.Width = 60;
-            colMasterClip.TextAlign = HorizontalAlignment.Left;
-
-            databaseListView.Columns.AddRange(new ColumnHeader[] { colMasterPID, colMasterVN, colMasterMT, colMasterClip });
+            //Load listview values
+            commonMethod.LoadMastersListView(databaseListView);
 
             //load values into list view
             PopulateMasterArchiveValuesInLIst();
@@ -670,7 +591,7 @@ namespace TNG_Database
             projectID1.Width = 100;
 
             Label projectID2 = new Label();
-            projectID2.Text = tapeDBValues.ProjectId;
+            projectID2.Text = masterArchiveValues.ProjectId;
 
             //set 2
             Label videoName1 = new Label();
@@ -678,7 +599,7 @@ namespace TNG_Database
             videoName1.Width = 100;
 
             Label videoName2 = new Label();
-            videoName2.Text = tapeDBValues.ProjectName;
+            videoName2.Text = masterArchiveValues.VideoName;
 
             //set 3
             Label masterTape1 = new Label();
@@ -686,7 +607,7 @@ namespace TNG_Database
             masterTape1.Width = 100;
 
             Label masterTape2 = new Label();
-            masterTape2.Text = tapeDBValues.TapeName;
+            masterTape2.Text = masterArchiveValues.MasterTape;
 
             //set 4
             Label clipNumber1 = new Label();
@@ -694,7 +615,7 @@ namespace TNG_Database
             clipNumber1.Width = 100;
 
             Label clipNumber2 = new Label();
-            clipNumber2.Text = tapeDBValues.TapeNumber;
+            clipNumber2.Text = masterArchiveValues.ClipNumber;
 
             //Add Labels to corresponding flowlayouts
             flowLayoutPanel1.Controls.AddRange(new Control[] { projectID1, projectID2 });
