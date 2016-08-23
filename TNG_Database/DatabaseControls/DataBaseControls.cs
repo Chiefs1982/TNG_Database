@@ -1450,20 +1450,20 @@ namespace TNG_Database
                         {
                             switch (computer.ToLower())
                             {
-                                case "editer2":
+                                case "edit2":
                                     userName = people[1];
                                     break;
-                                case "editer3":
+                                case "edit3":
                                     userName = people[2];
                                     break;
-                                case "editer5":
+                                case "edit5":
                                     userName = people[3];
                                     break;
-                                case "editer6":
+                                case "edit6":
                                     userName = people[4];
                                     break;
-                                case "editer1":
-                                case "editer4":
+                                case "edit1":
+                                case "edit4":
                                 default:
                                     userName = people[0];
                                     break;

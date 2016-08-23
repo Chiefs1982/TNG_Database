@@ -18,6 +18,8 @@ namespace TNG_Database
 {
     public partial class MainForm : Form
     {
+        //TODO delete WORK TEST toolstrip item
+
         //Form references to open each form
         public TNG_Database.SearchTapeForm searchTapeForm;
         public TNG_Database.PeopleForm peopleForm;

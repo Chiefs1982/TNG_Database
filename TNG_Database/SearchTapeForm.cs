@@ -103,14 +103,13 @@ namespace TNG_Database
         {
             switch (filter.Replace(" ","").ToLower())
             {
-                case "all":
-                    return Filter.All;
                 case "tapes":
                     return Filter.Tapes;
                 case "masterarchive":
                     return Filter.Master;
                 case "projects":
                     return Filter.Projects;
+                case "all":
                 default:
                     return Filter.All;
             }
@@ -125,9 +124,6 @@ namespace TNG_Database
         {
             switch (filter)
             {
-                case Filter.All:
-                    PopulateSearchView(searchList);
-                    break;
                 case Filter.Tapes:
                     PopulateSearchView(searchList, "tapes");
                     break;
@@ -137,6 +133,7 @@ namespace TNG_Database
                 case Filter.Projects:
                     PopulateSearchView(searchList, "projects");
                     break;
+                case Filter.All:
                 default:
                     PopulateSearchView(searchList);
                     break;
@@ -216,10 +213,6 @@ namespace TNG_Database
                 searchListView.Clear();
                 switch (currentFilter)
                 {
-                    case Filter.All:
-                    default:
-                        commonMethod.LoadSearchAllListView(searchListView);
-                        break;
                     case Filter.Tapes:
                         commonMethod.LoadTapeListView(searchListView);
                         break;
@@ -228,6 +221,10 @@ namespace TNG_Database
                         break;
                     case Filter.Projects:
                         commonMethod.LoadProjectsListView(searchListView);
+                        break;
+                    case Filter.All:
+                    default:
+                        commonMethod.LoadSearchAllListView(searchListView);
                         break;
                 }
 
@@ -353,25 +350,6 @@ namespace TNG_Database
                 //default show all values
                 commonMethod.LoadSearchAllFlowValues(new FlowLayoutPanel[] { searchFlowPanel1, searchFlowPanel2, searchFlowPanel3, searchFlowPanel4, searchFlowPanel5, searchFlowPanel6, searchFlowPanel7, searchFlowPanel8, searchFlowPanel9 }, searchValues);
             }
-
-
-
-            /*
-            switch (currentFilter)
-            {
-                case Filter.All:
-                default:
-                    break;
-                case Filter.Tapes:
-                    commonMethod.LoadTapesFlowValues(new FlowLayoutPanel[] { searchFlowPanel1, searchFlowPanel2, searchFlowPanel3, searchFlowPanel4, searchFlowPanel5, searchFlowPanel6, searchFlowPanel7, searchFlowPanel8, searchFlowPanel9 }, searchValues);
-                    break;
-                case Filter.Master:
-                    break;
-                case Filter.Projects:
-                    commonMethod.LoadProjectsFlowValues(new FlowLayoutPanel[] { searchFlowPanel1,searchFlowPanel2 }, searchValues);
-                    break;
-            }
-            */
         }
 
         /// <summary>
@@ -497,10 +475,6 @@ namespace TNG_Database
             {
                 switch (GetFilterValue(searchFilterCombo.Text))
                 {
-                    case Filter.All:
-                    default:
-                        currentFilter = Filter.All;
-                        break;
                     case Filter.Tapes:
                         currentFilter = Filter.Tapes;
                         break;
@@ -509,6 +483,10 @@ namespace TNG_Database
                         break;
                     case Filter.Projects:
                         currentFilter = Filter.Projects;
+                        break;
+                    case Filter.All:
+                    default:
+                        currentFilter = Filter.All;
                         break;
                 }
                 WhatToFilter(currentFilter);

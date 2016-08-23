@@ -81,8 +81,6 @@ namespace TNG_Database
         {
             switch (selection)
             {
-                case "tapedatabase":
-                    return DeleteForm.tapeDatabase;
                 case "projects":
                     return DeleteForm.projects;
                 case "people":
@@ -91,6 +89,7 @@ namespace TNG_Database
                     return DeleteForm.masterList;
                 case "masterarchivevideos":
                     return DeleteForm.masterArchiveVideos;
+                case "tapedatabase":
                 default:
                     return DeleteForm.tapeDatabase;
             }
@@ -813,20 +812,12 @@ namespace TNG_Database
 
         #region Main Combo functions
 
-        //combo selction changed
+        //combo selection changed
         private void deleteFormSelectCombo_SelectedIndexChanged(object sender, EventArgs e)
         {
 
             switch (GetEnumDropdown(deleteFormSelectCombo.Text.Replace(" ", "").ToLower()))
             {
-                case DeleteForm.tapeDatabase:
-                    if (!currentFormState.Equals(DeleteForm.tapeDatabase))
-                    {
-                        currentFormState = DeleteForm.tapeDatabase;
-                        LoadTapeDBPage();
-                    }
-
-                    break;
                 case DeleteForm.projects:
                     if (!currentFormState.Equals(DeleteForm.projects))
                     {
@@ -855,6 +846,7 @@ namespace TNG_Database
                         LoadMasterArchiveVideosPage();
                     }
                     break;
+                case DeleteForm.tapeDatabase:
                 default:
                     if (!currentFormState.Equals(DeleteForm.tapeDatabase))
                     {
@@ -924,9 +916,6 @@ namespace TNG_Database
         {
             switch (currentFormState)
             {
-                case DeleteForm.tapeDatabase:
-                    ReinstateTapevalue();
-                    break;
                 case DeleteForm.projects:
                     ReinstateProject();
                     break;
@@ -939,6 +928,7 @@ namespace TNG_Database
                 case DeleteForm.masterArchiveVideos:
                     ReinstateMasterArchiveVideo();
                     break;
+                case DeleteForm.tapeDatabase:
                 default:
                     ReinstateTapevalue();
                     break;

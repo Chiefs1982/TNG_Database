@@ -104,14 +104,13 @@ namespace TNG_Database
         {
             switch (camera)
             {
-                case "Cannon":
-                    return 0;
                 case "XDCam":
                     return 1;
                 case "Beta":
                     return 2;
                 case "DVC":
                     return 3;
+                case "Cannon":
                 default:
                     return 0;
             }
