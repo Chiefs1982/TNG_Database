@@ -39,6 +39,7 @@
             this.columnMaster = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnPerson = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tapeDatabasePanel = new System.Windows.Forms.Panel();
+            this.deleteReinstateButton = new System.Windows.Forms.Button();
             this.flowLayoutPanel9 = new System.Windows.Forms.FlowLayoutPanel();
             this.flowLayoutPanel8 = new System.Windows.Forms.FlowLayoutPanel();
             this.flowLayoutPanel7 = new System.Windows.Forms.FlowLayoutPanel();
@@ -50,7 +51,6 @@
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.deleteFormSelectCombo = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.deleteReinstateButton = new System.Windows.Forms.Button();
             this.tapeDatabasePanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -72,7 +72,7 @@
             this.databaseListView.MultiSelect = false;
             this.databaseListView.Name = "databaseListView";
             this.databaseListView.Size = new System.Drawing.Size(786, 282);
-            this.databaseListView.TabIndex = 1;
+            this.databaseListView.TabIndex = 2;
             this.databaseListView.UseCompatibleStateImageBehavior = false;
             this.databaseListView.View = System.Windows.Forms.View.Details;
             this.databaseListView.SelectedIndexChanged += new System.EventHandler(this.databaseListView_SelectedIndexChanged);
@@ -136,6 +136,17 @@
             this.tapeDatabasePanel.Name = "tapeDatabasePanel";
             this.tapeDatabasePanel.Size = new System.Drawing.Size(786, 276);
             this.tapeDatabasePanel.TabIndex = 2;
+            // 
+            // deleteReinstateButton
+            // 
+            this.deleteReinstateButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.deleteReinstateButton.Location = new System.Drawing.Point(540, 3);
+            this.deleteReinstateButton.Name = "deleteReinstateButton";
+            this.deleteReinstateButton.Size = new System.Drawing.Size(243, 59);
+            this.deleteReinstateButton.TabIndex = 3;
+            this.deleteReinstateButton.Text = "Reinstate";
+            this.deleteReinstateButton.UseVisualStyleBackColor = true;
+            this.deleteReinstateButton.Click += new System.EventHandler(this.deleteReinstateButton_Click);
             // 
             // flowLayoutPanel9
             // 
@@ -206,7 +217,7 @@
             this.deleteFormSelectCombo.Location = new System.Drawing.Point(81, 7);
             this.deleteFormSelectCombo.Name = "deleteFormSelectCombo";
             this.deleteFormSelectCombo.Size = new System.Drawing.Size(181, 21);
-            this.deleteFormSelectCombo.TabIndex = 3;
+            this.deleteFormSelectCombo.TabIndex = 1;
             this.deleteFormSelectCombo.SelectedIndexChanged += new System.EventHandler(this.deleteFormSelectCombo_SelectedIndexChanged);
             this.deleteFormSelectCombo.DropDownClosed += new System.EventHandler(this.deleteFormSelectCombo_DropDownClosed);
             this.deleteFormSelectCombo.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.deleteFormSelectCombo_KeyPress);
@@ -219,17 +230,6 @@
             this.label1.Size = new System.Drawing.Size(66, 13);
             this.label1.TabIndex = 4;
             this.label1.Text = "Select Form:";
-            // 
-            // deleteReinstateButton
-            // 
-            this.deleteReinstateButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.deleteReinstateButton.Location = new System.Drawing.Point(540, 3);
-            this.deleteReinstateButton.Name = "deleteReinstateButton";
-            this.deleteReinstateButton.Size = new System.Drawing.Size(243, 59);
-            this.deleteReinstateButton.TabIndex = 3;
-            this.deleteReinstateButton.Text = "Reinstate";
-            this.deleteReinstateButton.UseVisualStyleBackColor = true;
-            this.deleteReinstateButton.Click += new System.EventHandler(this.deleteReinstateButton_Click);
             // 
             // DeletedValuesForm
             // 

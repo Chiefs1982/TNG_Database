@@ -74,7 +74,7 @@
             this.peopleFormListBox.Location = new System.Drawing.Point(12, 94);
             this.peopleFormListBox.Name = "peopleFormListBox";
             this.peopleFormListBox.Size = new System.Drawing.Size(156, 238);
-            this.peopleFormListBox.TabIndex = 1;
+            this.peopleFormListBox.TabIndex = 4;
             this.peopleFormListBox.SelectedIndexChanged += new System.EventHandler(this.peopleFormListBox_SelectedIndexChanged);
             // 
             // currentUsersLabel
@@ -91,7 +91,7 @@
             this.addUserPeopleButton.Location = new System.Drawing.Point(174, 94);
             this.addUserPeopleButton.Name = "addUserPeopleButton";
             this.addUserPeopleButton.Size = new System.Drawing.Size(117, 23);
-            this.addUserPeopleButton.TabIndex = 3;
+            this.addUserPeopleButton.TabIndex = 1;
             this.addUserPeopleButton.Text = "Add User";
             this.addUserPeopleButton.UseVisualStyleBackColor = true;
             this.addUserPeopleButton.Click += new System.EventHandler(this.addUserPeopleButton_Click);
@@ -101,7 +101,7 @@
             this.editUserPeopleButton.Location = new System.Drawing.Point(174, 123);
             this.editUserPeopleButton.Name = "editUserPeopleButton";
             this.editUserPeopleButton.Size = new System.Drawing.Size(117, 23);
-            this.editUserPeopleButton.TabIndex = 4;
+            this.editUserPeopleButton.TabIndex = 2;
             this.editUserPeopleButton.Text = "Edit User";
             this.editUserPeopleButton.UseVisualStyleBackColor = true;
             this.editUserPeopleButton.Click += new System.EventHandler(this.editUserPeopleButton_Click);
@@ -111,7 +111,7 @@
             this.deleteUserPeopleButton.Location = new System.Drawing.Point(174, 152);
             this.deleteUserPeopleButton.Name = "deleteUserPeopleButton";
             this.deleteUserPeopleButton.Size = new System.Drawing.Size(117, 23);
-            this.deleteUserPeopleButton.TabIndex = 5;
+            this.deleteUserPeopleButton.TabIndex = 3;
             this.deleteUserPeopleButton.Text = "Delete User";
             this.deleteUserPeopleButton.UseVisualStyleBackColor = true;
             this.deleteUserPeopleButton.Click += new System.EventHandler(this.deleteUserPeopleButton_Click);
@@ -138,7 +138,7 @@
             this.editUserEditButton.Location = new System.Drawing.Point(281, 116);
             this.editUserEditButton.Name = "editUserEditButton";
             this.editUserEditButton.Size = new System.Drawing.Size(75, 23);
-            this.editUserEditButton.TabIndex = 5;
+            this.editUserEditButton.TabIndex = 3;
             this.editUserEditButton.Text = "Edit";
             this.editUserEditButton.UseVisualStyleBackColor = true;
             this.editUserEditButton.Click += new System.EventHandler(this.editUserEditButton_Click);
@@ -148,7 +148,7 @@
             this.editUserCancelButton.Location = new System.Drawing.Point(362, 116);
             this.editUserCancelButton.Name = "editUserCancelButton";
             this.editUserCancelButton.Size = new System.Drawing.Size(75, 23);
-            this.editUserCancelButton.TabIndex = 4;
+            this.editUserCancelButton.TabIndex = 1;
             this.editUserCancelButton.Text = "Cancel";
             this.editUserCancelButton.UseVisualStyleBackColor = true;
             this.editUserCancelButton.Click += new System.EventHandler(this.editUserCancelButton_Click);
@@ -158,7 +158,7 @@
             this.editUserPeopleTB.Location = new System.Drawing.Point(141, 60);
             this.editUserPeopleTB.Name = "editUserPeopleTB";
             this.editUserPeopleTB.Size = new System.Drawing.Size(296, 20);
-            this.editUserPeopleTB.TabIndex = 3;
+            this.editUserPeopleTB.TabIndex = 2;
             this.editUserPeopleTB.TextChanged += new System.EventHandler(this.editUserPeopleTB_TextChanged);
             this.editUserPeopleTB.KeyDown += new System.Windows.Forms.KeyEventHandler(this.editUserPeopleTB_KeyDown);
             // 
@@ -238,7 +238,7 @@
             this.addUserNameTextbox.Location = new System.Drawing.Point(141, 35);
             this.addUserNameTextbox.Name = "addUserNameTextbox";
             this.addUserNameTextbox.Size = new System.Drawing.Size(296, 20);
-            this.addUserNameTextbox.TabIndex = 0;
+            this.addUserNameTextbox.TabIndex = 1;
             this.addUserNameTextbox.TextChanged += new System.EventHandler(this.addUserNameTextbox_TextChanged);
             this.addUserNameTextbox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.addUserNameTextbox_KeyDown);
             // 
@@ -261,7 +261,7 @@
             this.deleteUserCancelButton.Location = new System.Drawing.Point(362, 59);
             this.deleteUserCancelButton.Name = "deleteUserCancelButton";
             this.deleteUserCancelButton.Size = new System.Drawing.Size(75, 23);
-            this.deleteUserCancelButton.TabIndex = 3;
+            this.deleteUserCancelButton.TabIndex = 1;
             this.deleteUserCancelButton.Text = "Cancel";
             this.deleteUserCancelButton.UseVisualStyleBackColor = true;
             this.deleteUserCancelButton.Click += new System.EventHandler(this.deleteUserCancelButton_Click);

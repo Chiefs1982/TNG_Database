@@ -48,6 +48,7 @@ DONE
 * Add sorting to all listviews
 * Create way to select Master from dropdown and display all projects on media
 * Add something to let user know about tags and commas
+* Make sure tab order is correct for inputing information
 
 
 TODO
@@ -64,7 +65,6 @@ TODO
 - Clean up switch statements that have default the same as another
 - Change Deleted page listview load and flowlayout build to common Methods
 - Get current user for entries to add or update to db from ComputerInfo class
-- Make sure tab order is correct for inputing information
 - Add tooltips to everything
 - Add ability to delete multiple selected items in a list
 

@@ -86,7 +86,7 @@
             this.masterListListBox.Location = new System.Drawing.Point(12, 40);
             this.masterListListBox.Name = "masterListListBox";
             this.masterListListBox.Size = new System.Drawing.Size(181, 368);
-            this.masterListListBox.TabIndex = 1;
+            this.masterListListBox.TabIndex = 4;
             this.masterListListBox.SelectedIndexChanged += new System.EventHandler(this.masterListListBox_SelectedIndexChanged);
             // 
             // masterListAddButton
@@ -94,7 +94,7 @@
             this.masterListAddButton.Location = new System.Drawing.Point(208, 40);
             this.masterListAddButton.Name = "masterListAddButton";
             this.masterListAddButton.Size = new System.Drawing.Size(91, 23);
-            this.masterListAddButton.TabIndex = 2;
+            this.masterListAddButton.TabIndex = 1;
             this.masterListAddButton.Text = "Add";
             this.masterListAddButton.UseVisualStyleBackColor = true;
             this.masterListAddButton.Click += new System.EventHandler(this.masterListAddButton_Click);
@@ -104,7 +104,7 @@
             this.masterListEditButton.Location = new System.Drawing.Point(208, 69);
             this.masterListEditButton.Name = "masterListEditButton";
             this.masterListEditButton.Size = new System.Drawing.Size(91, 23);
-            this.masterListEditButton.TabIndex = 3;
+            this.masterListEditButton.TabIndex = 2;
             this.masterListEditButton.Text = "Edit";
             this.masterListEditButton.UseVisualStyleBackColor = true;
             this.masterListEditButton.Click += new System.EventHandler(this.masterListEditButton_Click);
@@ -114,7 +114,7 @@
             this.masterListDeleteButton.Location = new System.Drawing.Point(208, 98);
             this.masterListDeleteButton.Name = "masterListDeleteButton";
             this.masterListDeleteButton.Size = new System.Drawing.Size(91, 23);
-            this.masterListDeleteButton.TabIndex = 4;
+            this.masterListDeleteButton.TabIndex = 3;
             this.masterListDeleteButton.Text = "Delete";
             this.masterListDeleteButton.UseVisualStyleBackColor = true;
             this.masterListDeleteButton.Click += new System.EventHandler(this.masterListDeleteButton_Click);
@@ -211,7 +211,7 @@
             this.addMasterListCancelButton.Location = new System.Drawing.Point(317, 121);
             this.addMasterListCancelButton.Name = "addMasterListCancelButton";
             this.addMasterListCancelButton.Size = new System.Drawing.Size(75, 23);
-            this.addMasterListCancelButton.TabIndex = 5;
+            this.addMasterListCancelButton.TabIndex = 4;
             this.addMasterListCancelButton.Text = "Cancel";
             this.addMasterListCancelButton.UseVisualStyleBackColor = true;
             this.addMasterListCancelButton.Click += new System.EventHandler(this.addMasterListCancelButton_Click);
@@ -221,7 +221,7 @@
             this.addMasterListAddButton.Location = new System.Drawing.Point(236, 121);
             this.addMasterListAddButton.Name = "addMasterListAddButton";
             this.addMasterListAddButton.Size = new System.Drawing.Size(75, 23);
-            this.addMasterListAddButton.TabIndex = 4;
+            this.addMasterListAddButton.TabIndex = 3;
             this.addMasterListAddButton.Text = "Add";
             this.addMasterListAddButton.UseVisualStyleBackColor = true;
             this.addMasterListAddButton.Click += new System.EventHandler(this.addMasterListAddButton_Click);
@@ -232,7 +232,7 @@
             this.addMasterListNameTextbox.MaxLength = 50;
             this.addMasterListNameTextbox.Name = "addMasterListNameTextbox";
             this.addMasterListNameTextbox.Size = new System.Drawing.Size(274, 20);
-            this.addMasterListNameTextbox.TabIndex = 3;
+            this.addMasterListNameTextbox.TabIndex = 1;
             this.addMasterListNameTextbox.TextChanged += new System.EventHandler(this.addMasterListNameTextbox_TextChanged);
             // 
             // cameraAddMasterCombo
@@ -288,7 +288,7 @@
             this.editMasterCancelButton.Location = new System.Drawing.Point(317, 162);
             this.editMasterCancelButton.Name = "editMasterCancelButton";
             this.editMasterCancelButton.Size = new System.Drawing.Size(75, 23);
-            this.editMasterCancelButton.TabIndex = 9;
+            this.editMasterCancelButton.TabIndex = 1;
             this.editMasterCancelButton.Text = "Cancel";
             this.editMasterCancelButton.UseVisualStyleBackColor = true;
             this.editMasterCancelButton.Click += new System.EventHandler(this.editMasterCancelButton_Click);
@@ -298,7 +298,7 @@
             this.editMasterEditButton.Location = new System.Drawing.Point(236, 162);
             this.editMasterEditButton.Name = "editMasterEditButton";
             this.editMasterEditButton.Size = new System.Drawing.Size(75, 23);
-            this.editMasterEditButton.TabIndex = 8;
+            this.editMasterEditButton.TabIndex = 4;
             this.editMasterEditButton.Text = "Edit";
             this.editMasterEditButton.UseVisualStyleBackColor = true;
             this.editMasterEditButton.Click += new System.EventHandler(this.editMasterEditButton_Click);
@@ -311,7 +311,7 @@
             this.editCameraNewMasterDropdown.MaxDropDownItems = 5;
             this.editCameraNewMasterDropdown.Name = "editCameraNewMasterDropdown";
             this.editCameraNewMasterDropdown.Size = new System.Drawing.Size(121, 21);
-            this.editCameraNewMasterDropdown.TabIndex = 7;
+            this.editCameraNewMasterDropdown.TabIndex = 3;
             this.editCameraNewMasterDropdown.DropDownClosed += new System.EventHandler(this.editCameraNewMasterDropdown_DropDownClosed);
             this.editCameraNewMasterDropdown.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.editCameraNewMasterDropdown_KeyPress);
             // 
@@ -330,7 +330,7 @@
             this.editNewNameMasterTextbox.MaxLength = 50;
             this.editNewNameMasterTextbox.Name = "editNewNameMasterTextbox";
             this.editNewNameMasterTextbox.Size = new System.Drawing.Size(312, 20);
-            this.editNewNameMasterTextbox.TabIndex = 5;
+            this.editNewNameMasterTextbox.TabIndex = 2;
             this.editNewNameMasterTextbox.TextChanged += new System.EventHandler(this.editNewNameMasterTextbox_TextChanged);
             // 
             // editNewMasterNameLabel
@@ -399,7 +399,7 @@
             this.deleteMasterListCancelButton.Location = new System.Drawing.Point(317, 100);
             this.deleteMasterListCancelButton.Name = "deleteMasterListCancelButton";
             this.deleteMasterListCancelButton.Size = new System.Drawing.Size(75, 23);
-            this.deleteMasterListCancelButton.TabIndex = 7;
+            this.deleteMasterListCancelButton.TabIndex = 1;
             this.deleteMasterListCancelButton.Text = "Cancel";
             this.deleteMasterListCancelButton.UseVisualStyleBackColor = true;
             this.deleteMasterListCancelButton.Click += new System.EventHandler(this.deleteMasterListCancelButton_Click);
@@ -409,7 +409,7 @@
             this.deleteMasterListDeleteButton.Location = new System.Drawing.Point(236, 100);
             this.deleteMasterListDeleteButton.Name = "deleteMasterListDeleteButton";
             this.deleteMasterListDeleteButton.Size = new System.Drawing.Size(75, 23);
-            this.deleteMasterListDeleteButton.TabIndex = 6;
+            this.deleteMasterListDeleteButton.TabIndex = 2;
             this.deleteMasterListDeleteButton.Text = "Delete";
             this.deleteMasterListDeleteButton.UseVisualStyleBackColor = true;
             this.deleteMasterListDeleteButton.Click += new System.EventHandler(this.deleteMasterListDeleteButton_Click);

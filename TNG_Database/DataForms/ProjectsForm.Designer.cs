@@ -79,7 +79,7 @@
             this.projectsListView.Location = new System.Drawing.Point(12, 54);
             this.projectsListView.Name = "projectsListView";
             this.projectsListView.Size = new System.Drawing.Size(311, 440);
-            this.projectsListView.TabIndex = 0;
+            this.projectsListView.TabIndex = 4;
             this.projectsListView.UseCompatibleStateImageBehavior = false;
             this.projectsListView.View = System.Windows.Forms.View.Details;
             this.projectsListView.SelectedIndexChanged += new System.EventHandler(this.projectsListView_SelectedIndexChanged);
@@ -108,7 +108,7 @@
             this.projectsAddButton.Location = new System.Drawing.Point(340, 54);
             this.projectsAddButton.Name = "projectsAddButton";
             this.projectsAddButton.Size = new System.Drawing.Size(75, 23);
-            this.projectsAddButton.TabIndex = 2;
+            this.projectsAddButton.TabIndex = 1;
             this.projectsAddButton.Text = "Add";
             this.projectsAddButton.UseVisualStyleBackColor = true;
             this.projectsAddButton.Click += new System.EventHandler(this.projectsAddButton_Click);
@@ -118,7 +118,7 @@
             this.projectsUpdateButton.Location = new System.Drawing.Point(340, 83);
             this.projectsUpdateButton.Name = "projectsUpdateButton";
             this.projectsUpdateButton.Size = new System.Drawing.Size(75, 23);
-            this.projectsUpdateButton.TabIndex = 3;
+            this.projectsUpdateButton.TabIndex = 2;
             this.projectsUpdateButton.Text = "Update";
             this.projectsUpdateButton.UseVisualStyleBackColor = true;
             this.projectsUpdateButton.Click += new System.EventHandler(this.projectsUpdateButton_Click);
@@ -128,7 +128,7 @@
             this.projectsDeleteButton.Location = new System.Drawing.Point(340, 112);
             this.projectsDeleteButton.Name = "projectsDeleteButton";
             this.projectsDeleteButton.Size = new System.Drawing.Size(75, 23);
-            this.projectsDeleteButton.TabIndex = 4;
+            this.projectsDeleteButton.TabIndex = 3;
             this.projectsDeleteButton.Text = "Delete";
             this.projectsDeleteButton.UseVisualStyleBackColor = true;
             this.projectsDeleteButton.Click += new System.EventHandler(this.projectsDeleteButton_Click);
@@ -219,7 +219,7 @@
             this.addProjectCancelButton.Location = new System.Drawing.Point(312, 101);
             this.addProjectCancelButton.Name = "addProjectCancelButton";
             this.addProjectCancelButton.Size = new System.Drawing.Size(75, 23);
-            this.addProjectCancelButton.TabIndex = 8;
+            this.addProjectCancelButton.TabIndex = 4;
             this.addProjectCancelButton.Text = "Cancel";
             this.addProjectCancelButton.UseVisualStyleBackColor = true;
             this.addProjectCancelButton.Click += new System.EventHandler(this.addProjectCancelButton_Click);
@@ -229,7 +229,7 @@
             this.addProjectAddButton.Location = new System.Drawing.Point(227, 101);
             this.addProjectAddButton.Name = "addProjectAddButton";
             this.addProjectAddButton.Size = new System.Drawing.Size(75, 23);
-            this.addProjectAddButton.TabIndex = 7;
+            this.addProjectAddButton.TabIndex = 3;
             this.addProjectAddButton.Text = "Add";
             this.addProjectAddButton.UseVisualStyleBackColor = true;
             this.addProjectAddButton.Click += new System.EventHandler(this.addProjectAddButton_Click);
@@ -239,14 +239,14 @@
             this.addProjectNameTextBox.Location = new System.Drawing.Point(104, 60);
             this.addProjectNameTextBox.Name = "addProjectNameTextBox";
             this.addProjectNameTextBox.Size = new System.Drawing.Size(291, 20);
-            this.addProjectNameTextBox.TabIndex = 6;
+            this.addProjectNameTextBox.TabIndex = 2;
             // 
             // addProjectIDTextBox
             // 
             this.addProjectIDTextBox.Location = new System.Drawing.Point(104, 31);
             this.addProjectIDTextBox.Name = "addProjectIDTextBox";
             this.addProjectIDTextBox.Size = new System.Drawing.Size(109, 20);
-            this.addProjectIDTextBox.TabIndex = 5;
+            this.addProjectIDTextBox.TabIndex = 1;
             // 
             // label2
             // 
@@ -274,7 +274,7 @@
             this.editProjectsGroupBox.Controls.Add(this.editProjectIDTextBox);
             this.editProjectsGroupBox.Controls.Add(this.label5);
             this.editProjectsGroupBox.Controls.Add(this.label6);
-            this.editProjectsGroupBox.Location = new System.Drawing.Point(431, 550);
+            this.editProjectsGroupBox.Location = new System.Drawing.Point(431, 552);
             this.editProjectsGroupBox.Name = "editProjectsGroupBox";
             this.editProjectsGroupBox.Size = new System.Drawing.Size(401, 140);
             this.editProjectsGroupBox.TabIndex = 9;
@@ -286,7 +286,7 @@
             this.editProjectCancelButton.Location = new System.Drawing.Point(312, 101);
             this.editProjectCancelButton.Name = "editProjectCancelButton";
             this.editProjectCancelButton.Size = new System.Drawing.Size(75, 23);
-            this.editProjectCancelButton.TabIndex = 8;
+            this.editProjectCancelButton.TabIndex = 1;
             this.editProjectCancelButton.Text = "Cancel";
             this.editProjectCancelButton.UseVisualStyleBackColor = true;
             this.editProjectCancelButton.Click += new System.EventHandler(this.editProjectCancelButton_Click);
@@ -296,7 +296,7 @@
             this.editProjectEditButton.Location = new System.Drawing.Point(227, 101);
             this.editProjectEditButton.Name = "editProjectEditButton";
             this.editProjectEditButton.Size = new System.Drawing.Size(75, 23);
-            this.editProjectEditButton.TabIndex = 7;
+            this.editProjectEditButton.TabIndex = 4;
             this.editProjectEditButton.Text = "Edit";
             this.editProjectEditButton.UseVisualStyleBackColor = true;
             this.editProjectEditButton.Click += new System.EventHandler(this.editProjectEditButton_Click);
@@ -306,14 +306,14 @@
             this.editProjectNameTextBox.Location = new System.Drawing.Point(104, 60);
             this.editProjectNameTextBox.Name = "editProjectNameTextBox";
             this.editProjectNameTextBox.Size = new System.Drawing.Size(291, 20);
-            this.editProjectNameTextBox.TabIndex = 6;
+            this.editProjectNameTextBox.TabIndex = 3;
             // 
             // editProjectIDTextBox
             // 
             this.editProjectIDTextBox.Location = new System.Drawing.Point(104, 31);
             this.editProjectIDTextBox.Name = "editProjectIDTextBox";
             this.editProjectIDTextBox.Size = new System.Drawing.Size(109, 20);
-            this.editProjectIDTextBox.TabIndex = 5;
+            this.editProjectIDTextBox.TabIndex = 2;
             // 
             // label5
             // 
@@ -371,7 +371,7 @@
             this.deleteProjectCancelButton.Location = new System.Drawing.Point(312, 101);
             this.deleteProjectCancelButton.Name = "deleteProjectCancelButton";
             this.deleteProjectCancelButton.Size = new System.Drawing.Size(75, 23);
-            this.deleteProjectCancelButton.TabIndex = 8;
+            this.deleteProjectCancelButton.TabIndex = 1;
             this.deleteProjectCancelButton.Text = "Cancel";
             this.deleteProjectCancelButton.UseVisualStyleBackColor = true;
             this.deleteProjectCancelButton.Click += new System.EventHandler(this.deleteProjectCancelButton_Click);
@@ -381,7 +381,7 @@
             this.deleteProjectDeleteButton.Location = new System.Drawing.Point(227, 101);
             this.deleteProjectDeleteButton.Name = "deleteProjectDeleteButton";
             this.deleteProjectDeleteButton.Size = new System.Drawing.Size(75, 23);
-            this.deleteProjectDeleteButton.TabIndex = 7;
+            this.deleteProjectDeleteButton.TabIndex = 2;
             this.deleteProjectDeleteButton.Text = "Delete";
             this.deleteProjectDeleteButton.UseVisualStyleBackColor = true;
             this.deleteProjectDeleteButton.Click += new System.EventHandler(this.deleteProjectDeleteButton_Click);

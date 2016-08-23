@@ -166,7 +166,7 @@
             this.deleteArchiveCancelButton.Location = new System.Drawing.Point(312, 120);
             this.deleteArchiveCancelButton.Name = "deleteArchiveCancelButton";
             this.deleteArchiveCancelButton.Size = new System.Drawing.Size(75, 23);
-            this.deleteArchiveCancelButton.TabIndex = 8;
+            this.deleteArchiveCancelButton.TabIndex = 1;
             this.deleteArchiveCancelButton.Text = "Cancel";
             this.deleteArchiveCancelButton.UseVisualStyleBackColor = true;
             this.deleteArchiveCancelButton.Click += new System.EventHandler(this.deleteArchiveCancelButton_Click);
@@ -176,7 +176,7 @@
             this.deleteArchiveDeleteButton.Location = new System.Drawing.Point(227, 120);
             this.deleteArchiveDeleteButton.Name = "deleteArchiveDeleteButton";
             this.deleteArchiveDeleteButton.Size = new System.Drawing.Size(75, 23);
-            this.deleteArchiveDeleteButton.TabIndex = 7;
+            this.deleteArchiveDeleteButton.TabIndex = 2;
             this.deleteArchiveDeleteButton.Text = "Delete";
             this.deleteArchiveDeleteButton.UseVisualStyleBackColor = true;
             this.deleteArchiveDeleteButton.Click += new System.EventHandler(this.deleteArchiveDeleteButton_Click);
@@ -224,14 +224,14 @@
             this.editArchiveMasterTapeComboBox.Location = new System.Drawing.Point(104, 97);
             this.editArchiveMasterTapeComboBox.Name = "editArchiveMasterTapeComboBox";
             this.editArchiveMasterTapeComboBox.Size = new System.Drawing.Size(198, 21);
-            this.editArchiveMasterTapeComboBox.TabIndex = 16;
+            this.editArchiveMasterTapeComboBox.TabIndex = 4;
             // 
             // editArchiveClipNumberTextbox
             // 
             this.editArchiveClipNumberTextbox.Location = new System.Drawing.Point(104, 131);
             this.editArchiveClipNumberTextbox.Name = "editArchiveClipNumberTextbox";
             this.editArchiveClipNumberTextbox.Size = new System.Drawing.Size(54, 20);
-            this.editArchiveClipNumberTextbox.TabIndex = 15;
+            this.editArchiveClipNumberTextbox.TabIndex = 5;
             // 
             // label15
             // 
@@ -256,7 +256,7 @@
             this.editArchiveCancelButton.Location = new System.Drawing.Point(312, 176);
             this.editArchiveCancelButton.Name = "editArchiveCancelButton";
             this.editArchiveCancelButton.Size = new System.Drawing.Size(75, 23);
-            this.editArchiveCancelButton.TabIndex = 8;
+            this.editArchiveCancelButton.TabIndex = 1;
             this.editArchiveCancelButton.Text = "Cancel";
             this.editArchiveCancelButton.UseVisualStyleBackColor = true;
             this.editArchiveCancelButton.Click += new System.EventHandler(this.editArchiveCancelButton_Click);
@@ -266,7 +266,7 @@
             this.editArchiveEditButton.Location = new System.Drawing.Point(227, 176);
             this.editArchiveEditButton.Name = "editArchiveEditButton";
             this.editArchiveEditButton.Size = new System.Drawing.Size(75, 23);
-            this.editArchiveEditButton.TabIndex = 7;
+            this.editArchiveEditButton.TabIndex = 6;
             this.editArchiveEditButton.Text = "Edit";
             this.editArchiveEditButton.UseVisualStyleBackColor = true;
             this.editArchiveEditButton.Click += new System.EventHandler(this.editArchiveEditButton_Click);
@@ -276,14 +276,14 @@
             this.editArchiveNameTextBox.Location = new System.Drawing.Point(104, 60);
             this.editArchiveNameTextBox.Name = "editArchiveNameTextBox";
             this.editArchiveNameTextBox.Size = new System.Drawing.Size(291, 20);
-            this.editArchiveNameTextBox.TabIndex = 6;
+            this.editArchiveNameTextBox.TabIndex = 3;
             // 
             // editArchiveIDTextBox
             // 
             this.editArchiveIDTextBox.Location = new System.Drawing.Point(104, 31);
             this.editArchiveIDTextBox.Name = "editArchiveIDTextBox";
             this.editArchiveIDTextBox.Size = new System.Drawing.Size(109, 20);
-            this.editArchiveIDTextBox.TabIndex = 5;
+            this.editArchiveIDTextBox.TabIndex = 2;
             // 
             // label5
             // 
@@ -328,14 +328,14 @@
             this.addArchiveMasterTapeComboBox.Location = new System.Drawing.Point(104, 94);
             this.addArchiveMasterTapeComboBox.Name = "addArchiveMasterTapeComboBox";
             this.addArchiveMasterTapeComboBox.Size = new System.Drawing.Size(198, 21);
-            this.addArchiveMasterTapeComboBox.TabIndex = 12;
+            this.addArchiveMasterTapeComboBox.TabIndex = 3;
             // 
             // addArchiveClipNumberTextbox
             // 
             this.addArchiveClipNumberTextbox.Location = new System.Drawing.Point(104, 128);
             this.addArchiveClipNumberTextbox.Name = "addArchiveClipNumberTextbox";
             this.addArchiveClipNumberTextbox.Size = new System.Drawing.Size(54, 20);
-            this.addArchiveClipNumberTextbox.TabIndex = 11;
+            this.addArchiveClipNumberTextbox.TabIndex = 4;
             // 
             // label10
             // 
@@ -360,7 +360,7 @@
             this.addArchiveCancelButton.Location = new System.Drawing.Point(312, 162);
             this.addArchiveCancelButton.Name = "addArchiveCancelButton";
             this.addArchiveCancelButton.Size = new System.Drawing.Size(75, 23);
-            this.addArchiveCancelButton.TabIndex = 8;
+            this.addArchiveCancelButton.TabIndex = 6;
             this.addArchiveCancelButton.Text = "Cancel";
             this.addArchiveCancelButton.UseVisualStyleBackColor = true;
             this.addArchiveCancelButton.Click += new System.EventHandler(this.addArchiveCancelButton_Click);
@@ -370,7 +370,7 @@
             this.addArchiveAddButton.Location = new System.Drawing.Point(227, 162);
             this.addArchiveAddButton.Name = "addArchiveAddButton";
             this.addArchiveAddButton.Size = new System.Drawing.Size(75, 23);
-            this.addArchiveAddButton.TabIndex = 7;
+            this.addArchiveAddButton.TabIndex = 5;
             this.addArchiveAddButton.Text = "Add";
             this.addArchiveAddButton.UseVisualStyleBackColor = true;
             this.addArchiveAddButton.Click += new System.EventHandler(this.addArchiveAddButton_Click);
@@ -380,14 +380,14 @@
             this.addArchiveNameTextBox.Location = new System.Drawing.Point(104, 55);
             this.addArchiveNameTextBox.Name = "addArchiveNameTextBox";
             this.addArchiveNameTextBox.Size = new System.Drawing.Size(291, 20);
-            this.addArchiveNameTextBox.TabIndex = 6;
+            this.addArchiveNameTextBox.TabIndex = 2;
             // 
             // addArchiveIDTextBox
             // 
             this.addArchiveIDTextBox.Location = new System.Drawing.Point(104, 26);
             this.addArchiveIDTextBox.Name = "addArchiveIDTextBox";
             this.addArchiveIDTextBox.Size = new System.Drawing.Size(109, 20);
-            this.addArchiveIDTextBox.TabIndex = 5;
+            this.addArchiveIDTextBox.TabIndex = 1;
             // 
             // label2
             // 
@@ -518,7 +518,7 @@
             this.archiveDeleteButton.Location = new System.Drawing.Point(340, 106);
             this.archiveDeleteButton.Name = "archiveDeleteButton";
             this.archiveDeleteButton.Size = new System.Drawing.Size(75, 23);
-            this.archiveDeleteButton.TabIndex = 15;
+            this.archiveDeleteButton.TabIndex = 3;
             this.archiveDeleteButton.Text = "Delete";
             this.archiveDeleteButton.UseVisualStyleBackColor = true;
             this.archiveDeleteButton.Click += new System.EventHandler(this.archiveDeleteButton_Click);
@@ -528,7 +528,7 @@
             this.archiveUpdateButton.Location = new System.Drawing.Point(340, 77);
             this.archiveUpdateButton.Name = "archiveUpdateButton";
             this.archiveUpdateButton.Size = new System.Drawing.Size(75, 23);
-            this.archiveUpdateButton.TabIndex = 14;
+            this.archiveUpdateButton.TabIndex = 2;
             this.archiveUpdateButton.Text = "Update";
             this.archiveUpdateButton.UseVisualStyleBackColor = true;
             this.archiveUpdateButton.Click += new System.EventHandler(this.archiveUpdateButton_Click);
@@ -538,7 +538,7 @@
             this.archiveAddButton.Location = new System.Drawing.Point(340, 48);
             this.archiveAddButton.Name = "archiveAddButton";
             this.archiveAddButton.Size = new System.Drawing.Size(75, 23);
-            this.archiveAddButton.TabIndex = 13;
+            this.archiveAddButton.TabIndex = 1;
             this.archiveAddButton.Text = "Add";
             this.archiveAddButton.UseVisualStyleBackColor = true;
             this.archiveAddButton.Click += new System.EventHandler(this.archiveAddButton_Click);
@@ -564,7 +564,7 @@
             this.archiveListView.MultiSelect = false;
             this.archiveListView.Name = "archiveListView";
             this.archiveListView.Size = new System.Drawing.Size(322, 440);
-            this.archiveListView.TabIndex = 11;
+            this.archiveListView.TabIndex = 4;
             this.archiveListView.UseCompatibleStateImageBehavior = false;
             this.archiveListView.View = System.Windows.Forms.View.Details;
             this.archiveListView.SelectedIndexChanged += new System.EventHandler(this.archiveListView_SelectedIndexChanged);

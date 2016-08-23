@@ -47,15 +47,15 @@
             this.label3 = new System.Windows.Forms.Label();
             this.searchTotalFoundLabel = new System.Windows.Forms.Label();
             this.defaultTapeGroupbox = new System.Windows.Forms.GroupBox();
-            this.searchFlowPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.searchFlowPanel9 = new System.Windows.Forms.FlowLayoutPanel();
+            this.searchFlowPanel8 = new System.Windows.Forms.FlowLayoutPanel();
+            this.searchFlowPanel7 = new System.Windows.Forms.FlowLayoutPanel();
+            this.searchFlowPanel6 = new System.Windows.Forms.FlowLayoutPanel();
+            this.searchFlowPanel5 = new System.Windows.Forms.FlowLayoutPanel();
+            this.searchFlowPanel4 = new System.Windows.Forms.FlowLayoutPanel();
             this.searchFlowPanel3 = new System.Windows.Forms.FlowLayoutPanel();
             this.searchFlowPanel2 = new System.Windows.Forms.FlowLayoutPanel();
-            this.searchFlowPanel4 = new System.Windows.Forms.FlowLayoutPanel();
-            this.searchFlowPanel5 = new System.Windows.Forms.FlowLayoutPanel();
-            this.searchFlowPanel6 = new System.Windows.Forms.FlowLayoutPanel();
-            this.searchFlowPanel7 = new System.Windows.Forms.FlowLayoutPanel();
-            this.searchFlowPanel8 = new System.Windows.Forms.FlowLayoutPanel();
-            this.searchFlowPanel9 = new System.Windows.Forms.FlowLayoutPanel();
+            this.searchFlowPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.defaultTapeGroupbox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -90,7 +90,7 @@
             this.searchButton.Location = new System.Drawing.Point(693, 23);
             this.searchButton.Name = "searchButton";
             this.searchButton.Size = new System.Drawing.Size(139, 23);
-            this.searchButton.TabIndex = 3;
+            this.searchButton.TabIndex = 2;
             this.searchButton.Text = "Search";
             this.searchButton.UseVisualStyleBackColor = true;
             this.searchButton.Click += new System.EventHandler(this.searchButton_Click);
@@ -113,7 +113,7 @@
             this.searchListView.MultiSelect = false;
             this.searchListView.Name = "searchListView";
             this.searchListView.Size = new System.Drawing.Size(820, 250);
-            this.searchListView.TabIndex = 5;
+            this.searchListView.TabIndex = 4;
             this.searchListView.UseCompatibleStateImageBehavior = false;
             this.searchListView.View = System.Windows.Forms.View.Details;
             this.searchListView.SelectedIndexChanged += new System.EventHandler(this.searchListView_SelectedIndexChanged);
@@ -171,7 +171,7 @@
             this.searchFilterCombo.Location = new System.Drawing.Point(693, 52);
             this.searchFilterCombo.Name = "searchFilterCombo";
             this.searchFilterCombo.Size = new System.Drawing.Size(139, 21);
-            this.searchFilterCombo.TabIndex = 6;
+            this.searchFilterCombo.TabIndex = 3;
             this.searchFilterCombo.SelectedIndexChanged += new System.EventHandler(this.searchFilterCombo_SelectedIndexChanged);
             this.searchFilterCombo.DropDownClosed += new System.EventHandler(this.searchFilterCombo_DropDownClosed);
             this.searchFilterCombo.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.searchFilterCombo_KeyPress);
@@ -211,12 +211,47 @@
             this.defaultTapeGroupbox.TabIndex = 9;
             this.defaultTapeGroupbox.TabStop = false;
             // 
-            // searchFlowPanel1
+            // searchFlowPanel9
             // 
-            this.searchFlowPanel1.Location = new System.Drawing.Point(6, 22);
-            this.searchFlowPanel1.Name = "searchFlowPanel1";
-            this.searchFlowPanel1.Size = new System.Drawing.Size(808, 20);
-            this.searchFlowPanel1.TabIndex = 0;
+            this.searchFlowPanel9.Location = new System.Drawing.Point(6, 182);
+            this.searchFlowPanel9.Name = "searchFlowPanel9";
+            this.searchFlowPanel9.Size = new System.Drawing.Size(808, 20);
+            this.searchFlowPanel9.TabIndex = 3;
+            // 
+            // searchFlowPanel8
+            // 
+            this.searchFlowPanel8.Location = new System.Drawing.Point(6, 162);
+            this.searchFlowPanel8.Name = "searchFlowPanel8";
+            this.searchFlowPanel8.Size = new System.Drawing.Size(808, 20);
+            this.searchFlowPanel8.TabIndex = 1;
+            // 
+            // searchFlowPanel7
+            // 
+            this.searchFlowPanel7.Location = new System.Drawing.Point(6, 142);
+            this.searchFlowPanel7.Name = "searchFlowPanel7";
+            this.searchFlowPanel7.Size = new System.Drawing.Size(808, 20);
+            this.searchFlowPanel7.TabIndex = 2;
+            // 
+            // searchFlowPanel6
+            // 
+            this.searchFlowPanel6.Location = new System.Drawing.Point(6, 122);
+            this.searchFlowPanel6.Name = "searchFlowPanel6";
+            this.searchFlowPanel6.Size = new System.Drawing.Size(808, 20);
+            this.searchFlowPanel6.TabIndex = 1;
+            // 
+            // searchFlowPanel5
+            // 
+            this.searchFlowPanel5.Location = new System.Drawing.Point(6, 102);
+            this.searchFlowPanel5.Name = "searchFlowPanel5";
+            this.searchFlowPanel5.Size = new System.Drawing.Size(808, 20);
+            this.searchFlowPanel5.TabIndex = 1;
+            // 
+            // searchFlowPanel4
+            // 
+            this.searchFlowPanel4.Location = new System.Drawing.Point(6, 82);
+            this.searchFlowPanel4.Name = "searchFlowPanel4";
+            this.searchFlowPanel4.Size = new System.Drawing.Size(808, 20);
+            this.searchFlowPanel4.TabIndex = 1;
             // 
             // searchFlowPanel3
             // 
@@ -232,47 +267,12 @@
             this.searchFlowPanel2.Size = new System.Drawing.Size(808, 20);
             this.searchFlowPanel2.TabIndex = 1;
             // 
-            // searchFlowPanel4
+            // searchFlowPanel1
             // 
-            this.searchFlowPanel4.Location = new System.Drawing.Point(6, 82);
-            this.searchFlowPanel4.Name = "searchFlowPanel4";
-            this.searchFlowPanel4.Size = new System.Drawing.Size(808, 20);
-            this.searchFlowPanel4.TabIndex = 1;
-            // 
-            // searchFlowPanel5
-            // 
-            this.searchFlowPanel5.Location = new System.Drawing.Point(6, 102);
-            this.searchFlowPanel5.Name = "searchFlowPanel5";
-            this.searchFlowPanel5.Size = new System.Drawing.Size(808, 20);
-            this.searchFlowPanel5.TabIndex = 1;
-            // 
-            // searchFlowPanel6
-            // 
-            this.searchFlowPanel6.Location = new System.Drawing.Point(6, 122);
-            this.searchFlowPanel6.Name = "searchFlowPanel6";
-            this.searchFlowPanel6.Size = new System.Drawing.Size(808, 20);
-            this.searchFlowPanel6.TabIndex = 1;
-            // 
-            // searchFlowPanel7
-            // 
-            this.searchFlowPanel7.Location = new System.Drawing.Point(6, 142);
-            this.searchFlowPanel7.Name = "searchFlowPanel7";
-            this.searchFlowPanel7.Size = new System.Drawing.Size(808, 20);
-            this.searchFlowPanel7.TabIndex = 2;
-            // 
-            // searchFlowPanel8
-            // 
-            this.searchFlowPanel8.Location = new System.Drawing.Point(6, 162);
-            this.searchFlowPanel8.Name = "searchFlowPanel8";
-            this.searchFlowPanel8.Size = new System.Drawing.Size(808, 20);
-            this.searchFlowPanel8.TabIndex = 1;
-            // 
-            // searchFlowPanel9
-            // 
-            this.searchFlowPanel9.Location = new System.Drawing.Point(6, 182);
-            this.searchFlowPanel9.Name = "searchFlowPanel9";
-            this.searchFlowPanel9.Size = new System.Drawing.Size(808, 20);
-            this.searchFlowPanel9.TabIndex = 3;
+            this.searchFlowPanel1.Location = new System.Drawing.Point(6, 22);
+            this.searchFlowPanel1.Name = "searchFlowPanel1";
+            this.searchFlowPanel1.Size = new System.Drawing.Size(808, 20);
+            this.searchFlowPanel1.TabIndex = 0;
             // 
             // SearchTapeForm
             // 
