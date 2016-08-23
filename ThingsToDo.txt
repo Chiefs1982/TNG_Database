@@ -46,11 +46,12 @@ DONE
 * Be able to update tapes if dropdown or date changes
 * Update paste function to paste properly
 * Add sorting to all listviews
+* Create way to select Master from dropdown and display all projects on media
+* Add something to let user know about tags and commas
 
 
 TODO
 - PUT TRY & USING STATEMENTS AROUND SQL stuff
-- Create way to select Master from dropdown and display all projects on media
 - Create Preferences
 	- how often to backup database
 	- default export directory
@@ -65,7 +66,7 @@ TODO
 - Get current user for entries to add or update to db from ComputerInfo class
 - Make sure tab order is correct for inputing information
 - Add tooltips to everything
-- Add something to let user know about tags and commas
+- Add ability to delete multiple selected items in a list
 
 
 1541918047

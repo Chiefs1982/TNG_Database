@@ -468,7 +468,7 @@
             this.addTapeGroupbox.Controls.Add(this.addProjectIDTextbox);
             this.addTapeGroupbox.Controls.Add(this.addProjectLabel);
             this.addTapeGroupbox.Controls.Add(this.addIDLabel);
-            this.addTapeGroupbox.Location = new System.Drawing.Point(744, 317);
+            this.addTapeGroupbox.Location = new System.Drawing.Point(18, 69);
             this.addTapeGroupbox.Name = "addTapeGroupbox";
             this.addTapeGroupbox.Size = new System.Drawing.Size(726, 218);
             this.addTapeGroupbox.TabIndex = 5;
@@ -571,10 +571,13 @@
             // 
             // addTagsTextbox
             // 
+            this.addTagsTextbox.ForeColor = System.Drawing.SystemColors.GrayText;
             this.addTagsTextbox.Location = new System.Drawing.Point(290, 76);
+            this.addTagsTextbox.MaxLength = 50;
             this.addTagsTextbox.Name = "addTagsTextbox";
             this.addTagsTextbox.Size = new System.Drawing.Size(415, 20);
             this.addTagsTextbox.TabIndex = 9;
+            this.addTagsTextbox.Text = "Seperate each tag with a comma";
             this.addTagsTextbox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.addTagsTextbox_KeyPress);
             // 
             // label4

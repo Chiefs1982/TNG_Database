@@ -37,6 +37,12 @@ namespace TNG_Database
         CommonMethods commonMethod = CommonMethods.Instance();
         UpdateStatus updateStatus = UpdateStatus.Instance();
 
+        //tag default text
+        private string tagText = "Seperate each tag with a comma";
+
+        //default tooltip
+        ToolTip toolTip = new ToolTip();
+
         public TapeListForm()
         {
             InitializeComponent();
@@ -86,6 +92,21 @@ namespace TNG_Database
             editTapeNumberUpDown.ValueChanged += editTextBoxes_TextChanged;
             editDateShotDate.ValueChanged += editTextBoxes_TextChanged;
 
+            //focus given to to tag textbox
+            addTagsTextbox.GotFocus += AddTagsTextbox_GotFocus;
+            editTagsTextbox.GotFocus += AddTagsTextbox_GotFocus;
+            //losing focus
+            addTagsTextbox.LostFocus += AddTagsTextbox_LostFocus;
+            editTagsTextbox.LostFocus += AddTagsTextbox_LostFocus;
+
+            //Tooltips
+            //add
+            addTagsTextbox.MouseHover += AddTagsTextbox_MouseHover;
+            addTagsTextbox.MouseLeave += AddTagsTextbox_MouseLeave;
+            //edit
+            editTagsTextbox.MouseHover += AddTagsTextbox_MouseHover;
+            editTagsTextbox.MouseLeave += AddTagsTextbox_MouseLeave;
+
             //Tell user the database is ready for use
             updateStatus.UpdateStatusBar("Database is Loaded and Ready", mainform);
 
@@ -101,12 +122,7 @@ namespace TNG_Database
             CommonMethods.ListViewItemComparer.SortColumn = -1;
             tapeListListView.ColumnClick += new ColumnClickEventHandler(CommonMethods.ListViewItemComparer.SearchListView_ColumnClick);
         }
-
         
-
-
-
-
         //-------------------------------------------
         //------------CLASS METHODS------------------
         //-------------------------------------------
@@ -444,6 +460,9 @@ namespace TNG_Database
             addCameraComboBox.SelectedIndex = 0;
             addTapeNumUpDown.Value = 1;
             addTapePersonDropdown.Text = ComputerInfo.ComputerUser;
+            //default text and color
+            addTagsTextbox.ForeColor = SystemColors.GrayText;
+            addTagsTextbox.Text = tagText;
         }
 
         //Edit entry button pressed
@@ -464,6 +483,9 @@ namespace TNG_Database
             editDateShotDate.Value = commonMethod.ConvertDateForDatePicker(tapeValues.DateShot);
             editTapeMasterListLabel.Text = tapeValues.MasterArchive;
             editPersonDropdown.Text = tapeValues.PersonEntered;
+            //default text and color
+            editTagsTextbox.ForeColor = SystemColors.GrayText;
+            editTagsTextbox.Text = tagText;
         }
 
         //Delete entry button pressed
@@ -837,6 +859,30 @@ namespace TNG_Database
             }
         }
 
+        //Focus given to tag textbox
+        private void AddTagsTextbox_GotFocus(object sender, EventArgs e)
+        {
+            TextBox textBox = (TextBox)sender;
+
+            if (textBox.Text.Equals(tagText))
+            {
+                textBox.Clear();
+                textBox.ForeColor = SystemColors.WindowText;
+            }
+        }
+
+        //Focus lost from tag textbox
+        private void AddTagsTextbox_LostFocus(object sender, EventArgs e)
+        {
+            TextBox textBox = (TextBox)sender;
+
+            if (textBox.Text.Equals(string.Empty))
+            {
+                textBox.ForeColor = SystemColors.GrayText;
+                textBox.Text = tagText;
+            }
+        }
+
         #endregion
 
 
@@ -906,6 +952,30 @@ namespace TNG_Database
             //redraw tags from new list
             DisplayTags("add",addTagDisplayFlowLayout,addTagList);
         }
+
+        //MouseOver Event
+        private void AddTagsTextbox_MouseHover(object sender, EventArgs e)
+        {
+            TextBox textBox = (TextBox)sender;
+
+            if (!textBox.Text.Equals(tagText))
+            {
+                toolTip.InitialDelay = 1000;
+                toolTip.Show(tagText, textBox, -30, -22, 2000);
+            }
+        }
+
+        //Mouse leave event
+        private void AddTagsTextbox_MouseLeave(object sender, EventArgs e)
+        {
+            TextBox textBox = (TextBox)sender;
+
+            if (toolTip.Active)
+            {
+                toolTip.Hide(textBox);
+            }
+        }
+
         #endregion
 
     }

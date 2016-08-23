@@ -110,7 +110,7 @@
             // 
             this.homeToolStripMenuItem.Name = "homeToolStripMenuItem";
             this.homeToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
-            this.homeToolStripMenuItem.Text = "Home";
+            this.homeToolStripMenuItem.Text = "Search";
             this.homeToolStripMenuItem.Click += new System.EventHandler(this.homeToolStripMenuItem_Click);
             // 
             // archiveListsToolStripMenuItem
