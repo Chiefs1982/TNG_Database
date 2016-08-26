@@ -29,6 +29,9 @@ namespace TNG_Database
         CommonMethods commonMethod = CommonMethods.Instance();
         UpdateStatus updateStatus = UpdateStatus.Instance();
 
+        //List of mulitple items to delete
+        List<ProjectValues> tapesToDelete = null;
+
         public ProjectsForm(TNG_Database.MainForm parent)
         {
             InitializeComponent();
@@ -143,6 +146,7 @@ namespace TNG_Database
                     deleteProjectsGroupBox.Visible = false;
                     projectsDefaultGroupBox.Visible = true;
                     UpdateDefaultBox();
+                    projectsDeleteButton.Text = "Delete";
                     break;
             }
 
@@ -232,15 +236,66 @@ namespace TNG_Database
         //Delete Button Pressed
         private void projectsDeleteButton_Click(object sender, EventArgs e)
         {
-            //set labels to seleted values in listview
-            deleteProjectIDLabel.Text = listValues.ProjectID;
-            deleteProjectNameLabel.Text = listValues.Projectname;
 
-            //open delete groupbox
-            CloseGroupBox("delete");
+            if (projectsListView.SelectedItems.Count == 1)
+            {
+                //set labels to seleted values in listview
+                deleteProjectIDLabel.Text = listValues.ProjectID;
+                deleteProjectNameLabel.Text = listValues.Projectname;
 
-            //give the cancel button focus
-            deleteProjectCancelButton.Focus();
+                //open delete groupbox
+                CloseGroupBox("delete");
+
+                //give the cancel button focus
+                deleteProjectCancelButton.Focus();
+            }
+            else if (projectsListView.SelectedItems.Count > 1)
+            {
+                //multiple items selected in listview
+
+                //Show message box to make sure user is to be deleted
+                DialogResult deleteMessage = MessageBox.Show("Do you want to delete these " + projectsListView.SelectedItems.Count + " entries?", "Deletion Warning!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+                //Check to see if user pressed yes or no
+                if (deleteMessage == DialogResult.Yes)
+                {
+
+                    //clear delete list
+                    if (tapesToDelete == null)
+                    {
+                        tapesToDelete = new List<ProjectValues>();
+                    }
+                    else
+                    {
+                        tapesToDelete.Clear();
+                    }
+
+                    //iterate over each item selected and save data in a value, then a list
+                    foreach (ListViewItem item in projectsListView.SelectedItems)
+                    {
+                        ProjectValues value = new ProjectValues(item.SubItems[0].Text, item.SubItems[1].Text, Convert.ToInt32(item.Tag));
+
+                        tapesToDelete.Add(value);
+                    }
+
+
+
+                    if (projectsListView.SelectedItems.Count > 1 && tapesToDelete.Count > 0)
+                    {
+                        Console.WriteLine("sending " + tapesToDelete.Count + " items to delete");
+                        updateStatus.UpdateStatusBar(AddToDatabase.DeleteMultipleProjectSelected(tapesToDelete) + " items deleted", mainform);
+                    }
+
+                    PopulateListView();
+                    CloseGroupBox();
+
+                }
+                else if (deleteMessage == DialogResult.No)
+                {
+                    //No Pressed, nothing will be done
+                }
+            }
+                
         }
 
         #endregion
@@ -423,7 +478,7 @@ namespace TNG_Database
         {
             //updates default groupbox based on listview selection
             CloseGroupBox();
-            if (projectsListView.SelectedItems.Count > 0)
+            if (projectsListView.SelectedItems.Count == 1)
             {
                 listValues.ID = Convert.ToInt32(projectsListView.SelectedItems[0].Tag);
                 listValues.ProjectID = projectsListView.SelectedItems[0].SubItems[0].Text;
@@ -432,17 +487,28 @@ namespace TNG_Database
                 //make selected panel visible
                 defaultLabel.Visible = false;
                 defaultLabelPanel.Visible = true;
+                //make button say delete
+                projectsDeleteButton.Text = "Delete";
             }
-            else
+            else if(projectsListView.SelectedItems.Count > 1)
             {
-                if (projectsListView.SelectedItems.Count == 0)
-                {
-                    updateStatus.UpdateStatusBar("Nothing Selected", mainform);
+                //more than one item selected
+                CloseGroupBox();
 
-                    //make default nothing selected label visible
-                    defaultLabelPanel.Visible = false;
-                    defaultLabel.Visible = true;
-                }
+                projectsUpdateButton.Enabled = false;
+                projectsDeleteButton.Enabled = true;
+                updateStatus.UpdateStatusBar(projectsListView.SelectedItems.Count + " projects selected", mainform);
+                projectsDeleteButton.Text = "Delete(" + projectsListView.SelectedItems.Count + ")";
+            }
+            else if(projectsListView.SelectedItems.Count == 0)
+            {
+                updateStatus.UpdateStatusBar("Nothing Selected", mainform);
+
+                //make default nothing selected label visible
+                defaultLabelPanel.Visible = false;
+                defaultLabel.Visible = true;
+                //make button say delete
+                projectsDeleteButton.Text = "Delete";
             }
         }
 

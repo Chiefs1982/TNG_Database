@@ -39,6 +39,10 @@ namespace TNG_Database
 
         //tag default text
         private string tagText = "Seperate each tag with a comma";
+        private string defaultNoText = "Select an item from the list to Edit or Delete";
+
+        //List of mulitple items to delete
+        List<TapeDatabaseValues> tapesToDelete = null;
 
         //default tooltip
         ToolTip toolTip = new ToolTip();
@@ -61,6 +65,10 @@ namespace TNG_Database
 
             //set default items to appropriate visibility
             defaultItemsPanel.Visible = false;
+            defaultNoItemSelectedLabel.Visible = true;
+
+            //set default label to default value
+            defaultNoItemSelectedLabel.Text = defaultNoText;
             defaultNoItemSelectedLabel.Visible = true;
 
             //disable all groupboxes except default
@@ -197,6 +205,7 @@ namespace TNG_Database
                     deleteTapeGroupbox.Visible = false;
                     defaultTapeGroupbox.Visible = true;
                     UpdateDefaultBox();
+                    tapeListDeleteEntryButton.Text = "Delete Entry";
                     break;
             }
         }
@@ -207,7 +216,7 @@ namespace TNG_Database
         private void UpdateDefaultBox()
         {
             //checks to make sure an item is selected
-            if (tapeListListView.SelectedItems.Count > 0)
+            if (tapeListListView.SelectedItems.Count == 1)
             {
                 //set value to current index
                 listViewIndex = tapeListListView.SelectedIndices[0];
@@ -236,6 +245,16 @@ namespace TNG_Database
                 tapeListEditEntryButton.Enabled = true;
                 tapeListDeleteEntryButton.Enabled = true;
             }
+            else if (tapeListListView.SelectedItems.Count > 1)
+            {
+                //make default label visible and default panel invisible
+                defaultItemsPanel.Visible = false;
+                defaultNoItemSelectedLabel.Visible = true;
+
+                //set default label to display number of items
+                defaultNoItemSelectedLabel.Visible = false;
+                updateStatus.UpdateStatusBar(tapeListListView.SelectedItems.Count + " items selected", mainform);
+            }
             else
             {
                 //set value to current index
@@ -246,6 +265,10 @@ namespace TNG_Database
 
                 //make default label visible and default panel invisible
                 defaultItemsPanel.Visible = false;
+                defaultNoItemSelectedLabel.Visible = true;
+
+                //set default label to default value
+                defaultNoItemSelectedLabel.Text = defaultNoText;
                 defaultNoItemSelectedLabel.Visible = true;
 
                 //make edit and delete buttons disabled
@@ -492,20 +515,72 @@ namespace TNG_Database
         private void tapeListDeleteEntryButton_Click(object sender, EventArgs e)
         {
             //Place delete tape groupbox and make visible
+            if (tapeListListView.SelectedItems.Count == 1)
+            {
 
-            LoadTapeValuesFromList();
-            deleteProjectIDLabel.Text = tapeValues.ProjectId;
-            deleteProjectNameLabel.Text = tapeValues.ProjectName;
-            deleteTapeNameLabel.Text = tapeValues.TapeName;
-            deleteTapeNumberLabel.Text = tapeValues.TapeNumber;
-            deleteCameraLabel.Text = commonMethod.GetCameraName(tapeValues.Camera);
-            //split csv int a list and display
-            deleteTagList = tapeValues.TapeTags.Split(',').ToList();
-            DisplayTags("delete", deleteTagFlowLayoutPanel, deleteTagList);
-            deleteDateShotLabel.Text = tapeValues.DateShot;
-            deleteMasterArchiveLabel.Text = tapeValues.MasterArchive;
-            deletePersonLabel.Text = tapeValues.PersonEntered;
-            MakeBoxesVisible("delete");
+                LoadTapeValuesFromList();
+                deleteProjectIDLabel.Text = tapeValues.ProjectId;
+                deleteProjectNameLabel.Text = tapeValues.ProjectName;
+                deleteTapeNameLabel.Text = tapeValues.TapeName;
+                deleteTapeNumberLabel.Text = tapeValues.TapeNumber;
+                deleteCameraLabel.Text = commonMethod.GetCameraName(tapeValues.Camera);
+                //split csv int a list and display
+                deleteTagList = tapeValues.TapeTags.Split(',').ToList();
+                DisplayTags("delete", deleteTagFlowLayoutPanel, deleteTagList);
+                deleteDateShotLabel.Text = tapeValues.DateShot;
+                deleteMasterArchiveLabel.Text = tapeValues.MasterArchive;
+                deletePersonLabel.Text = tapeValues.PersonEntered;
+                MakeBoxesVisible("delete");
+            }else if(tapeListListView.SelectedItems.Count > 1)
+            {
+                //multiple items selected in listview
+
+                //Show message box to make sure user is to be deleted
+                DialogResult deleteMessage = MessageBox.Show("Do you want to delete these " + tapeListListView.SelectedItems.Count + " entries?", "Deletion Warning!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+                //Check to see if user pressed yes or no
+                if (deleteMessage == DialogResult.Yes)
+                {
+
+                    //clear delete list
+                    if (tapesToDelete == null)
+                    {
+                        tapesToDelete = new List<TapeDatabaseValues>();
+                    }
+                    else
+                    {
+                        tapesToDelete.Clear();
+                    }
+
+                    //iterate over each item selected and save data in a value, then a list
+                    foreach (ListViewItem item in tapeListListView.SelectedItems)
+                    {
+                        TapeDatabaseValues value = new TapeDatabaseValues(
+                            item.SubItems[3].Text, item.SubItems[4].Text, item.SubItems[1].Text, item.SubItems[2].Text,
+                            commonMethod.GetCameraNumber(item.SubItems[5].Text), item.SubItems[6].Text, item.SubItems[7].Text,
+                            item.SubItems[8].Text, item.SubItems[9].Text, Convert.ToInt32(item.SubItems[0].Text)
+                            );
+
+                        tapesToDelete.Add(value);
+                    }
+
+
+
+                    if (tapeListListView.SelectedItems.Count > 1 && tapesToDelete.Count > 0)
+                    {
+                        Console.WriteLine("sending " + tapesToDelete.Count + " items to delete");
+                        updateStatus.UpdateStatusBar(AddToDatabase.DeleteMultipleTapeSelected(tapesToDelete) + " items deleted", mainform);
+                    }
+
+                    PopulateTapeList();
+                    MakeBoxesVisible();
+
+                }
+                else if (deleteMessage == DialogResult.No)
+                {
+                    //No Pressed, nothing will be done
+                }
+            }
 
         }
         #endregion
@@ -720,24 +795,27 @@ namespace TNG_Database
 
                 AddToDatabase deleteDB = new AddToDatabase();
 
+                if(tapeListListView.SelectedItems.Count == 1)
+                {
+                    //Delete tape from database
+                    if (deleteDB.DeleteTapeDatabase(tapeValues))
+                    {
+                        //deletion success
+                        tapeValues.Clear();
+                        ClearDeleteLabels();
+                        PopulateTapeList();
+                        MakeBoxesVisible();
+                        tapeListListView.Focus();
+                        updateStatus.UpdateStatusBar("Entry deleted", mainform);
+                    }
+                    else
+                    {
+                        updateStatus.UpdateStatusBar("There was an error deleting entry", mainform);
+                        MakeBoxesVisible();
+                        tapeListListView.Focus();
+                    }
+                }
                 
-                //Delete user from database
-                if (deleteDB.DeleteTapeDatabase(tapeValues))
-                {
-                    //deletion success
-                    tapeValues.Clear();
-                    ClearDeleteLabels();
-                    PopulateTapeList();
-                    MakeBoxesVisible();
-                    tapeListListView.Focus();
-                    updateStatus.UpdateStatusBar("Entry deleted", mainform);
-                }
-                else
-                {
-                    updateStatus.UpdateStatusBar("There was an error deleting entry", mainform);
-                    MakeBoxesVisible();
-                    tapeListListView.Focus();
-                }
             }
             else if (deleteMessage == DialogResult.No)
             {
@@ -764,7 +842,7 @@ namespace TNG_Database
         {
             //updates default groupbox based on listview selection
             MakeBoxesVisible();
-            if (tapeListListView.SelectedItems.Count > 0)
+            if (tapeListListView.SelectedItems.Count == 1)
             {
                 listValues.ID = Convert.ToInt32(tapeListListView.SelectedItems[0].SubItems[0].Text);
                 listValues.ProjectId = tapeListListView.SelectedItems[0].SubItems[1].Text;
@@ -776,12 +854,22 @@ namespace TNG_Database
                 listValues.DateShot = tapeListListView.SelectedItems[0].SubItems[7].Text;
                 listValues.MasterArchive = tapeListListView.SelectedItems[0].SubItems[8].Text;
                 listValues.PersonEntered = tapeListListView.SelectedItems[0].SubItems[9].Text;
-            }else
+                tapesToDelete = null;
+            }
+            else if (tapeListListView.SelectedItems.Count > 1)
             {
-                if (tapeListListView.SelectedItems.Count == 0)
-                {
-                    updateStatus.UpdateStatusBar("Nothing Selected", mainform);
-                }
+                //more than one item selected
+                MakeBoxesVisible();
+
+                tapeListEditEntryButton.Enabled = false;
+                tapeListDeleteEntryButton.Enabled = true;
+                tapeListDeleteEntryButton.Text = "Delete(" + tapeListListView.SelectedItems.Count + ")";
+            }
+            else if (tapeListListView.SelectedItems.Count == 0)
+            {
+                //no items selected
+                updateStatus.UpdateStatusBar("Nothing Selected", mainform);
+                tapesToDelete = null;
             }
         }
 

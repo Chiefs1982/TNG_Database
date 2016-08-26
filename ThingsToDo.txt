@@ -67,7 +67,14 @@ TODO
 - Be able to save the old databases and recall them if needed
 - Add tooltips to everything
 - Add ability to delete multiple selected items in a list
+	* Tapes
+	* Projects
+	- Masters
+	- People
+	- Archive Videos
 - Make sure all project IDs can evaluate to numbers
+- Get rid of displaying ID for tapes on table and put it as a tag
+- Create status bar update que to display text slowly until there is nothing new to display
 
 
 1541918047

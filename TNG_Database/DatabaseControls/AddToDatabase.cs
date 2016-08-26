@@ -17,6 +17,7 @@ namespace TNG_Database
         //private string tngDatabaseConnectString = "Data Source=TNG_TapeDatabase.sqlite;Version=3;";
         //gets string for database connection from DatabaseControls
         private string tngDatabaseConnectString = DataBaseControls.GetDBName();
+        private static string staticDatabase = DataBaseControls.Database;
         //-------------------------------------------------
         /// <summary>
         /// Close connection and command variables, and collects Garbage
@@ -27,6 +28,18 @@ namespace TNG_Database
         {
             if(command != null) { command.Dispose(); }
             if(connection != null) { connection.Close(); connection.Dispose(); }
+            GC.Collect();
+        }
+
+        private static void CloseConnection(SQLiteConnection connection)
+        {
+            if (connection != null) { connection.Close(); connection.Dispose(); }
+            GC.Collect();
+        }
+
+        private static void CloseCommand(SQLiteCommand command)
+        {
+            if (command != null) { command.Dispose(); }
             GC.Collect();
         }
 
@@ -59,12 +72,12 @@ namespace TNG_Database
                 if (check == 0)
                 {
                     //There is not an entry go ahead and insert new row
-                    command.CommandText = "insert into TapeDatabase (tape_name, tape_number, project_id, project_name, camera, tape_tags, date_shot, master_archive, person_entered) values (@tapeName, @tapeNumber, @projectID, @projectNumber, @camera, @tapeTags, @dateShot, @masterArchive, @personEntered)";
+                    command.CommandText = "insert into TapeDatabase (tape_name, tape_number, project_id, project_name, camera, tape_tags, date_shot, master_archive, person_entered) values (@tapeName, @tapeNumber, @projectID, @projectName, @camera, @tapeTags, @dateShot, @masterArchive, @personEntered)";
                     command.Parameters.Clear();
                     command.Parameters.AddWithValue("@tapeName", tapeDBValues.TapeName);
                     command.Parameters.AddWithValue("@tapeNumber", tapeDBValues.TapeNumber);
                     command.Parameters.AddWithValue("@projectID", tapeDBValues.ProjectId);
-                    command.Parameters.AddWithValue("@projectNumber", tapeDBValues.ProjectName);
+                    command.Parameters.AddWithValue("@projectName", tapeDBValues.ProjectName);
                     command.Parameters.AddWithValue("@camera", tapeDBValues.Camera);
                     command.Parameters.AddWithValue("@tapeTags", tapeDBValues.TapeTags);
                     command.Parameters.AddWithValue("@dateShot", tapeDBValues.DateShot);
@@ -278,6 +291,89 @@ namespace TNG_Database
             }
             
         }
+
+
+        public static int DeleteMultipleTapeSelected(List<TapeDatabaseValues> listValues)
+        {
+            int deleted = 0;
+
+            try
+            {
+                //Gets and opens up connection with TNG_TapeDatabase.sqlite
+                SQLiteConnection tapeDBConnection = new SQLiteConnection(staticDatabase);
+                tapeDBConnection.Open();
+                
+                foreach (TapeDatabaseValues tapeValues in listValues)
+                {
+                    //Insert entry to delete into Deleted Tape Database DB
+                    SQLiteCommand command = new SQLiteCommand(tapeDBConnection);
+                    command.CommandText = "insert into DeleteTapeDatabase (tape_name, tape_number, project_id, project_name, camera, tape_tags, date_shot, master_archive, person_entered) values (@tapeName, @tapeNumber, @projectID, @projectName, @camera, @tapeTags, @dateShot, @masterArchive, @personEntered); delete from TapeDatabase where id = @id and project_id = @projectID";
+                    command.Parameters.Clear();
+                    command.Parameters.AddWithValue("@id", tapeValues.ID);
+                    command.Parameters.AddWithValue("@tapeName", tapeValues.TapeName);
+                    command.Parameters.AddWithValue("@tapeNumber", tapeValues.TapeNumber);
+                    command.Parameters.AddWithValue("@projectID", tapeValues.ProjectId);
+                    command.Parameters.AddWithValue("@projectName", tapeValues.ProjectName);
+                    command.Parameters.AddWithValue("@camera", tapeValues.Camera);
+                    command.Parameters.AddWithValue("@tapeTags", tapeValues.TapeTags);
+                    command.Parameters.AddWithValue("@dateShot", tapeValues.DateShot);
+                    command.Parameters.AddWithValue("@masterArchive", tapeValues.MasterArchive);
+                    command.Parameters.AddWithValue("@personEntered", tapeValues.PersonEntered);
+                    if(command.ExecuteNonQuery() == 1) { /* Success */ }
+                    /*
+                    //Entry double checked to match
+                    command.CommandText = "delete from TapeDatabase where id = @id and project_id = @projectID";
+                    command.ExecuteNonQuery();
+                    */
+                    deleted++;
+                }
+
+                return deleted;
+            }
+            catch (Exception e)
+            {
+                MainForm.LogFile("Delete Tape List Error: " + e.Message);
+                return deleted;
+            }
+        }
+
+        public static int DeleteMultipleProjectSelected(List<ProjectValues> listValues)
+        {
+            int deleted = 0;
+
+            try
+            {
+                //Gets and opens up connection with TNG_TapeDatabase.sqlite
+                SQLiteConnection tapeDBConnection = new SQLiteConnection(staticDatabase);
+                tapeDBConnection.Open();
+
+                foreach (ProjectValues projectValues in listValues)
+                {
+                    //Insert entry to delete into Deleted Tape Database DB
+                    SQLiteCommand command = new SQLiteCommand(tapeDBConnection);
+                    command.CommandText = "insert into DeleteProjects (project_id, project_name) values (@projectID, @projectName); delete from Projects where id = @id and project_id = @projectID";
+                    command.Parameters.Clear();
+                    command.Parameters.AddWithValue("@id", projectValues.ID);
+                    command.Parameters.AddWithValue("@projectName", projectValues.Projectname);
+                    command.Parameters.AddWithValue("@projectID", projectValues.ProjectID);
+                    if (command.ExecuteNonQuery() == 1) { /* Success */ }
+                    /*
+                    //Entry double checked to match
+                    command.CommandText = "delete from TapeDatabase where id = @id and project_id = @projectID";
+                    command.ExecuteNonQuery();
+                    */
+                    deleted++;
+                }
+
+                return deleted;
+            }
+            catch (Exception e)
+            {
+                MainForm.LogFile("Delete Project List Error: " + e.Message);
+                return deleted;
+            }
+        }
+
         #endregion
         //----------------------------------------------
         //---MASTER LIST ADD, DELETE, UPDATE DATABASE---

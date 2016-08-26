@@ -153,7 +153,6 @@
             this.tapeListListView.FullRowSelect = true;
             this.tapeListListView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.tapeListListView.Location = new System.Drawing.Point(12, 27);
-            this.tapeListListView.MultiSelect = false;
             this.tapeListListView.Name = "tapeListListView";
             this.tapeListListView.Size = new System.Drawing.Size(726, 284);
             this.tapeListListView.TabIndex = 4;

@@ -26,6 +26,11 @@ namespace TNG_Database
             return database;
         }
 
+        public static string Database
+        {
+            get { return database; }
+        }
+
         /// <summary>
         /// Close connection and command variables, and collects Garbage
         /// </summary>

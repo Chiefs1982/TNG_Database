@@ -274,7 +274,7 @@
             this.editProjectsGroupBox.Controls.Add(this.editProjectIDTextBox);
             this.editProjectsGroupBox.Controls.Add(this.label5);
             this.editProjectsGroupBox.Controls.Add(this.label6);
-            this.editProjectsGroupBox.Location = new System.Drawing.Point(431, 552);
+            this.editProjectsGroupBox.Location = new System.Drawing.Point(431, 549);
             this.editProjectsGroupBox.Name = "editProjectsGroupBox";
             this.editProjectsGroupBox.Size = new System.Drawing.Size(401, 140);
             this.editProjectsGroupBox.TabIndex = 9;
