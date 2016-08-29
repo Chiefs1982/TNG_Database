@@ -549,7 +549,7 @@ namespace TNG_Database
             //create labels to show values
             //set 1
             Label masterArchive1 = new Label();
-            masterArchive1.Text = "Project ID: ";
+            masterArchive1.Text = "Archive Tape: ";
             masterArchive1.Width = 100;
 
             Label masterArchive2 = new Label();
@@ -557,7 +557,7 @@ namespace TNG_Database
 
             //set 2
             Label masterMedia1 = new Label();
-            masterMedia1.Text = "Project Name: ";
+            masterMedia1.Text = "Media: ";
             masterMedia1.Width = 100;
 
             Label masterMedia2 = new Label();
@@ -720,7 +720,7 @@ namespace TNG_Database
                     ClearFlowLayouts();
                     ButtonInvisibleAndDisabled();
                     masterArchiveValues = null;
-                    LoadMasterListPage();
+                    LoadMasterArchiveVideosPage();
                 }
                 else
                 {

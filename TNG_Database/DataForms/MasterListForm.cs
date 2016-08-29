@@ -23,6 +23,9 @@ namespace TNG_Database
         //Reference to CommonMethods
         CommonMethods commonMethod = CommonMethods.Instance();
 
+        //list to capture multiple selected itemms for deletion
+        List<MasterListValues> masterListValues = null;
+
         public MasterListForm()
         {
             InitializeComponent();
@@ -105,6 +108,7 @@ namespace TNG_Database
             }
 
             ShowDefaultGroupboxNothingSelected();
+            masterListListBox.SelectionMode = SelectionMode.MultiExtended;
         }
 
         /// <summary>
@@ -175,6 +179,32 @@ namespace TNG_Database
                 //Update Application Status
                 updateStatus.UpdateStatusBar("There was a problem", mainform);
             }
+        }
+
+        private int GetCameraName(string masterName)
+        {
+            int cameraName = 0;
+
+            //check to make sure masterList is not empty
+            if (masterList != null)
+            {
+                //Iterate through master list
+                foreach (MasterListValues item in masterList)
+                {
+                    //If name in master list matches item selected, then get name and camera info
+                    if (masterName.Equals(item.MasterArchive))
+                    {
+                        cameraName = Convert.ToInt32(item.MasterMedia);
+                    }
+                }
+            }
+            else
+            {
+                //Update Application Status
+                updateStatus.UpdateStatusBar("There was a problem", mainform);
+            }
+
+            return cameraName;
         }
 
         /// <summary>
@@ -256,14 +286,65 @@ namespace TNG_Database
         //Delete button pressed
         private void masterListDeleteButton_Click(object sender, EventArgs e)
         {
-            //Make every other groupbox invisible
-            MakeGroupboxesInvisible("delete");
+            if(masterListListBox.SelectedItems.Count == 1)
+            {
+                //Make every other groupbox invisible
+                MakeGroupboxesInvisible("delete");
 
-            //Label Name and Camera of item selected
-            LabelSelectedItem(deleteMasterNameMasterListLabel, deleteCameraNameMasterListLabel);
+                //Label Name and Camera of item selected
+                LabelSelectedItem(deleteMasterNameMasterListLabel, deleteCameraNameMasterListLabel);
 
-            //Make delete groupbox visible
-            deleteMasterListGroupBox.Visible = true;
+                //Make delete groupbox visible
+                deleteMasterListGroupBox.Visible = true;
+            }else if(masterListListBox.SelectedItems.Count > 1)
+            {
+                //multiple items selected in listview
+
+                //Show message box to make sure user is to be deleted
+                DialogResult deleteMessage = MessageBox.Show("Do you want to delete these " + masterListListBox.SelectedItems.Count + " entries?", "Deletion Warning!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+                //Check to see if user pressed yes or no
+                if (deleteMessage == DialogResult.Yes)
+                {
+
+                    //clear delete list
+                    if (masterListValues == null)
+                    {
+                        masterListValues = new List<MasterListValues>();
+                    }
+                    else
+                    {
+                        masterListValues.Clear();
+                    }
+
+                    //iterate over each item selected and save data in a value, then a list
+                    foreach (var item in masterListListBox.SelectedItems)
+                    {
+                        MasterListValues value = new MasterListValues(item.ToString(), GetCameraName(item.ToString()));
+
+                        masterListValues.Add(value);
+                    }
+
+
+
+                    if (masterListListBox.SelectedItems.Count > 1 && masterListValues.Count > 0)
+                    {
+                        Console.WriteLine("sending " + masterListValues.Count + " people to delete");
+                        updateStatus.UpdateStatusBar(AddToDatabase.DeleteMultipleMasterListselected(masterListValues) + " lists deleted", mainform);
+                    }
+
+                    PopulateMasterList();
+                    MakeGroupboxesInvisible("default");
+                    masterListDeleteButton.Enabled = false;
+                    masterListDeleteButton.Text = "Delete";
+
+                }
+                else if (deleteMessage == DialogResult.No)
+                {
+                    //No Pressed, nothing will be done
+                }
+            }
+            
         }
         #endregion
         //---------------------------------------------------
@@ -360,7 +441,7 @@ namespace TNG_Database
             if(addMasterListNameTextbox.Text.Length > 0)
             {
                 AddToDatabase database = new AddToDatabase();
-                sendValues = new MasterListValues(addMasterListNameTextbox.Text, commonMethod.GetCameraNumber(cameraAddMasterCombo.GetItemText(cameraAddMasterCombo.SelectedItem)));
+                sendValues = new MasterListValues(addMasterListNameTextbox.Text, commonMethod.GetCameraNumber(cameraAddMasterCombo.Text));
 
                 if (database.AddMasterList(sendValues))
                 {
@@ -462,7 +543,7 @@ namespace TNG_Database
         //ListBox selection change
         private void masterListListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(masterListListBox.SelectedIndex != -1)
+            if(masterListListBox.SelectedIndex != -1 && masterListListBox.SelectedItems.Count == 1)
             {
                 //Selection made
                 //Make everything invisible except default GB
@@ -488,10 +569,26 @@ namespace TNG_Database
 
                 //Update Application Status
                 updateStatus.UpdateStatusBar(sendValues.MasterArchive + " Selected", mainform);
+                masterListDeleteButton.Text = "Delete";
             }
-            else
+            else if (masterListListBox.SelectedIndex != -1 && masterListListBox.SelectedItems.Count > 1)
+            {
+                //more than one item selected
+                MakeGroupboxesInvisible();
+
+                masterListEditButton.Enabled = false;
+                masterListDeleteButton.Enabled = true;
+                masterListDeleteButton.Text = "Delete(" + masterListListBox.SelectedItems.Count + ")";
+                updateStatus.UpdateStatusBar(masterListListBox.SelectedItems.Count + " users selected", mainform);
+            }
+            else if (masterListListBox.SelectedItems.Count == 0)
             {
                 ShowDefaultGroupboxNothingSelected();
+                updateStatus.UpdateStatusBar("Nothing Selected", mainform);
+                masterListEditButton.Enabled = false;
+                masterListDeleteButton.Enabled = false;
+
+                masterListDeleteButton.Text = "Delete";
             }
         }
         //-----------------------------------------------

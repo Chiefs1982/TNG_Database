@@ -73,6 +73,7 @@
             this.peopleFormListBox.FormattingEnabled = true;
             this.peopleFormListBox.Location = new System.Drawing.Point(12, 94);
             this.peopleFormListBox.Name = "peopleFormListBox";
+            this.peopleFormListBox.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
             this.peopleFormListBox.Size = new System.Drawing.Size(156, 238);
             this.peopleFormListBox.TabIndex = 4;
             this.peopleFormListBox.SelectedIndexChanged += new System.EventHandler(this.peopleFormListBox_SelectedIndexChanged);

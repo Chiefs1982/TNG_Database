@@ -32,6 +32,9 @@ namespace TNG_Database
         CommonMethods commonMethod = CommonMethods.Instance();
         UpdateStatus updateStatus = UpdateStatus.Instance();
 
+        //list to delete multiple selections
+        List<MasterArchiveVideoValues> archivesToDelete = null;
+
         public MasterArchiveVideosForm(TNG_Database.MainForm parent)
         {
             InitializeComponent();
@@ -127,6 +130,8 @@ namespace TNG_Database
             {
                 updateStatus.UpdateStatusBar("No Projects in database", mainform);
             }
+
+            archiveDeleteButton.Text = "Delete";
         }
 
         /// <summary>
@@ -267,17 +272,71 @@ namespace TNG_Database
         //Delete Button Pressed
         private void archiveDeleteButton_Click(object sender, EventArgs e)
         {
-            //set labels to seleted values in listview
-            deleteArchiveIDLabel.Text = listValues.ProjectID;
-            deleteArchiveNameLabel.Text = listValues.VideoName;
-            deleteArchiveMasterTapeLabel.Text = listValues.MasterTape;
-            deleteArchiveClipLabel.Text = listValues.ClipNumber;
+            if(archiveListView.SelectedItems.Count == 1)
+            {
+                //set labels to seleted values in listview
+                deleteArchiveIDLabel.Text = listValues.ProjectID;
+                deleteArchiveNameLabel.Text = listValues.VideoName;
+                deleteArchiveMasterTapeLabel.Text = listValues.MasterTape;
+                deleteArchiveClipLabel.Text = listValues.ClipNumber;
 
-            //open delete groupbox
-            CloseGroupBox("delete");
+                //open delete groupbox
+                CloseGroupBox("delete");
 
-            //give the cancel button focus
-            deleteArchiveCancelButton.Focus();
+                //give the cancel button focus
+                deleteArchiveCancelButton.Focus();
+            }
+            else if (archiveListView.SelectedItems.Count > 1)
+            {
+
+                //multiple items selected in listview
+
+                //Show message box to make sure user is to be deleted
+                DialogResult deleteMessage = MessageBox.Show("Do you want to delete these " + archiveListView.SelectedItems.Count + " entries?", "Deletion Warning!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+                //Check to see if user pressed yes or no
+                if (deleteMessage == DialogResult.Yes)
+                {
+
+                    //clear delete list
+                    if (archivesToDelete == null)
+                    {
+                        archivesToDelete = new List<MasterArchiveVideoValues>();
+                    }
+                    else
+                    {
+                        archivesToDelete.Clear();
+                    }
+
+                    //iterate over each item selected and save data in a value, then a list
+                    foreach (ListViewItem item in archiveListView.SelectedItems)
+                    {
+                        MasterArchiveVideoValues value = new MasterArchiveVideoValues(
+                            item.SubItems[0].Text, item.SubItems[1].Text, item.SubItems[2].Text, item.SubItems[3].Text, Convert.ToInt32(item.Tag)
+                            );
+
+                        archivesToDelete.Add(value);
+                    }
+
+
+
+                    if (archiveListView.SelectedItems.Count > 1 && archivesToDelete.Count > 0)
+                    {
+                        Console.WriteLine("sending " + archivesToDelete.Count + " items to delete");
+                        updateStatus.UpdateStatusBar(AddToDatabase.DeleteMultipleMasterArchiveselected(archivesToDelete) + " items deleted", mainform);
+                    }
+
+                    PopulateListView();
+                    CloseGroupBox();
+
+                }
+                else if (deleteMessage == DialogResult.No)
+                {
+                    //No Pressed, nothing will be done
+                }
+        }
+
+            
         }
 
         #endregion
@@ -474,7 +533,7 @@ namespace TNG_Database
         {
             //updates default groupbox based on listview selection
             CloseGroupBox();
-            if (archiveListView.SelectedItems.Count > 0)
+            if (archiveListView.SelectedItems.Count == 1)
             {
                 listValues.ID = Convert.ToInt32(archiveListView.SelectedItems[0].Tag);
                 listValues.ProjectID = archiveListView.SelectedItems[0].SubItems[0].Text;
@@ -485,17 +544,26 @@ namespace TNG_Database
                 //make selected panel visible
                 defaultLabel.Visible = false;
                 defaultLabelPanel.Visible = true;
+                archiveDeleteButton.Text = "Delete";
             }
-            else
+            else if (archiveListView.SelectedItems.Count > 1)
             {
-                if (archiveListView.SelectedItems.Count == 0)
-                {
-                    updateStatus.UpdateStatusBar("Nothing Selected", mainform);
+                //more than one item selected
+                archiveUpdateButton.Enabled = false;
+                archiveDeleteButton.Enabled = true;
+                archiveDeleteButton.Text = "Delete(" + archiveListView.SelectedItems.Count + ")";
+                updateStatus.UpdateStatusBar("Delete(" + archiveListView.SelectedItems.Count + ") Archive Entries", mainform);
+                defaultLabelPanel.Visible = false;
+                defaultLabel.Visible = true;
+            }
+            else if(archiveListView.SelectedItems.Count == 0)
+            {
+                updateStatus.UpdateStatusBar("Nothing Selected", mainform);
 
-                    //make default nothing selected label visible
-                    defaultLabelPanel.Visible = false;
-                    defaultLabel.Visible = true;
-                }
+                //make default nothing selected label visible
+                defaultLabelPanel.Visible = false;
+                defaultLabel.Visible = true;
+                archiveDeleteButton.Text = "Delete";
             }
         }
 

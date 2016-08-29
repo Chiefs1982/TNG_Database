@@ -18,6 +18,9 @@ namespace TNG_Database
         private TNG_Database.MainForm mainform;
 
         UpdateStatus updateStatus = UpdateStatus.Instance();
+
+        //list to capture multiple selected itemms for deletion
+        List<PeopleValues> peopleValues = null;
         
         //Initialize People Form
         public PeopleForm()
@@ -47,6 +50,8 @@ namespace TNG_Database
             deleteUserPeopleButton.Enabled = false;
             defaultEditGroupBox.Location = groupboxPoint;
             defaultEditGroupBox.Visible = true;
+
+            peopleFormListBox.SelectionMode = SelectionMode.MultiExtended;
         }
 
         //------------------------------------------------
@@ -77,6 +82,8 @@ namespace TNG_Database
                     peopleFormListBox.Items.Add(user);
                 }
             }
+
+            peopleFormListBox.SelectionMode = SelectionMode.MultiExtended;
         }
 
         //--------------------------------------------
@@ -84,10 +91,31 @@ namespace TNG_Database
         private void peopleFormListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             //If edit & delete buttons are not enabled AND selection is not on white space then enable them
-            if(!editUserPeopleButton.Enabled && !deleteUserPeopleButton.Enabled && peopleFormListBox.SelectedIndex != -1)
+            if(peopleFormListBox.SelectedIndex != -1 && peopleFormListBox.SelectedItems.Count == 1)
             {
                 editUserPeopleButton.Enabled = true;
                 deleteUserPeopleButton.Enabled = true;
+
+                deleteUserPeopleButton.Text = "Delete User";
+                updateStatus.UpdateStatusBar(peopleFormListBox.SelectedItem.ToString() + " selected", mainform);
+            }
+            else if (peopleFormListBox.SelectedItems.Count > 1)
+            {
+                //more than one item selected
+                CloseOpenGroupBox("default");
+
+                editUserPeopleButton.Enabled = false;
+                deleteUserPeopleButton.Enabled = true;
+                deleteUserPeopleButton.Text = "Delete(" + peopleFormListBox.SelectedItems.Count + ")";
+                updateStatus.UpdateStatusBar(peopleFormListBox.SelectedItems.Count + " users selected", mainform);
+            }
+            else if(peopleFormListBox.SelectedItems.Count == 0)
+            {
+                updateStatus.UpdateStatusBar("Nothing Selected", mainform);
+                editUserPeopleButton.Enabled = false;
+                deleteUserPeopleButton.Enabled = false;
+
+                deleteUserPeopleButton.Text = "Delete User";
             }
         }
 
@@ -126,10 +154,11 @@ namespace TNG_Database
                 default:
                     editUserGroupBox.Visible = false;
                     deleteUserGroupBox.Visible = false;
-                    addUserGroupBox.Visible = true;
+                    addUserGroupBox.Visible = false;
                     defaultEditGroupBox.Visible = true;
                     break;
             }
+            peopleFormListBox.SelectionMode = SelectionMode.MultiExtended;
         }
 
         //---------------------------------------------------------
@@ -163,7 +192,7 @@ namespace TNG_Database
         private void deleteUserPeopleButton_Click(object sender, EventArgs e)
         {
             //Check to make sure a user is selected in the listbox
-            if (peopleFormListBox.SelectedIndex != -1)
+            if (peopleFormListBox.SelectedIndex != -1 && peopleFormListBox.SelectedItems.Count == 1)
             {
                 //Check to make sure other Group Boxes aren't visible
                 if (editUserGroupBox.Visible || addUserGroupBox.Visible || defaultEditGroupBox.Visible)
@@ -178,6 +207,54 @@ namespace TNG_Database
                 deleteUserNameLabel.Text = peopleFormListBox.GetItemText(peopleFormListBox.SelectedItem);
                 deleteUserGroupBox.Visible = true;
                 deleteUserCancelButton.Focus();
+            }else if (peopleFormListBox.SelectedItems.Count > 1)
+            {
+                //multiple items selected in listview
+
+                //Show message box to make sure user is to be deleted
+                DialogResult deleteMessage = MessageBox.Show("Do you want to delete these " + peopleFormListBox.SelectedItems.Count + " entries?", "Deletion Warning!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+                //Check to see if user pressed yes or no
+                if (deleteMessage == DialogResult.Yes)
+                {
+
+                    //clear delete list
+                    if (peopleValues == null)
+                    {
+                        peopleValues = new List<PeopleValues>();
+                    }
+                    else
+                    {
+                        peopleValues.Clear();
+                    }
+
+                    //iterate over each item selected and save data in a value, then a list
+                    foreach (var item in peopleFormListBox.SelectedItems)
+                    {
+                        PeopleValues value = new PeopleValues(item.ToString());
+
+                        peopleValues.Add(value);
+                    }
+
+
+
+                    if (peopleFormListBox.SelectedItems.Count > 1 && peopleValues.Count > 0)
+                    {
+                        Console.WriteLine("sending " + peopleValues.Count + " people to delete");
+                        updateStatus.UpdateStatusBar(AddToDatabase.DeleteMultiplePeopleSelected(peopleValues) + " people deleted", mainform);
+                    }
+
+                    PopulateUserList();
+                    CloseOpenGroupBox("default");
+                    deleteUserPeopleButton.Enabled = false;
+                    deleteUserPeopleButton.Text = "Delete User";
+
+                }
+                else if (deleteMessage == DialogResult.No)
+                {
+                    //No Pressed, nothing will be done
+                }
+
             }
         }
 

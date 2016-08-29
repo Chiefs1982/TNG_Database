@@ -561,7 +561,6 @@
             this.columnClip});
             this.archiveListView.FullRowSelect = true;
             this.archiveListView.Location = new System.Drawing.Point(12, 48);
-            this.archiveListView.MultiSelect = false;
             this.archiveListView.Name = "archiveListView";
             this.archiveListView.Size = new System.Drawing.Size(322, 440);
             this.archiveListView.TabIndex = 4;

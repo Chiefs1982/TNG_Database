@@ -81,7 +81,7 @@ namespace TNG_Database
         {
             switch (camera.ToLower())
             {
-                case "cannon":
+                case "canon":
                     return 2;
                 case "xdcam":
                     return 1;
