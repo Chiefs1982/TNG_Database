@@ -166,7 +166,7 @@ namespace TNG_Database
                 listViewIndex = Convert.ToInt32(projectsListView.SelectedItems[0].Tag);
 
                 //Update Status label
-                updateStatus.UpdateStatusBar(projectsListView.SelectedItems[0].SubItems[0].Text + " item selected", mainform);
+                updateStatus.UpdateStatusBar(projectsListView.SelectedItems[0].SubItems[0].Text + " item selected", mainform,0);
 
                 //set items in default panel to item selected
                 defaultProjectIDLabel.Text = projectsListView.SelectedItems[0].SubItems[0].Text;
@@ -502,8 +502,6 @@ namespace TNG_Database
             }
             else if(projectsListView.SelectedItems.Count == 0)
             {
-                updateStatus.UpdateStatusBar("Nothing Selected", mainform);
-
                 //make default nothing selected label visible
                 defaultLabelPanel.Visible = false;
                 defaultLabel.Visible = true;

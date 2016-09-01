@@ -167,7 +167,7 @@ namespace TNG_Database
             if (searchList.Count.Equals(0))
             {
                 //No entries returned
-                updateStatus.UpdateStatusBar("No Items Mathced Search, Try Again", mainForm);
+                updateStatus.UpdateStatusBar("No Items Matched Search, Try Again", mainForm);
                 Console.WriteLine("Nothing found");
             }
             else
@@ -444,7 +444,7 @@ namespace TNG_Database
         //Listview item index changed
         private void searchListView_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (searchListView.SelectedItems.Count > 0)
+            if (searchListView.SelectedItems.Count == 1)
             {
                 SetCurrentSelection();
                 AddListItemToValues();

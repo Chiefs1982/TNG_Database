@@ -114,10 +114,7 @@ namespace TNG_Database
             //edit
             editTagsTextbox.MouseHover += AddTagsTextbox_MouseHover;
             editTagsTextbox.MouseLeave += AddTagsTextbox_MouseLeave;
-
-            //Tell user the database is ready for use
-            updateStatus.UpdateStatusBar("Database is Loaded and Ready", mainform);
-
+            
             //keep items highlighted
             tapeListListView.HideSelection = false;
 
@@ -150,7 +147,7 @@ namespace TNG_Database
             if (tapeListValues[0].ID.Equals(0))
             {
                 //nothing was in database to return
-                updateStatus.UpdateStatusBar("There are no items in the database", mainform);
+                updateStatus.UpdateStatusBar("There are no items in the database", mainform,0);
             }
             else
             {
@@ -158,10 +155,10 @@ namespace TNG_Database
                 foreach (TapeDatabaseValues values in tapeListValues)
                 {
                     tapeListListView.Items.Add(new ListViewItem(new string[] { values.ID.ToString(), values.ProjectId, values.ProjectName, values.TapeName, values.TapeNumber, commonMethod.GetCameraName(values.Camera), values.TapeTags, values.DateShot, values.MasterArchive, values.PersonEntered }));
+                    //Tell user the database is ready for use
+                    updateStatus.UpdateStatusBar("Database is Loaded and Ready", mainform, 0);
                 }
             }
-
-            
             
         }
         //----------------------------------------------------        
@@ -222,7 +219,7 @@ namespace TNG_Database
                 listViewIndex = tapeListListView.SelectedIndices[0];
 
                 //Update Status label
-                updateStatus.UpdateStatusBar(tapeListListView.SelectedItems[0].SubItems[1].Text + " item selected", mainform);
+                updateStatus.UpdateStatusBar(tapeListListView.SelectedItems[0].SubItems[1].Text + " item selected", mainform,0);
 
                 //set items in default panel to item selected
                 defaultProjectIDLabel.Text = tapeListListView.SelectedItems[0].SubItems[1].Text;
@@ -253,7 +250,7 @@ namespace TNG_Database
 
                 //set default label to display number of items
                 defaultNoItemSelectedLabel.Visible = false;
-                updateStatus.UpdateStatusBar(tapeListListView.SelectedItems.Count + " items selected", mainform);
+                updateStatus.UpdateStatusBar(tapeListListView.SelectedItems.Count + " items selected", mainform,0);
             }
             else
             {
@@ -622,12 +619,13 @@ namespace TNG_Database
                 if (addDB.AddTapeDatabase(tapeValues))
                 {
                     //update status and clear all controls and variables
+                    updateStatus.UpdateStatusBar("Tape Added to Database", mainform);
                     PopulateTapeList();
                     tapeValues.Clear();
                     ClearAddControls();
                     MakeBoxesVisible();
                     tapeListListView.Focus();
-                    updateStatus.UpdateStatusBar("Tape Added to Database", mainform);
+
                 }
             }else
             {
@@ -868,7 +866,6 @@ namespace TNG_Database
             else if (tapeListListView.SelectedItems.Count == 0)
             {
                 //no items selected
-                updateStatus.UpdateStatusBar("Nothing Selected", mainform);
                 tapesToDelete = null;
             }
         }

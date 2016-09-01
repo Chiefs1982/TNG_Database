@@ -84,6 +84,8 @@ namespace TNG_Database
             }
 
             peopleFormListBox.SelectionMode = SelectionMode.MultiExtended;
+
+            updateStatus.UpdateStatusBar("Nothing Selected", mainform,0);
         }
 
         //--------------------------------------------
@@ -97,7 +99,7 @@ namespace TNG_Database
                 deleteUserPeopleButton.Enabled = true;
 
                 deleteUserPeopleButton.Text = "Delete User";
-                updateStatus.UpdateStatusBar(peopleFormListBox.SelectedItem.ToString() + " selected", mainform);
+                updateStatus.UpdateStatusBar(peopleFormListBox.SelectedItem.ToString() + " selected", mainform,0);
             }
             else if (peopleFormListBox.SelectedItems.Count > 1)
             {
@@ -107,11 +109,10 @@ namespace TNG_Database
                 editUserPeopleButton.Enabled = false;
                 deleteUserPeopleButton.Enabled = true;
                 deleteUserPeopleButton.Text = "Delete(" + peopleFormListBox.SelectedItems.Count + ")";
-                updateStatus.UpdateStatusBar(peopleFormListBox.SelectedItems.Count + " users selected", mainform);
+                updateStatus.UpdateStatusBar(peopleFormListBox.SelectedItems.Count + " users selected", mainform,0);
             }
             else if(peopleFormListBox.SelectedItems.Count == 0)
             {
-                updateStatus.UpdateStatusBar("Nothing Selected", mainform);
                 editUserPeopleButton.Enabled = false;
                 deleteUserPeopleButton.Enabled = false;
 

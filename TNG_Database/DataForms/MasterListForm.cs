@@ -109,6 +109,7 @@ namespace TNG_Database
 
             ShowDefaultGroupboxNothingSelected();
             masterListListBox.SelectionMode = SelectionMode.MultiExtended;
+            updateStatus.UpdateStatusBar("Nothing Selected", mainform);
         }
 
         /// <summary>
@@ -568,7 +569,7 @@ namespace TNG_Database
                 defaultCameraNameMasterListLabel.Visible = true;
 
                 //Update Application Status
-                updateStatus.UpdateStatusBar(sendValues.MasterArchive + " Selected", mainform);
+                updateStatus.UpdateStatusBar(sendValues.MasterArchive + " Selected", mainform,0);
                 masterListDeleteButton.Text = "Delete";
             }
             else if (masterListListBox.SelectedIndex != -1 && masterListListBox.SelectedItems.Count > 1)
@@ -579,12 +580,11 @@ namespace TNG_Database
                 masterListEditButton.Enabled = false;
                 masterListDeleteButton.Enabled = true;
                 masterListDeleteButton.Text = "Delete(" + masterListListBox.SelectedItems.Count + ")";
-                updateStatus.UpdateStatusBar(masterListListBox.SelectedItems.Count + " users selected", mainform);
+                updateStatus.UpdateStatusBar(masterListListBox.SelectedItems.Count + " users selected", mainform,0);
             }
             else if (masterListListBox.SelectedItems.Count == 0)
             {
                 ShowDefaultGroupboxNothingSelected();
-                updateStatus.UpdateStatusBar("Nothing Selected", mainform);
                 masterListEditButton.Enabled = false;
                 masterListDeleteButton.Enabled = false;
 

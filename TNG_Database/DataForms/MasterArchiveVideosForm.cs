@@ -193,7 +193,7 @@ namespace TNG_Database
                 listViewIndex = Convert.ToInt32(archiveListView.SelectedItems[0].Tag);
 
                 //Update Status label
-                updateStatus.UpdateStatusBar(archiveListView.SelectedItems[0].SubItems[0].Text + " item selected", mainform);
+                updateStatus.UpdateStatusBar(archiveListView.SelectedItems[0].SubItems[0].Text + " item selected", mainform,0);
 
                 //set items in default panel to item selected
                 defaultArchiveIDLabel.Text = archiveListView.SelectedItems[0].SubItems[0].Text;
@@ -552,14 +552,12 @@ namespace TNG_Database
                 archiveUpdateButton.Enabled = false;
                 archiveDeleteButton.Enabled = true;
                 archiveDeleteButton.Text = "Delete(" + archiveListView.SelectedItems.Count + ")";
-                updateStatus.UpdateStatusBar("Delete(" + archiveListView.SelectedItems.Count + ") Archive Entries", mainform);
+                updateStatus.UpdateStatusBar("Delete(" + archiveListView.SelectedItems.Count + ") Archive Entries", mainform,0);
                 defaultLabelPanel.Visible = false;
                 defaultLabel.Visible = true;
             }
             else if(archiveListView.SelectedItems.Count == 0)
             {
-                updateStatus.UpdateStatusBar("Nothing Selected", mainform);
-
                 //make default nothing selected label visible
                 defaultLabelPanel.Visible = false;
                 defaultLabel.Visible = true;

@@ -13,6 +13,7 @@ using TNG_Database.Values;
 using Spire.Doc;
 using Spire.Doc.Documents;
 using System.Globalization;
+using System.Timers;
 
 namespace TNG_Database
 {
@@ -45,6 +46,11 @@ namespace TNG_Database
 
         //Context menu strip
         private ContextMenuStrip peopleContext;
+
+        //status label static
+        private static ToolStripStatusLabel updateStatusLabel;
+
+        System.Timers.Timer statTimer;
 
         List<string> people;
 
@@ -86,7 +92,8 @@ namespace TNG_Database
             computerInfo.UpdateUserName(this);
 
             pasteToolStripMenuItem.Enabled = false;
-            
+
+            updateStatusLabel = applicationStatusLabel;
         }
 
         #region Class Methods
@@ -795,9 +802,12 @@ namespace TNG_Database
             applicationStatusLabel.Text = update;
         }
 
-
-        public delegate void UpdateProgressBarCallback(int add);
-
+        //Static update Status label
+        public static void UpdateStatusBarOntheBottom(string update)
+        {
+            updateStatusLabel.Text = update;
+        }
+        
         private void UpdateProgressBar(int add)
         {
             mainFormProgressBar.Increment(add);
@@ -1096,7 +1106,5 @@ namespace TNG_Database
         {
             
         }
-
-        
     }
 }
