@@ -609,6 +609,11 @@ namespace TNG_Database
                 tapeValues.TapeName = addTapeNameTextbox.Text;
                 tapeValues.TapeNumber = addTapeNumUpDown.Value.ToString();
                 tapeValues.Camera = commonMethod.GetCameraNumber(addCameraComboBox.Text);
+                //if there is text in tags textbox then add it on the end of the tag string
+                if(addTagsTextbox.TextLength > 0 && !addTagList.Contains(addTagsTextbox.Text.ToLower().Replace(",", "")))
+                {
+                    addTagList.Add(addTagsTextbox.Text);
+                }
                 tapeValues.TapeTags = String.Join(",", addTagList);
                 tapeValues.MasterArchive = addTapeMasterArchiveLabel.Text;
                 tapeValues.DateShot = commonMethod.ConvertDateFromDropdownForDB(addDateDateTime.Value);
@@ -693,6 +698,12 @@ namespace TNG_Database
             }else
             {
                 projectNameEdit = editTapeNameTextbox.Text;
+            }
+
+            //if there is text in tags textbox then add it on the end of the tag string
+            if (editTagsTextbox.TextLength > 0 && !editTagList.Contains(editTagsTextbox.Text.ToLower().Replace(",", "")))
+            {
+                editTagList.Add(editTagsTextbox.Text);
             }
 
             //Create new TapeDatabaseValues for edited entry
@@ -979,7 +990,7 @@ namespace TNG_Database
             if (e.KeyChar.Equals(',') || e.KeyChar.Equals((char)Keys.Enter))
             {
                 //check to see if there is anything in the textbox
-                if(addTagsTextbox.Text.Length > 0)
+                if(addTagsTextbox.Text.Length > 0 && !addTagList.Contains(addTagsTextbox.Text.ToLower().Replace(",","")))
                 {
                     //use text from textbox, remove the ',' and add it to a list, and display tags
                     string text = addTagsTextbox.Text;
@@ -1000,7 +1011,7 @@ namespace TNG_Database
             if (e.KeyChar.Equals(',') || e.KeyChar.Equals((char)Keys.Enter))
             {
                 //check to see if there is anything in the textbox
-                if (editTagsTextbox.Text.Length > 0)
+                if (editTagsTextbox.Text.Length > 0 && !editTagList.Contains(editTagsTextbox.Text.ToLower().Replace(",", "")))
                 {
                     //use text from textbox, remove the ',' and add it to a list, and display tags
                     string text = editTagsTextbox.Text;

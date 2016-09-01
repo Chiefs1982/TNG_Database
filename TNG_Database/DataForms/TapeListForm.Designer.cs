@@ -461,7 +461,7 @@
             this.addTapeGroupbox.Controls.Add(this.addProjectIDTextbox);
             this.addTapeGroupbox.Controls.Add(this.addProjectLabel);
             this.addTapeGroupbox.Controls.Add(this.addIDLabel);
-            this.addTapeGroupbox.Location = new System.Drawing.Point(744, 317);
+            this.addTapeGroupbox.Location = new System.Drawing.Point(45, 56);
             this.addTapeGroupbox.Name = "addTapeGroupbox";
             this.addTapeGroupbox.Size = new System.Drawing.Size(726, 218);
             this.addTapeGroupbox.TabIndex = 5;
