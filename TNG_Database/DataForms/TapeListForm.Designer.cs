@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.tapeListListView = new System.Windows.Forms.ListView();
-            this.columnID = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnPID = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnProjectName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnTapeName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -140,7 +139,6 @@
             // tapeListListView
             // 
             this.tapeListListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnID,
             this.columnPID,
             this.columnProjectName,
             this.columnTapeName,
@@ -160,11 +158,6 @@
             this.tapeListListView.View = System.Windows.Forms.View.Details;
             this.tapeListListView.SelectedIndexChanged += new System.EventHandler(this.tapeListListView_SelectedIndexChanged);
             // 
-            // columnID
-            // 
-            this.columnID.Text = "#";
-            this.columnID.Width = 25;
-            // 
             // columnPID
             // 
             this.columnPID.Text = "Project ID";
@@ -172,7 +165,7 @@
             // columnProjectName
             // 
             this.columnProjectName.Text = "Project Name";
-            this.columnProjectName.Width = 120;
+            this.columnProjectName.Width = 130;
             // 
             // columnTapeName
             // 
@@ -207,6 +200,7 @@
             // columnPerson
             // 
             this.columnPerson.Text = "Entered By";
+            this.columnPerson.Width = 70;
             // 
             // tapeListAddNewButton
             // 
@@ -1142,7 +1136,6 @@
         #endregion
 
         private System.Windows.Forms.ListView tapeListListView;
-        private System.Windows.Forms.ColumnHeader columnID;
         private System.Windows.Forms.ColumnHeader columnPID;
         private System.Windows.Forms.ColumnHeader columnProjectName;
         private System.Windows.Forms.ColumnHeader columnTapeName;

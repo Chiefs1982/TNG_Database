@@ -154,7 +154,7 @@ namespace TNG_Database
                 //List returned values, populate listview
                 foreach (TapeDatabaseValues values in tapeListValues)
                 {
-                    tapeListListView.Items.Add(new ListViewItem(new string[] { values.ID.ToString(), values.ProjectId, values.ProjectName, values.TapeName, values.TapeNumber, commonMethod.GetCameraName(values.Camera), values.TapeTags, values.DateShot, values.MasterArchive, values.PersonEntered }));
+                    tapeListListView.Items.Add(new ListViewItem(new string[] { values.ProjectId, values.ProjectName, values.TapeName, values.TapeNumber, commonMethod.GetCameraName(values.Camera), values.TapeTags, values.DateShot, values.MasterArchive, values.PersonEntered })).Tag = Convert.ToInt32(values.ID);
                     //Tell user the database is ready for use
                     updateStatus.UpdateStatusBar("Database is Loaded and Ready", mainform, 0);
                 }
@@ -219,20 +219,20 @@ namespace TNG_Database
                 listViewIndex = tapeListListView.SelectedIndices[0];
 
                 //Update Status label
-                updateStatus.UpdateStatusBar(tapeListListView.SelectedItems[0].SubItems[1].Text + " item selected", mainform,0);
+                updateStatus.UpdateStatusBar(tapeListListView.SelectedItems[0].SubItems[0].Text + " item selected", mainform,0);
 
                 //set items in default panel to item selected
-                defaultProjectIDLabel.Text = tapeListListView.SelectedItems[0].SubItems[1].Text;
-                defaultProjectNameLabel.Text = tapeListListView.SelectedItems[0].SubItems[2].Text;
-                defaultTapeNameLabel.Text = tapeListListView.SelectedItems[0].SubItems[3].Text;
-                defaultTapeNumberLabel.Text = tapeListListView.SelectedItems[0].SubItems[4].Text;
-                defaultCameraLabel.Text = tapeListListView.SelectedItems[0].SubItems[5].Text;
+                defaultProjectIDLabel.Text = tapeListListView.SelectedItems[0].SubItems[0].Text;
+                defaultProjectNameLabel.Text = tapeListListView.SelectedItems[0].SubItems[1].Text;
+                defaultTapeNameLabel.Text = tapeListListView.SelectedItems[0].SubItems[2].Text;
+                defaultTapeNumberLabel.Text = tapeListListView.SelectedItems[0].SubItems[3].Text;
+                defaultCameraLabel.Text = tapeListListView.SelectedItems[0].SubItems[4].Text;
                 //Split csv into list and display
-                defaultTagList = tapeListListView.SelectedItems[0].SubItems[6].Text.Split(',').ToList();
+                defaultTagList = tapeListListView.SelectedItems[0].SubItems[5].Text.Split(',').ToList();
                 DisplayTags("default", defaultTagFlowLayoutPanel, defaultTagList);
-                defaultDateLabel.Text = tapeListListView.SelectedItems[0].SubItems[7].Text;
-                defaultMasterArchiveLabel.Text = tapeListListView.SelectedItems[0].SubItems[8].Text;
-                defaultPersonLabel.Text = tapeListListView.SelectedItems[0].SubItems[9].Text;
+                defaultDateLabel.Text = tapeListListView.SelectedItems[0].SubItems[6].Text;
+                defaultMasterArchiveLabel.Text = tapeListListView.SelectedItems[0].SubItems[7].Text;
+                defaultPersonLabel.Text = tapeListListView.SelectedItems[0].SubItems[8].Text;
 
                 //swap default views
                 defaultNoItemSelectedLabel.Visible = false;
@@ -360,16 +360,16 @@ namespace TNG_Database
         /// </summary>
         private void LoadTapeValuesFromList()
         {
-            tapeValues.ID = Convert.ToInt32(tapeListListView.SelectedItems[0].SubItems[0].Text);
-            tapeValues.ProjectId = tapeListListView.SelectedItems[0].SubItems[1].Text;
-            tapeValues.ProjectName = tapeListListView.SelectedItems[0].SubItems[2].Text;
-            tapeValues.TapeName = tapeListListView.SelectedItems[0].SubItems[3].Text;
-            tapeValues.TapeNumber = tapeListListView.SelectedItems[0].SubItems[4].Text;
-            tapeValues.Camera = commonMethod.GetCameraNumber(tapeListListView.SelectedItems[0].SubItems[5].Text);
-            tapeValues.TapeTags = tapeListListView.SelectedItems[0].SubItems[6].Text;
-            tapeValues.DateShot = tapeListListView.SelectedItems[0].SubItems[7].Text;
-            tapeValues.MasterArchive = tapeListListView.SelectedItems[0].SubItems[8].Text;
-            tapeValues.PersonEntered = tapeListListView.SelectedItems[0].SubItems[9].Text;
+            tapeValues.ID = Convert.ToInt32(tapeListListView.SelectedItems[0].Tag);
+            tapeValues.ProjectId = tapeListListView.SelectedItems[0].SubItems[0].Text;
+            tapeValues.ProjectName = tapeListListView.SelectedItems[0].SubItems[1].Text;
+            tapeValues.TapeName = tapeListListView.SelectedItems[0].SubItems[2].Text;
+            tapeValues.TapeNumber = tapeListListView.SelectedItems[0].SubItems[3].Text;
+            tapeValues.Camera = commonMethod.GetCameraNumber(tapeListListView.SelectedItems[0].SubItems[4].Text);
+            tapeValues.TapeTags = tapeListListView.SelectedItems[0].SubItems[5].Text;
+            tapeValues.DateShot = tapeListListView.SelectedItems[0].SubItems[6].Text;
+            tapeValues.MasterArchive = tapeListListView.SelectedItems[0].SubItems[7].Text;
+            tapeValues.PersonEntered = tapeListListView.SelectedItems[0].SubItems[8].Text;
         }
 
         /// <summary>
@@ -553,9 +553,9 @@ namespace TNG_Database
                     foreach (ListViewItem item in tapeListListView.SelectedItems)
                     {
                         TapeDatabaseValues value = new TapeDatabaseValues(
-                            item.SubItems[3].Text, item.SubItems[4].Text, item.SubItems[1].Text, item.SubItems[2].Text,
-                            commonMethod.GetCameraNumber(item.SubItems[5].Text), item.SubItems[6].Text, item.SubItems[7].Text,
-                            item.SubItems[8].Text, item.SubItems[9].Text, Convert.ToInt32(item.SubItems[0].Text)
+                            item.SubItems[2].Text, item.SubItems[3].Text, item.SubItems[0].Text, item.SubItems[1].Text,
+                            commonMethod.GetCameraNumber(item.SubItems[4].Text), item.SubItems[5].Text, item.SubItems[6].Text,
+                            item.SubItems[7].Text, item.SubItems[8].Text, Convert.ToInt32(item.Tag)
                             );
 
                         tapesToDelete.Add(value);
@@ -842,16 +842,16 @@ namespace TNG_Database
             MakeBoxesVisible();
             if (tapeListListView.SelectedItems.Count == 1)
             {
-                listValues.ID = Convert.ToInt32(tapeListListView.SelectedItems[0].SubItems[0].Text);
-                listValues.ProjectId = tapeListListView.SelectedItems[0].SubItems[1].Text;
-                listValues.ProjectName = tapeListListView.SelectedItems[0].SubItems[2].Text;
-                listValues.TapeName = tapeListListView.SelectedItems[0].SubItems[3].Text;
-                listValues.TapeNumber = tapeListListView.SelectedItems[0].SubItems[4].Text;
-                listValues.Camera = commonMethod.GetCameraNumber(tapeListListView.SelectedItems[0].SubItems[5].Text);
-                listValues.TapeTags = tapeListListView.SelectedItems[0].SubItems[6].Text;
-                listValues.DateShot = tapeListListView.SelectedItems[0].SubItems[7].Text;
-                listValues.MasterArchive = tapeListListView.SelectedItems[0].SubItems[8].Text;
-                listValues.PersonEntered = tapeListListView.SelectedItems[0].SubItems[9].Text;
+                listValues.ID = Convert.ToInt32(tapeListListView.SelectedItems[0].Tag);
+                listValues.ProjectId = tapeListListView.SelectedItems[0].SubItems[0].Text;
+                listValues.ProjectName = tapeListListView.SelectedItems[0].SubItems[1].Text;
+                listValues.TapeName = tapeListListView.SelectedItems[0].SubItems[2].Text;
+                listValues.TapeNumber = tapeListListView.SelectedItems[0].SubItems[3].Text;
+                listValues.Camera = commonMethod.GetCameraNumber(tapeListListView.SelectedItems[0].SubItems[4].Text);
+                listValues.TapeTags = tapeListListView.SelectedItems[0].SubItems[5].Text;
+                listValues.DateShot = tapeListListView.SelectedItems[0].SubItems[6].Text;
+                listValues.MasterArchive = tapeListListView.SelectedItems[0].SubItems[7].Text;
+                listValues.PersonEntered = tapeListListView.SelectedItems[0].SubItems[8].Text;
                 tapesToDelete = null;
             }
             else if (tapeListListView.SelectedItems.Count > 1)

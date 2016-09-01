@@ -74,6 +74,8 @@ TODO
 - Be able to save the old databases and recall them if needed
 - Add tooltips to everything
 - Make sure all project IDs can evaluate to numbers
+- check for same entries into tags
+- add what is in textbox for tags onto end of entry when entered
 - Get rid of displaying ID for tapes on table and put it as a tag
 
 
