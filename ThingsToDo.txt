@@ -62,6 +62,7 @@ DONE
 * Get rid of displaying ID for tapes on table and put it as a tag
 * add what is in textbox for tags onto end of entry when entered
 * check for same entries into tags
+* Make sure all project IDs can evaluate to numbers
 
 
 TODO
@@ -76,7 +77,7 @@ TODO
 - Add export and import feature for database file
 - Be able to save the old databases and recall them if needed
 - Add tooltips to everything
-- Make sure all project IDs can evaluate to numbers
+- Add control coloring to LightCoral when there is an error to highlight error(see tapelist form addprojectid_lostfocus)
 
 
 1541918047

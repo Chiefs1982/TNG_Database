@@ -590,51 +590,61 @@ namespace TNG_Database
         //Add Button pressed
         private void addTapeAddButton_Click(object sender, EventArgs e)
         {
-            //check to make sure that all info is entered
-            if(addProjectIDTextbox.Text.Length > 0
-                && addTapeNameTextbox.Text.Length > 0 && addTagList.Count > 0
-                && addTapeNumUpDown.Value > 0 && addCameraComboBox.Text.Length > 0
-                && addTapePersonDropdown.Text.Length > 0)
+            //check if project id is a number
+            if (commonMethod.StringIsANumber(addProjectIDTextbox.Text))
             {
-                //load tape values to add to database
-                tapeValues.ProjectId = addProjectIDTextbox.Text;
-                if(addTapeListProjectName.Text.Length > 0)
-                {
-                    tapeValues.ProjectName = addTapeListProjectName.Text;
-                }else
-                {
-                    tapeValues.ProjectName = addTapeNameTextbox.Text;
-                }
                 
-                tapeValues.TapeName = addTapeNameTextbox.Text;
-                tapeValues.TapeNumber = addTapeNumUpDown.Value.ToString();
-                tapeValues.Camera = commonMethod.GetCameraNumber(addCameraComboBox.Text);
-                //if there is text in tags textbox then add it on the end of the tag string
-                if(addTagsTextbox.TextLength > 0 && !addTagList.Contains(addTagsTextbox.Text.ToLower().Replace(",", "")))
+                //check to make sure that all info is entered
+                if (addProjectIDTextbox.Text.Length > 0
+                    && addTapeNameTextbox.Text.Length > 0 && (addTagList.Count > 0 || addTagsTextbox.TextLength > 0)
+                    && addTapeNumUpDown.Value > 0 && addCameraComboBox.Text.Length > 0
+                    && addTapePersonDropdown.Text.Length > 0)
                 {
-                    addTagList.Add(addTagsTextbox.Text);
+                    //load tape values to add to database
+                    tapeValues.ProjectId = addProjectIDTextbox.Text;
+                    if (addTapeListProjectName.Text.Length > 0)
+                    {
+                        tapeValues.ProjectName = addTapeListProjectName.Text;
+                    }
+                    else
+                    {
+                        tapeValues.ProjectName = addTapeNameTextbox.Text;
+                    }
+
+                    tapeValues.TapeName = addTapeNameTextbox.Text;
+                    tapeValues.TapeNumber = addTapeNumUpDown.Value.ToString();
+                    tapeValues.Camera = commonMethod.GetCameraNumber(addCameraComboBox.Text);
+                    //if there is text in tags textbox then add it on the end of the tag string
+                    if (addTagsTextbox.TextLength > 0 && !addTagList.Contains(addTagsTextbox.Text.ToLower().Replace(",", "")))
+                    {
+                        addTagList.Add(addTagsTextbox.Text);
+                    }
+                    tapeValues.TapeTags = String.Join(",", addTagList);
+                    tapeValues.MasterArchive = addTapeMasterArchiveLabel.Text;
+                    tapeValues.DateShot = commonMethod.ConvertDateFromDropdownForDB(addDateDateTime.Value);
+                    tapeValues.PersonEntered = addTapePersonDropdown.Text;
+
+                    //Add to database and check to make sure it is added
+                    AddToDatabase addDB = new AddToDatabase();
+                    if (addDB.AddTapeDatabase(tapeValues))
+                    {
+                        //update status and clear all controls and variables
+                        updateStatus.UpdateStatusBar("Tape Added to Database", mainform);
+                        PopulateTapeList();
+                        tapeValues.Clear();
+                        ClearAddControls();
+                        MakeBoxesVisible();
+                        tapeListListView.Focus();
+
+                    }
                 }
-                tapeValues.TapeTags = String.Join(",", addTagList);
-                tapeValues.MasterArchive = addTapeMasterArchiveLabel.Text;
-                tapeValues.DateShot = commonMethod.ConvertDateFromDropdownForDB(addDateDateTime.Value);
-                tapeValues.PersonEntered = addTapePersonDropdown.Text;
-
-                //Add to database and check to make sure it is added
-                AddToDatabase addDB = new AddToDatabase();
-                if (addDB.AddTapeDatabase(tapeValues))
+                else
                 {
-                    //update status and clear all controls and variables
-                    updateStatus.UpdateStatusBar("Tape Added to Database", mainform);
-                    PopulateTapeList();
-                    tapeValues.Clear();
-                    ClearAddControls();
-                    MakeBoxesVisible();
-                    tapeListListView.Focus();
-
+                    updateStatus.UpdateStatusBar("Please Fill Out All Fields", mainform);
                 }
             }else
             {
-                updateStatus.UpdateStatusBar("Please Fill Out All Fields", mainform);
+                updateStatus.UpdateStatusBar("Project ID must be a number", mainform);
             }
         }
         //Cancel Button pressed
@@ -689,56 +699,64 @@ namespace TNG_Database
         //Edit button pressed
         private void editTapeEditButton_Click(object sender, EventArgs e)
         {
-            AddToDatabase editDB = new AddToDatabase();
-            string projectNameEdit = "";
-
-            if(editProjectNameLabel.Text.Length > 0)
+            //check to see if project ID is a number
+            if (commonMethod.StringIsANumber(editProjectIDTextbox.Text))
             {
-                projectNameEdit = editProjectNameLabel.Text;
-            }else
-            {
-                projectNameEdit = editTapeNameTextbox.Text;
-            }
+                AddToDatabase editDB = new AddToDatabase();
+                string projectNameEdit = "";
 
-            //if there is text in tags textbox then add it on the end of the tag string
-            if (editTagsTextbox.TextLength > 0 && !editTagList.Contains(editTagsTextbox.Text.ToLower().Replace(",", "")))
-            {
-                editTagList.Add(editTagsTextbox.Text);
-            }
-
-            //Create new TapeDatabaseValues for edited entry
-            TapeDatabaseValues newTapeValues = new TapeDatabaseValues(
-                editTapeNameTextbox.Text,editTapeNumberUpDown.Value.ToString(),editProjectIDTextbox.Text, projectNameEdit,
-                commonMethod.GetCameraNumber(editCameraDropdown.Text),String.Join(",",editTagList),commonMethod.ConvertDateFromDropdownForDB(editDateShotDate.Value),
-                editTapeMasterListLabel.Text,editPersonDropdown.Text);
-
-            //Check if user made a change
-            if (CompareOldEditValues(newTapeValues))
-            {
-                //Update entry and check to make sure it is updated
-                if (editDB.UpdateTapeDatabase(newTapeValues, tapeValues))
+                if (editProjectNameLabel.Text.Length > 0)
                 {
-                    //Enrty Update Successful
-                    ClearEditControls();
-                    tapeValues.Clear();
-                    PopulateTapeList();
-                    MakeBoxesVisible();
-                    tapeListListView.Focus();
-                    updateStatus.UpdateStatusBar("Values Updated in Database", mainform);
-
+                    projectNameEdit = editProjectNameLabel.Text;
                 }
                 else
                 {
-                    //Entry Update Unsuccessful
-                    updateStatus.UpdateStatusBar("There Was A Problem Updated Entry", mainform);
+                    projectNameEdit = editTapeNameTextbox.Text;
+                }
+
+                //if there is text in tags textbox then add it on the end of the tag string
+                if (editTagsTextbox.TextLength > 0 && !editTagList.Contains(editTagsTextbox.Text.ToLower().Replace(",", "")))
+                {
+                    editTagList.Add(editTagsTextbox.Text);
+                }
+
+                //Create new TapeDatabaseValues for edited entry
+                TapeDatabaseValues newTapeValues = new TapeDatabaseValues(
+                    editTapeNameTextbox.Text, editTapeNumberUpDown.Value.ToString(), editProjectIDTextbox.Text, projectNameEdit,
+                    commonMethod.GetCameraNumber(editCameraDropdown.Text), String.Join(",", editTagList), commonMethod.ConvertDateFromDropdownForDB(editDateShotDate.Value),
+                    editTapeMasterListLabel.Text, editPersonDropdown.Text);
+
+                //Check if user made a change
+                if (CompareOldEditValues(newTapeValues))
+                {
+                    //Update entry and check to make sure it is updated
+                    if (editDB.UpdateTapeDatabase(newTapeValues, tapeValues))
+                    {
+                        //Enrty Update Successful
+                        ClearEditControls();
+                        tapeValues.Clear();
+                        PopulateTapeList();
+                        MakeBoxesVisible();
+                        tapeListListView.Focus();
+                        updateStatus.UpdateStatusBar("Values Updated in Database", mainform);
+
+                    }
+                    else
+                    {
+                        //Entry Update Unsuccessful
+                        updateStatus.UpdateStatusBar("There Was A Problem Updated Entry", mainform);
+                    }
+                }
+                else
+                {
+                    //User Needs to change a value
+                    updateStatus.UpdateStatusBar("Must Change At Least One Value", mainform);
                 }
             }else
             {
-                //User Needs to change a value
-                updateStatus.UpdateStatusBar("Must Change At Least One Value", mainform);
+                //project ID was NOT a number
+                updateStatus.UpdateStatusBar("Project ID must be a number", mainform);
             }
-
-
             
         }
         //Edit cancel button pressed
@@ -888,7 +906,7 @@ namespace TNG_Database
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void addTextBoxes_TextChanged(object sender, EventArgs e)
         {
-            if(addProjectIDTextbox.Text.Length > 0 && addTapeNameTextbox.Text.Length > 0 && addTagList.Count > 0 && addTapeNumUpDown.Value > 0 && !addDateDateTime.Value.Equals(string.Empty) && !addCameraComboBox.Text.Equals(string.Empty))
+            if(addProjectIDTextbox.Text.Length > 0 && addTapeNameTextbox.Text.Length > 0 && (addTagList.Count > 0 || addTagsTextbox.TextLength > 0) && addTapeNumUpDown.Value > 0 && !addDateDateTime.Value.Equals(string.Empty) && !addCameraComboBox.Text.Equals(string.Empty) && commonMethod.StringIsANumber(addProjectIDTextbox.Text))
             {
                 addTapeAddButton.Enabled = true;
             }else
@@ -904,7 +922,7 @@ namespace TNG_Database
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void editTextBoxes_TextChanged(object sender, EventArgs e)
         {
-            if (editProjectIDTextbox.Text.Length > 0 && editTapeNameTextbox.Text.Length > 0 && editTagList.Count > 0 && editTapeNumberUpDown.Value > 0 && !editDateShotDate.Value.Equals(string.Empty) && !editCameraDropdown.Text.Equals(string.Empty))
+            if (editProjectIDTextbox.Text.Length > 0 && editTapeNameTextbox.Text.Length > 0 && (editTagList.Count > 0 || editTagsTextbox.TextLength > 0) && editTapeNumberUpDown.Value > 0 && !editDateShotDate.Value.Equals(string.Empty) && !editCameraDropdown.Text.Equals(string.Empty) && commonMethod.StringIsANumber(editProjectIDTextbox.Text))
             {
                 editTapeEditButton.Enabled = true;
             }
@@ -917,7 +935,7 @@ namespace TNG_Database
         //Project label lost Focus
         private void AddProjectIDTextbox_LostFocus(object sender, EventArgs e)
         {
-            if(addProjectIDTextbox.Text.Length > 0)
+            if(addProjectIDTextbox.Text.Length > 0 && commonMethod.StringIsANumber(addProjectIDTextbox.Text))
             {
                 string projectName = DataBaseControls.GetProjectNameFromNumber(addProjectIDTextbox.Text);
                 if(projectName != null)
@@ -932,13 +950,22 @@ namespace TNG_Database
 
                 //Make Master list label
                 addTapeMasterArchiveLabel.Text = DataBaseControls.GetMasterForTapes(addProjectIDTextbox.Text, null);
+                
+                addProjectIDTextbox.BackColor = default(Color);
+            }
+            else
+            {
+                //project ID is empty or not a entered
+                addProjectIDTextbox.Focus();
+                addProjectIDTextbox.BackColor = Color.LightCoral;
+                updateStatus.UpdateStatusBar("You must enter a Project ID that is a number", mainform);
             }
         }
 
         //Project Label lost focus
         private void EditProjectIDTextbox_LostFocus(object sender, EventArgs e)
         {
-            if(editProjectIDTextbox.Text.Length > 0)
+            if(editProjectIDTextbox.Text.Length > 0 && commonMethod.StringIsANumber(editProjectIDTextbox.Text))
             {
                 string projectName = DataBaseControls.GetProjectNameFromNumber(editProjectIDTextbox.Text);
                 if(projectName != null)
@@ -951,7 +978,12 @@ namespace TNG_Database
                     editProjectNameLabel.Text = "";
                 }
 
-                editTapeMasterListLabel.Text = DataBaseControls.GetMasterForTapes(addProjectIDTextbox.Text, null);
+                editTapeMasterListLabel.Text = DataBaseControls.GetMasterForTapes(editProjectIDTextbox.Text, null);
+            }else
+            {
+                //project ID is empty or not a entered
+                editProjectIDTextbox.Focus();
+                updateStatus.UpdateStatusBar("You must enter a Project ID that is a number", mainform);
             }
         }
 

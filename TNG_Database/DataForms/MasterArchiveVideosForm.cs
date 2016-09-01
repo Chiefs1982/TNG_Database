@@ -348,44 +348,56 @@ namespace TNG_Database
         //Add button pressed
         private void addArchiveAddButton_Click(object sender, EventArgs e)
         {
-            //check to make sure something is entered in the textboxes
-            if (addArchiveIDTextBox.Text.Length > 0 && addArchiveNameTextBox.Text.Length > 0)
+            //check if project ID is a number
+            if (commonMethod.StringIsANumber(addArchiveIDTextBox.Text))
             {
-                //instatiate values and database class
-                MasterArchiveVideoValues addValues = new MasterArchiveVideoValues(addArchiveIDTextBox.Text, addArchiveNameTextBox.Text, addArchiveMasterTapeComboBox.Text, Convert.ToInt32(addArchiveClipNumberTextbox.Text).ToString("000"));
-                AddToDatabase addDB = new AddToDatabase();
-
-                //add to database and check if successful
-                if (addDB.AddMasterArchiveVideo(addValues))
+                //Project ID is a number
+                //check to make sure something is entered in the textboxes
+                if (addArchiveIDTextBox.Text.Length > 0 && addArchiveNameTextBox.Text.Length > 0)
                 {
-                    //success
+                    //instatiate values and database class
+                    MasterArchiveVideoValues addValues = new MasterArchiveVideoValues(addArchiveIDTextBox.Text, addArchiveNameTextBox.Text, addArchiveMasterTapeComboBox.Text, Convert.ToInt32(addArchiveClipNumberTextbox.Text).ToString("000"));
+                    AddToDatabase addDB = new AddToDatabase();
 
-                    //clear textboxes
-                    addArchiveIDTextBox.Clear();
-                    addArchiveNameTextBox.Clear();
-                    addArchiveClipNumberTextbox.Clear();
-                    addArchiveMasterTapeComboBox.SelectedIndex = 0;
-                    //populate list view
-                    PopulateListView();
-                    //open default groupbox
-                    CloseGroupBox();
+                    //add to database and check if successful
+                    if (addDB.AddMasterArchiveVideo(addValues))
+                    {
+                        //success
 
-                    //give listview focus
-                    archiveListView.Focus();
+                        //clear textboxes
+                        addArchiveIDTextBox.Clear();
+                        addArchiveNameTextBox.Clear();
+                        addArchiveClipNumberTextbox.Clear();
+                        addArchiveMasterTapeComboBox.SelectedIndex = 0;
+                        //populate list view
+                        PopulateListView();
+                        //open default groupbox
+                        CloseGroupBox();
 
-                    updateStatus.UpdateStatusBar("Project " + addValues.ProjectId + " Added to Database", mainform);
+                        //give listview focus
+                        archiveListView.Focus();
+
+                        updateStatus.UpdateStatusBar("Project " + addValues.ProjectId + " Added to Database", mainform);
+                    }
+                    else
+                    {
+                        //failed
+                        updateStatus.UpdateStatusBar("There was a problem, please try again", mainform);
+                    }
                 }
                 else
                 {
-                    //failed
-                    updateStatus.UpdateStatusBar("There was a problem, please try again", mainform);
+                    //at least one text box was empty
+                    updateStatus.UpdateStatusBar("You Must Enter Values!", mainform);
                 }
             }
             else
             {
-                //at least one text box was empty
-                updateStatus.UpdateStatusBar("You Must Enter Values!", mainform);
+                //project id was NOT a number
+                updateStatus.UpdateStatusBar("Project ID must be a number", mainform);
             }
+
+            
         }
 
         //Cancel Button pressed
@@ -409,43 +421,55 @@ namespace TNG_Database
         //Edit button pressed
         private void editArchiveEditButton_Click(object sender, EventArgs e)
         {
-            AddToDatabase editDB = new AddToDatabase();
-            MasterTapeValues editValues = new MasterTapeValues(editArchiveIDTextBox.Text, editArchiveNameTextBox.Text, editArchiveMasterTapeComboBox.Text, editArchiveClipNumberTextbox.Text, listValues.ID);
-
-            if (editArchiveIDTextBox.Text.Length > 0 && editArchiveNameTextBox.Text.Length > 0 && editArchiveClipNumberTextbox.Text.Length > 0)
+            //check if project ID is a number
+            if (commonMethod.StringIsANumber(editArchiveIDTextBox.Text))
             {
-                if (editDB.EditMasterArchiveVideo(listValues, editValues))
+                //Project ID is a number
+                AddToDatabase editDB = new AddToDatabase();
+                MasterTapeValues editValues = new MasterTapeValues(editArchiveIDTextBox.Text, editArchiveNameTextBox.Text, editArchiveMasterTapeComboBox.Text, editArchiveClipNumberTextbox.Text, listValues.ID);
+
+                if (editArchiveIDTextBox.Text.Length > 0 && editArchiveNameTextBox.Text.Length > 0 && editArchiveClipNumberTextbox.Text.Length > 0)
                 {
-                    //success
+                    if (editDB.EditMasterArchiveVideo(listValues, editValues))
+                    {
+                        //success
 
-                    //clear textboxes
-                    editArchiveIDTextBox.Clear();
-                    editArchiveNameTextBox.Clear();
-                    editArchiveClipNumberTextbox.Clear();
-                    editArchiveMasterTapeComboBox.SelectedIndex = 0;
+                        //clear textboxes
+                        editArchiveIDTextBox.Clear();
+                        editArchiveNameTextBox.Clear();
+                        editArchiveClipNumberTextbox.Clear();
+                        editArchiveMasterTapeComboBox.SelectedIndex = 0;
 
-                    //update list view
-                    PopulateListView();
+                        //update list view
+                        PopulateListView();
 
-                    //close edit groupbox and open default
-                    CloseGroupBox();
+                        //close edit groupbox and open default
+                        CloseGroupBox();
 
-                    //give listview focus
-                    archiveListView.Focus();
+                        //give listview focus
+                        archiveListView.Focus();
 
-                    updateStatus.UpdateStatusBar("Project " + editValues.ProjectID + " Updated in Database", mainform);
+                        updateStatus.UpdateStatusBar("Project " + editValues.ProjectID + " Updated in Database", mainform);
+                    }
+                    else
+                    {
+                        //failed
+                        updateStatus.UpdateStatusBar("There was a problem, please try again", mainform);
+                    }
                 }
                 else
                 {
-                    //failed
-                    updateStatus.UpdateStatusBar("There was a problem, please try again", mainform);
+                    //at least one textbox is empty
+                    updateStatus.UpdateStatusBar("You Must Enter Values!", mainform);
                 }
             }
             else
             {
-                //at least one textbox is empty
-                updateStatus.UpdateStatusBar("You Must Enter Values!", mainform);
+                //project id was NOT a number
+                updateStatus.UpdateStatusBar("Project ID must be a number", mainform);
             }
+
+            
         }
         
         //Cancel button pressed

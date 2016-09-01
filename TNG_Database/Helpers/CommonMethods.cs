@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using TNG_Database.Values;
@@ -716,5 +717,15 @@ namespace TNG_Database
 
         }
 
+        public bool StringIsANumber(string evaluate)
+        {
+            if(Regex.IsMatch(evaluate, @"^\d+$") && evaluate.Length > 0)
+            {
+                return true;
+            }else
+            {
+                return false;
+            }
+        }
     }
 }

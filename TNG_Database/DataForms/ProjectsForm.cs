@@ -307,41 +307,54 @@ namespace TNG_Database
         //Add button pressed
         private void addProjectAddButton_Click(object sender, EventArgs e)
         {
-            //check to make sure something is entered in the textboxes
-            if(addProjectIDTextBox.Text.Length > 0 && addProjectNameTextBox.Text.Length > 0)
+            //check if project ID is a number
+            if (commonMethod.StringIsANumber(addProjectIDTextBox.Text))
             {
-                //instatiate values and database class
-                ProjectValues addValues = new ProjectValues(addProjectIDTextBox.Text, addProjectNameTextBox.Text);
-                AddToDatabase addDB = new AddToDatabase();
-
-                //add to database and check if successful
-                if (addDB.AddProjects(addValues))
+                //Project ID is a number
+                //check to make sure something is entered in the textboxes
+                if (addProjectIDTextBox.Text.Length > 0 && addProjectNameTextBox.Text.Length > 0)
                 {
-                    //success
-                    
-                    //clear textboxes
-                    addProjectIDTextBox.Clear();
-                    addProjectNameTextBox.Clear();
-                    //populate list view
-                    PopulateListView();
-                    //open default groupbox
-                    CloseGroupBox();
+                    //instatiate values and database class
+                    ProjectValues addValues = new ProjectValues(addProjectIDTextBox.Text, addProjectNameTextBox.Text);
+                    AddToDatabase addDB = new AddToDatabase();
 
-                    //give listview focus
-                    projectsListView.Focus();
+                    //add to database and check if successful
+                    if (addDB.AddProjects(addValues))
+                    {
+                        //success
 
-                    updateStatus.UpdateStatusBar("Project " + addValues.ProjectID + " Added to Database", mainform);
+                        //clear textboxes
+                        addProjectIDTextBox.Clear();
+                        addProjectNameTextBox.Clear();
+                        //populate list view
+                        PopulateListView();
+                        //open default groupbox
+                        CloseGroupBox();
+
+                        //give listview focus
+                        projectsListView.Focus();
+
+                        updateStatus.UpdateStatusBar("Project " + addValues.ProjectID + " Added to Database", mainform);
+                    }
+                    else
+                    {
+                        //failed
+                        updateStatus.UpdateStatusBar("There was a problem, please try again", mainform);
+                    }
                 }
                 else
                 {
-                    //failed
-                    updateStatus.UpdateStatusBar("There was a problem, please try again", mainform);
+                    //at least one text box was empty
+                    updateStatus.UpdateStatusBar("You Must Enter Values!", mainform);
                 }
-            }else
-            {
-                //at least one text box was empty
-                updateStatus.UpdateStatusBar("You Must Enter Values!", mainform);
             }
+            else
+            {
+                //project id was NOT a number
+                updateStatus.UpdateStatusBar("Project ID must be a number", mainform);
+            }
+
+            
         }
 
         //Cancel Button pressed
@@ -363,39 +376,50 @@ namespace TNG_Database
         //Edit button pressed
         private void editProjectEditButton_Click(object sender, EventArgs e)
         {
-            AddToDatabase editDB = new AddToDatabase();
-            ProjectValues editValues = new ProjectValues(editProjectIDTextBox.Text, editProjectNameTextBox.Text, listValues.ID);
-
-            if(editProjectIDTextBox.Text.Length > 0 && editProjectNameTextBox.Text.Length > 0)
+            //check if project ID is a number
+            if (commonMethod.StringIsANumber(editProjectIDTextBox.Text))
             {
-                if (editDB.EditProject(listValues, editValues))
+                //Project ID is a number
+                AddToDatabase editDB = new AddToDatabase();
+                ProjectValues editValues = new ProjectValues(editProjectIDTextBox.Text, editProjectNameTextBox.Text, listValues.ID);
+
+                if (editProjectIDTextBox.Text.Length > 0 && editProjectNameTextBox.Text.Length > 0)
                 {
-                    //success
-                    
-                    //clear textboxes
-                    editProjectIDTextBox.Clear();
-                    editProjectNameTextBox.Clear();
-                    
-                    //update list view
-                    PopulateListView();
+                    if (editDB.EditProject(listValues, editValues))
+                    {
+                        //success
 
-                    //close edit groupbox and open default
-                    CloseGroupBox();
+                        //clear textboxes
+                        editProjectIDTextBox.Clear();
+                        editProjectNameTextBox.Clear();
 
-                    //give listview focus
-                    projectsListView.Focus();
+                        //update list view
+                        PopulateListView();
 
-                    updateStatus.UpdateStatusBar("Project " + editValues.ProjectID + " Updated in Database", mainform);
+                        //close edit groupbox and open default
+                        CloseGroupBox();
+
+                        //give listview focus
+                        projectsListView.Focus();
+
+                        updateStatus.UpdateStatusBar("Project " + editValues.ProjectID + " Updated in Database", mainform);
+                    }
+                    else
+                    {
+                        //failed
+                        updateStatus.UpdateStatusBar("There was a problem, please try again", mainform);
+                    }
                 }
                 else
                 {
-                    //failed
-                    updateStatus.UpdateStatusBar("There was a problem, please try again", mainform);
+                    //at least one textbox is empty
+                    updateStatus.UpdateStatusBar("You Must Enter Values!", mainform);
                 }
-            }else
+            }
+            else
             {
-                //at least one textbox is empty
-                updateStatus.UpdateStatusBar("You Must Enter Values!", mainform);
+                //project id was NOT a number
+                updateStatus.UpdateStatusBar("Project ID must be a number", mainform);
             }
         }
 
