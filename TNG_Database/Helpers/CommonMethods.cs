@@ -717,6 +717,11 @@ namespace TNG_Database
 
         }
 
+        /// <summary>
+        /// Checks if the string is a number and not empty.
+        /// </summary>
+        /// <param name="evaluate">The evaluate.</param>
+        /// <returns></returns>
         public bool StringIsANumber(string evaluate)
         {
             if(Regex.IsMatch(evaluate, @"^\d+$") && evaluate.Length > 0)
@@ -726,6 +731,24 @@ namespace TNG_Database
             {
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Changes background color on error
+        /// </summary>
+        /// <param name="control">The control.</param>
+        public void BackColorError(Control control)
+        {
+            control.BackColor = Color.LightCoral;
+        }
+
+        /// <summary>
+        /// Changes background color back to default when error is corrected
+        /// </summary>
+        /// <param name="control">The control.</param>
+        public void BackColorDefault(Control control)
+        {
+            control.BackColor = default(Color);
         }
     }
 }

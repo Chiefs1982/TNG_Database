@@ -464,6 +464,55 @@ namespace TNG_Database
             }
         }
 
+        private void SetDefaultColors(string controls)
+        {
+            switch (controls.ToLower())
+            {
+                case "edit":
+                    //set default colors for edit controls
+                    commonMethod.BackColorDefault(editProjectIDTextbox);
+                    commonMethod.BackColorDefault(editTapeNameTextbox);
+                    commonMethod.BackColorDefault(editTagsTextbox);
+                    commonMethod.BackColorDefault(editTapeNumberUpDown);
+                    commonMethod.BackColorDefault(editDateShotDate);
+                    commonMethod.BackColorDefault(editCameraDropdown);
+                    break;
+                case "add":
+                    //set default colors for add controls
+                    commonMethod.BackColorDefault(addProjectIDTextbox);
+                    commonMethod.BackColorDefault(addTapeNameTextbox);
+                    commonMethod.BackColorDefault(addTagsTextbox);
+                    commonMethod.BackColorDefault(addTapeNumUpDown);
+                    commonMethod.BackColorDefault(addDateDateTime);
+                    commonMethod.BackColorDefault(addCameraComboBox);
+                    break;
+            }
+        }
+
+        private void SetBackColorError(string controls)
+        {
+            switch (controls.ToLower())
+            {
+                case "edit":
+                    //set error colors for edit controls
+                    commonMethod.BackColorError(editProjectIDTextbox);
+                    commonMethod.BackColorError(editTapeNameTextbox);
+                    commonMethod.BackColorError(editTagsTextbox);
+                    commonMethod.BackColorError(editTapeNumberUpDown);
+                    commonMethod.BackColorError(editDateShotDate);
+                    commonMethod.BackColorError(editCameraDropdown);
+            break;
+                case "add":
+                    //change color of control based on the error
+                    commonMethod.BackColorError(addProjectIDTextbox);
+                    commonMethod.BackColorError(addTapeNameTextbox);
+                    commonMethod.BackColorError(addTagsTextbox);
+                    commonMethod.BackColorError(addTapeNumUpDown);
+                    commonMethod.BackColorError(addDateDateTime);
+                    commonMethod.BackColorError(addCameraComboBox);
+                    break;
+            }
+        }
         
         #endregion
 
@@ -483,6 +532,9 @@ namespace TNG_Database
             //default text and color
             addTagsTextbox.ForeColor = SystemColors.GrayText;
             addTagsTextbox.Text = tagText;
+
+            //set controls to default colors
+            SetDefaultColors("add");
         }
 
         //Edit entry button pressed
@@ -506,6 +558,9 @@ namespace TNG_Database
             //default text and color
             editTagsTextbox.ForeColor = SystemColors.GrayText;
             editTagsTextbox.Text = tagText;
+
+            //set controls to default colors
+            SetDefaultColors("edit");
         }
 
         //Delete entry button pressed
@@ -906,12 +961,24 @@ namespace TNG_Database
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void addTextBoxes_TextChanged(object sender, EventArgs e)
         {
-            if(addProjectIDTextbox.Text.Length > 0 && addTapeNameTextbox.Text.Length > 0 && (addTagList.Count > 0 || addTagsTextbox.TextLength > 0) && addTapeNumUpDown.Value > 0 && !addDateDateTime.Value.Equals(string.Empty) && !addCameraComboBox.Text.Equals(string.Empty) && commonMethod.StringIsANumber(addProjectIDTextbox.Text))
+            if(addProjectIDTextbox.TextLength > 0 && addTapeNameTextbox.TextLength > 0 && (addTagList.Count > 0 || addTagsTextbox.TextLength > 0) && addTapeNumUpDown.Value > 0 && !addDateDateTime.Value.Equals(string.Empty) && !addCameraComboBox.Text.Equals(string.Empty) && commonMethod.StringIsANumber(addProjectIDTextbox.Text))
             {
                 addTapeAddButton.Enabled = true;
-            }else
+
+                //Change to default color backgrounds
+                SetDefaultColors("add");
+            }
+            else
             {
                 addTapeAddButton.Enabled = false;
+
+                //change color of control based on the error
+                if(addProjectIDTextbox.TextLength == 0 || !commonMethod.StringIsANumber(addProjectIDTextbox.Text)) { commonMethod.BackColorError(addProjectIDTextbox); }
+                if(addTapeNameTextbox.TextLength == 0){ commonMethod.BackColorError(addTapeNameTextbox); }
+                if(addTagList.Count == 0 && addTagsTextbox.TextLength == 0){ commonMethod.BackColorError(addTagsTextbox); }
+                if(addTapeNumUpDown.Value == 0){ commonMethod.BackColorError(addTapeNumUpDown); }
+                if (addDateDateTime.Value.Equals(string.Empty)){ commonMethod.BackColorError(addDateDateTime); }
+                if (addCameraComboBox.Text.Equals(string.Empty)){ commonMethod.BackColorError(addCameraComboBox); }
             }
         }
 
@@ -925,10 +992,21 @@ namespace TNG_Database
             if (editProjectIDTextbox.Text.Length > 0 && editTapeNameTextbox.Text.Length > 0 && (editTagList.Count > 0 || editTagsTextbox.TextLength > 0) && editTapeNumberUpDown.Value > 0 && !editDateShotDate.Value.Equals(string.Empty) && !editCameraDropdown.Text.Equals(string.Empty) && commonMethod.StringIsANumber(editProjectIDTextbox.Text))
             {
                 editTapeEditButton.Enabled = true;
+
+                //Change to default color backgrounds
+                SetDefaultColors("edit");
             }
             else
             {
                 editTapeEditButton.Enabled = false;
+
+                //change color of control based on the error
+                if (editProjectIDTextbox.TextLength == 0 || !commonMethod.StringIsANumber(editProjectIDTextbox.Text)) { commonMethod.BackColorError(editProjectIDTextbox); }
+                if (editTapeNameTextbox.TextLength == 0) { commonMethod.BackColorError(editTapeNameTextbox); }
+                if (editTagList.Count == 0 && editTagsTextbox.TextLength == 0) { commonMethod.BackColorError(editTagsTextbox); }
+                if (editTapeNumberUpDown.Value == 0) { commonMethod.BackColorError(editTapeNumberUpDown); }
+                if (editDateShotDate.Value.Equals(string.Empty)) { commonMethod.BackColorError(editDateShotDate); }
+                if (editCameraDropdown.Text.Equals(string.Empty)) { commonMethod.BackColorError(editCameraDropdown); }
             }
         }
 
@@ -950,14 +1028,13 @@ namespace TNG_Database
 
                 //Make Master list label
                 addTapeMasterArchiveLabel.Text = DataBaseControls.GetMasterForTapes(addProjectIDTextbox.Text, null);
-                
-                addProjectIDTextbox.BackColor = default(Color);
+
+                commonMethod.BackColorDefault(addProjectIDTextbox);
             }
             else
             {
                 //project ID is empty or not a entered
-                addProjectIDTextbox.Focus();
-                addProjectIDTextbox.BackColor = Color.LightCoral;
+                commonMethod.BackColorError(addProjectIDTextbox);
                 updateStatus.UpdateStatusBar("You must enter a Project ID that is a number", mainform);
             }
         }
@@ -979,10 +1056,13 @@ namespace TNG_Database
                 }
 
                 editTapeMasterListLabel.Text = DataBaseControls.GetMasterForTapes(editProjectIDTextbox.Text, null);
-            }else
+
+                commonMethod.BackColorDefault(editProjectIDTextbox);
+            }
+            else
             {
-                //project ID is empty or not a entered
-                editProjectIDTextbox.Focus();
+                //project ID is empty or not a number
+                commonMethod.BackColorError(editProjectIDTextbox);
                 updateStatus.UpdateStatusBar("You must enter a Project ID that is a number", mainform);
             }
         }
@@ -995,6 +1075,7 @@ namespace TNG_Database
             if (textBox.Text.Equals(tagText))
             {
                 textBox.Clear();
+                commonMethod.BackColorDefault(textBox);
                 textBox.ForeColor = SystemColors.WindowText;
             }
         }
@@ -1007,6 +1088,7 @@ namespace TNG_Database
             if (textBox.Text.Equals(string.Empty))
             {
                 textBox.ForeColor = SystemColors.GrayText;
+                commonMethod.BackColorDefault(textBox);
                 textBox.Text = tagText;
             }
         }

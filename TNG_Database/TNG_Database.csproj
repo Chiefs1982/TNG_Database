@@ -152,6 +152,7 @@
     <Compile Include="PreferencesForm.Designer.cs">
       <DependentUpon>PreferencesForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Values\FirstFocusValues.cs" />
     <Compile Include="Values\MasterArchiveVideoValues.cs" />
     <Compile Include="DataForms\MasterListForm.cs">
       <SubType>Form</SubType>
