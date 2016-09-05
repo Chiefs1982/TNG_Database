@@ -461,7 +461,7 @@
             this.addTapeGroupbox.Controls.Add(this.addProjectIDTextbox);
             this.addTapeGroupbox.Controls.Add(this.addProjectLabel);
             this.addTapeGroupbox.Controls.Add(this.addIDLabel);
-            this.addTapeGroupbox.Location = new System.Drawing.Point(45, 56);
+            this.addTapeGroupbox.Location = new System.Drawing.Point(744, 333);
             this.addTapeGroupbox.Name = "addTapeGroupbox";
             this.addTapeGroupbox.Size = new System.Drawing.Size(726, 218);
             this.addTapeGroupbox.TabIndex = 5;
@@ -637,6 +637,7 @@
             0,
             0,
             0});
+            this.addTapeNumUpDown.ValueChanged += new System.EventHandler(this.addTapeNumUpDown_ValueChanged);
             // 
             // addProjectIDTextbox
             // 
@@ -896,7 +897,7 @@
             this.editTapeGroupbox.Controls.Add(this.editProjectIDTextbox);
             this.editTapeGroupbox.Controls.Add(this.label24);
             this.editTapeGroupbox.Controls.Add(this.label25);
-            this.editTapeGroupbox.Location = new System.Drawing.Point(744, 116);
+            this.editTapeGroupbox.Location = new System.Drawing.Point(6, 85);
             this.editTapeGroupbox.Name = "editTapeGroupbox";
             this.editTapeGroupbox.Size = new System.Drawing.Size(726, 195);
             this.editTapeGroupbox.TabIndex = 7;
@@ -1070,6 +1071,7 @@
             0,
             0,
             0});
+            this.editTapeNumberUpDown.ValueChanged += new System.EventHandler(this.editTapeNumberUpDown_ValueChanged);
             // 
             // editProjectIDTextbox
             // 

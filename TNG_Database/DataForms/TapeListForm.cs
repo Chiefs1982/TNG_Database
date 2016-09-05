@@ -47,6 +47,9 @@ namespace TNG_Database
         //default tooltip
         ToolTip toolTip = new ToolTip();
 
+        //values for checking if user went to a control
+        FirstFocusValues focusValues = new FirstFocusValues();
+
         public TapeListForm()
         {
             InitializeComponent();
@@ -106,6 +109,29 @@ namespace TNG_Database
             //losing focus
             addTagsTextbox.LostFocus += AddTagsTextbox_LostFocus;
             editTagsTextbox.LostFocus += AddTagsTextbox_LostFocus;
+
+            //set lost focus for all other controls.
+            addTapeNameTextbox.LostFocus += AddTapeNameTextbox_LostFocus;
+            addCameraComboBox.LostFocus += AddCameraComboBox_LostFocus;
+            addTapeNumUpDown.LostFocus += AddTapeNumUpDown_LostFocus;
+            addDateDateTime.LostFocus += AddDateDateTime_LostFocus;
+            editTapeNameTextbox.LostFocus += EditTapeNameTextbox_LostFocus;
+            editCameraDropdown.LostFocus += EditCameraDropdown_LostFocus;
+            editTapeNumberUpDown.LostFocus += EditTapeNumberUpDown_LostFocus;
+            editDateShotDate.LostFocus += EditDateShotDate_LostFocus;
+
+            //set Got Focus methods
+            addProjectIDTextbox.GotFocus += Controls_GotFocus;
+            addTapeNameTextbox.GotFocus += Controls_GotFocus;
+            addCameraComboBox.GotFocus += Controls_GotFocus;
+            addTapeNumUpDown.GotFocus += Controls_GotFocus;
+            addDateDateTime.GotFocus += Controls_GotFocus;
+            editProjectIDTextbox.GotFocus += Controls_GotFocus;
+            editTapeNameTextbox.GotFocus += Controls_GotFocus;
+            editCameraDropdown.GotFocus += Controls_GotFocus;
+            editTapeNumberUpDown.GotFocus += Controls_GotFocus;
+            editDateShotDate.GotFocus += Controls_GotFocus;
+
 
             //Tooltips
             //add
@@ -535,6 +561,9 @@ namespace TNG_Database
 
             //set controls to default colors
             SetDefaultColors("add");
+
+            //set focus values
+            focusValues.Reset();
         }
 
         //Edit entry button pressed
@@ -561,6 +590,9 @@ namespace TNG_Database
 
             //set controls to default colors
             SetDefaultColors("edit");
+
+            //set focus values
+            focusValues.Reset();
         }
 
         //Delete entry button pressed
@@ -968,17 +1000,41 @@ namespace TNG_Database
                 //Change to default color backgrounds
                 SetDefaultColors("add");
             }
+            else if (addProjectIDTextbox.TextLength > 0 && focusValues.ProjectID)
+            {
+                commonMethod.BackColorDefault(addProjectIDTextbox);
+            }
+            else if(addTapeNameTextbox.TextLength > 0 && focusValues.TapeName)
+            {
+                commonMethod.BackColorDefault(addTapeNameTextbox);
+            }
+            else if((addTagList.Count > 0 || addTagsTextbox.TextLength > 0) && focusValues.Tags && !addTagsTextbox.Text.Equals(tagText))
+            {
+                commonMethod.BackColorDefault(addTagsTextbox);
+            }
+            else if(addTapeNumUpDown.Value > 0 && focusValues.TapeNumber)
+            {
+                commonMethod.BackColorDefault(addTapeNumUpDown);
+            }
+            else if(!addDateDateTime.Value.Equals(string.Empty) && focusValues.DateShot)
+            {
+                commonMethod.BackColorDefault(addDateDateTime);
+            }
+            else if (!addCameraComboBox.Text.Equals(string.Empty) && focusValues.Camera)
+            {
+                commonMethod.BackColorDefault(addCameraComboBox);
+            }
             else
             {
                 addTapeAddButton.Enabled = false;
 
                 //change color of control based on the error
-                if(addProjectIDTextbox.TextLength == 0 || !commonMethod.StringIsANumber(addProjectIDTextbox.Text)) { commonMethod.BackColorError(addProjectIDTextbox); }
-                if(addTapeNameTextbox.TextLength == 0){ commonMethod.BackColorError(addTapeNameTextbox); }
-                if(addTagList.Count == 0 && addTagsTextbox.TextLength == 0){ commonMethod.BackColorError(addTagsTextbox); }
-                if(addTapeNumUpDown.Value == 0){ commonMethod.BackColorError(addTapeNumUpDown); }
-                if (addDateDateTime.Value.Equals(string.Empty)){ commonMethod.BackColorError(addDateDateTime); }
-                if (addCameraComboBox.Text.Equals(string.Empty)){ commonMethod.BackColorError(addCameraComboBox); }
+                if((addProjectIDTextbox.TextLength == 0 || !commonMethod.StringIsANumber(addProjectIDTextbox.Text)) && focusValues.ProjectID) { commonMethod.BackColorError(addProjectIDTextbox); }
+                if(addTapeNameTextbox.TextLength == 0 && focusValues.TapeName){ commonMethod.BackColorError(addTapeNameTextbox); }
+                if(addTagList.Count == 0 && (addTagsTextbox.TextLength == 0 || addTagsTextbox.Text.Equals(tagText)) && focusValues.Tags){ commonMethod.BackColorError(addTagsTextbox); }
+                if(addTapeNumUpDown.Value == 0 && focusValues.TapeName){ commonMethod.BackColorError(addTapeNumUpDown); }
+                if (addDateDateTime.Value.Equals(string.Empty) && focusValues.DateShot){ commonMethod.BackColorError(addDateDateTime); }
+                if (addCameraComboBox.Text.Equals(string.Empty) && focusValues.Camera){ commonMethod.BackColorError(addCameraComboBox); }
             }
         }
 
@@ -995,6 +1051,30 @@ namespace TNG_Database
 
                 //Change to default color backgrounds
                 SetDefaultColors("edit");
+            }
+            else if (editProjectIDTextbox.TextLength > 0 && focusValues.ProjectID)
+            {
+                commonMethod.BackColorDefault(editProjectIDTextbox);
+            }
+            else if (editTapeNameTextbox.TextLength > 0 && focusValues.TapeName)
+            {
+                commonMethod.BackColorDefault(editTapeNameTextbox);
+            }
+            else if ((editTagList.Count > 0 || editTagsTextbox.TextLength > 0) && focusValues.Tags && !editTagsTextbox.Text.Equals(tagText))
+            {
+                commonMethod.BackColorDefault(editTagsTextbox);
+            }
+            else if (editTapeNumberUpDown.Value > 0 && focusValues.TapeNumber)
+            {
+                commonMethod.BackColorDefault(editTapeNumberUpDown);
+            }
+            else if (!editDateShotDate.Value.Equals(string.Empty) && focusValues.DateShot)
+            {
+                commonMethod.BackColorDefault(editDateShotDate);
+            }
+            else if (!editCameraDropdown.Text.Equals(string.Empty) && focusValues.Camera)
+            {
+                commonMethod.BackColorDefault(editCameraDropdown);
             }
             else
             {
@@ -1013,6 +1093,8 @@ namespace TNG_Database
         //Project label lost Focus
         private void AddProjectIDTextbox_LostFocus(object sender, EventArgs e)
         {
+            focusValues.ProjectID = true;
+
             if(addProjectIDTextbox.Text.Length > 0 && commonMethod.StringIsANumber(addProjectIDTextbox.Text))
             {
                 string projectName = DataBaseControls.GetProjectNameFromNumber(addProjectIDTextbox.Text);
@@ -1037,11 +1119,14 @@ namespace TNG_Database
                 commonMethod.BackColorError(addProjectIDTextbox);
                 updateStatus.UpdateStatusBar("You must enter a Project ID that is a number", mainform);
             }
+
         }
 
         //Project Label lost focus
         private void EditProjectIDTextbox_LostFocus(object sender, EventArgs e)
         {
+            focusValues.ProjectID = true;
+
             if(editProjectIDTextbox.Text.Length > 0 && commonMethod.StringIsANumber(editProjectIDTextbox.Text))
             {
                 string projectName = DataBaseControls.GetProjectNameFromNumber(editProjectIDTextbox.Text);
@@ -1070,6 +1155,8 @@ namespace TNG_Database
         //Focus given to tag textbox
         private void AddTagsTextbox_GotFocus(object sender, EventArgs e)
         {
+            focusValues.Tags = true;
+
             TextBox textBox = (TextBox)sender;
 
             if (textBox.Text.Equals(tagText))
@@ -1083,6 +1170,8 @@ namespace TNG_Database
         //Focus lost from tag textbox
         private void AddTagsTextbox_LostFocus(object sender, EventArgs e)
         {
+            focusValues.Tags = true;
+
             TextBox textBox = (TextBox)sender;
 
             if (textBox.Text.Equals(string.Empty))
@@ -1092,6 +1181,100 @@ namespace TNG_Database
                 textBox.Text = tagText;
             }
         }
+
+        private void AddTapeNameTextbox_LostFocus(object sender, EventArgs e)
+        {
+            focusValues.TapeName = true;
+
+            if(addTapeNameTextbox.TextLength == 0)
+            {
+                commonMethod.BackColorError(addTapeNameTextbox);
+            }else
+            {
+                commonMethod.BackColorDefault(addTapeNameTextbox);
+            }
+        }
+
+        private void AddCameraComboBox_LostFocus(object sender, EventArgs e)
+        {
+            focusValues.Camera = true;
+        }
+
+
+        private void AddTapeNumUpDown_LostFocus(object sender, EventArgs e)
+        {
+            focusValues.TapeNumber = true;
+        }
+
+        private void AddDateDateTime_LostFocus(object sender, EventArgs e)
+        {
+            focusValues.DateShot = true;
+        }
+
+
+        private void EditTapeNameTextbox_LostFocus(object sender, EventArgs e)
+        {
+            focusValues.TapeName = true;
+
+            if (editTapeNameTextbox.TextLength == 0)
+            {
+                commonMethod.BackColorError(editTapeNameTextbox);
+            }
+            else
+            {
+                commonMethod.BackColorDefault(editTapeNameTextbox);
+            }
+        }
+
+
+        private void EditCameraDropdown_LostFocus(object sender, EventArgs e)
+        {
+            focusValues.Camera = true;
+        }
+
+
+        private void EditTapeNumberUpDown_LostFocus(object sender, EventArgs e)
+        {
+            focusValues.TapeNumber = true;
+        }
+
+        private void EditDateShotDate_LostFocus(object sender, EventArgs e)
+        {
+            focusValues.DateShot = true;
+        }
+
+        //Got Focus methods
+        private void Controls_GotFocus(object sender, EventArgs e)
+        {
+            Control control = sender as Control;
+
+            commonMethod.BackColorDefault(control);
+        }
+
+        private void addTapeNumUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            if(addTapeNumUpDown.Value == 0)
+            {
+                commonMethod.BackColorError(addTapeNumUpDown);
+            }
+            else
+            {
+                commonMethod.BackColorDefault(addTapeNumUpDown);
+            }
+        }
+
+        private void editTapeNumberUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            if (editTapeNumberUpDown.Value == 0)
+            {
+                commonMethod.BackColorError(editTapeNumberUpDown);
+            }
+            else
+            {
+                commonMethod.BackColorDefault(editTapeNumberUpDown);
+            }
+        }
+
 
         #endregion
 
@@ -1161,6 +1344,14 @@ namespace TNG_Database
             addTagList.RemoveAt(Convert.ToInt32(pBox.Tag));
             //redraw tags from new list
             DisplayTags("add",addTagDisplayFlowLayout,addTagList);
+
+            if(addTagList.Count == 0 && (addTagsTextbox.TextLength == 0 || addTagsTextbox.Text.Equals(tagText)))
+            {
+                commonMethod.BackColorError(addTagsTextbox);
+            }else
+            {
+                commonMethod.BackColorDefault(addTagsTextbox);
+            }
         }
 
         //MouseOver Event
@@ -1186,7 +1377,7 @@ namespace TNG_Database
             }
         }
 
-        #endregion
 
+        #endregion
     }
 }
