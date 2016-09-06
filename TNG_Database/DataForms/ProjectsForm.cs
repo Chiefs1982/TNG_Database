@@ -32,6 +32,9 @@ namespace TNG_Database
         //List of mulitple items to delete
         List<ProjectValues> tapesToDelete = null;
 
+        //Focus values
+        FirstFocusValues focusValues = new FirstFocusValues();
+
         public ProjectsForm(TNG_Database.MainForm parent)
         {
             InitializeComponent();
@@ -47,6 +50,24 @@ namespace TNG_Database
             addProjectIDTextBox.TextChanged += AddProjectTextBox_TextChanged;
             addProjectNameTextBox.TextChanged += AddProjectTextBox_TextChanged;
 
+            //edit textbox changed event
+            editProjectIDTextBox.TextChanged += EditProjectTextBox_TextChanged;
+            editProjectNameTextBox.TextChanged += EditProjectTextBox_TextChanged;
+
+            //Got Focus for controls
+            addProjectIDTextBox.GotFocus += AddProjectIDTextBox_GotFocus;
+            addProjectNameTextBox.GotFocus += AddProjectNameTextBox_GotFocus;
+            editProjectIDTextBox.GotFocus += EditProjectIDTextBox_GotFocus;
+            editProjectNameTextBox.GotFocus += EditProjectNameTextBox_GotFocus;
+
+
+            //Lost Focus for controls
+            addProjectIDTextBox.LostFocus += AddProjectIDTextBox_LostFocus;
+            addProjectNameTextBox.LostFocus += AddProjectNameTextBox_LostFocus;
+            editProjectIDTextBox.LostFocus += EditProjectIDTextBox_LostFocus;
+            editProjectNameTextBox.LostFocus += EditProjectNameTextBox_LostFocus;
+
+
             //make selected item always visible
             projectsListView.HideSelection = false;
 
@@ -58,27 +79,69 @@ namespace TNG_Database
             projectsListView.ColumnClick += new ColumnClickEventHandler(CommonMethods.ListViewItemComparer.SearchListView_ColumnClick);
         }
 
+        
+
         private void AddProjectTextBox_TextChanged(object sender, EventArgs e)
         {
             //check to make sure both textboxes have something in them
-            if(addProjectIDTextBox.Text.Length > 0 && addProjectNameTextBox.Text.Length > 0)
+            if(addProjectIDTextBox.TextLength > 0 && addProjectNameTextBox.TextLength > 0 && commonMethod.StringIsANumber(addProjectIDTextBox.Text))
             {
                 //Not empty
                 addProjectAddButton.Enabled = true;
-            }else
+                SetDefaultColors("add");
+            }
+            else if (addProjectIDTextBox.TextLength > 0 && focusValues.ProjectID)
+            {
+                commonMethod.BackColorDefault(addProjectIDTextBox);
+            }
+            else if (addProjectNameTextBox.TextLength > 0 && focusValues.ProjectName)
+            {
+                commonMethod.BackColorDefault(addProjectNameTextBox);
+            }
+            else
             {
                 //empty
                 addProjectAddButton.Enabled = false;
+
+                //change backgrounds to show errors
+                if(addProjectIDTextBox.TextLength == 0 && !commonMethod.StringIsANumber(addProjectIDTextBox.Text) && focusValues.ProjectID) { commonMethod.BackColorError(addProjectIDTextBox); }
+                if(addProjectNameTextBox.TextLength == 0 && focusValues.ProjectName) { commonMethod.BackColorError(addProjectNameTextBox); }
+            }
+        }
+
+        private void EditProjectTextBox_TextChanged(object sender, EventArgs e)
+        {
+            //check to make sure both textboxes have something in them
+            if (editProjectIDTextBox.TextLength > 0 && editProjectNameTextBox.TextLength > 0 && commonMethod.StringIsANumber(editProjectIDTextBox.Text))
+            {
+                SetDefaultColors("edit");
+            }
+            else if (editProjectIDTextBox.TextLength > 0 && focusValues.ProjectID)
+            {
+                commonMethod.BackColorDefault(editProjectIDTextBox);
+            }
+            else if (editProjectNameTextBox.TextLength > 0 && focusValues.ProjectName)
+            {
+                commonMethod.BackColorDefault(editProjectNameTextBox);
+            }
+            else
+            {
+                //empty
+                addProjectAddButton.Enabled = false;
+
+                //change backgrounds to show errors
+                if (editProjectIDTextBox.TextLength == 0 && !commonMethod.StringIsANumber(editProjectIDTextBox.Text) && focusValues.ProjectID) { commonMethod.BackColorError(editProjectIDTextBox); }
+                if (editProjectNameTextBox.TextLength == 0 && focusValues.ProjectName) { commonMethod.BackColorError(editProjectNameTextBox); }
             }
         }
 
         //-------------------------------------------------------
         //-------------------CLASS METHODS-----------------------
         //-------------------------------------------------------
-        #region Class Methods
-        /// <summary>
-        /// Populates the ListView.
-        /// </summary>
+            #region Class Methods
+            /// <summary>
+            /// Populates the ListView.
+            /// </summary>
         private void PopulateListView()
         {
             //clear list
@@ -202,6 +265,44 @@ namespace TNG_Database
             }
         }
 
+        /// <summary>
+        /// Sets the default colors.
+        /// </summary>
+        /// <param name="controls">The controls.</param>
+        private void SetDefaultColors(string controls)
+        {
+            switch (controls.ToLower())
+            {
+                case "add":
+                    commonMethod.BackColorDefault(addProjectIDTextBox);
+                    commonMethod.BackColorDefault(addProjectNameTextBox);
+                    break;
+                case "edit":
+                    commonMethod.BackColorDefault(editProjectIDTextBox);
+                    commonMethod.BackColorDefault(editProjectNameTextBox);
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Sets the error colors.
+        /// </summary>
+        /// <param name="controls">The controls.</param>
+        private void SetErrorColors(string controls)
+        {
+            switch (controls.ToLower())
+            {
+                case "add":
+                    commonMethod.BackColorError(addProjectIDTextBox);
+                    commonMethod.BackColorError(addProjectNameTextBox);
+                    break;
+                case "edit":
+                    commonMethod.BackColorError(editProjectIDTextBox);
+                    commonMethod.BackColorError(editProjectNameTextBox);
+                    break;
+            }
+        }
+
         #endregion
 
         //---------------------------------------------------------
@@ -217,6 +318,10 @@ namespace TNG_Database
             addProjectIDTextBox.Clear();
             //open groupbox
             CloseGroupBox("add");
+
+            //reset focus values
+            focusValues.Reset();
+            SetDefaultColors("add");
         }
 
         //Update Button Pressed
@@ -231,6 +336,10 @@ namespace TNG_Database
 
             //give focus to the cancel button
             editProjectCancelButton.Focus();
+
+            //reset focus values
+            focusValues.Reset();
+            SetDefaultColors("edit");
         }
 
         //Delete Button Pressed
@@ -534,6 +643,85 @@ namespace TNG_Database
             }
         }
 
-        
+
+        #region Focus Methods
+
+        private void EditProjectNameTextBox_LostFocus(object sender, EventArgs e)
+        {
+            focusValues.ProjectName = true;
+
+            if (editProjectNameTextBox.TextLength == 0)
+            {
+                commonMethod.BackColorError(editProjectNameTextBox);
+            }
+            else
+            {
+                commonMethod.BackColorDefault(editProjectNameTextBox);
+            }
+        }
+
+        private void EditProjectIDTextBox_LostFocus(object sender, EventArgs e)
+        {
+            focusValues.ProjectID = true;
+
+            if (editProjectIDTextBox.TextLength == 0 || !commonMethod.StringIsANumber(editProjectIDTextBox.Text))
+            {
+                commonMethod.BackColorError(editProjectIDTextBox);
+            }
+            else
+            {
+                commonMethod.BackColorDefault(editProjectIDTextBox);
+            }
+        }
+
+        private void EditProjectNameTextBox_GotFocus(object sender, EventArgs e)
+        {
+            commonMethod.BackColorDefault(editProjectNameTextBox);
+        }
+
+        private void EditProjectIDTextBox_GotFocus(object sender, EventArgs e)
+        {
+            commonMethod.BackColorDefault(editProjectIDTextBox);
+        }
+
+        private void AddProjectNameTextBox_LostFocus(object sender, EventArgs e)
+        {
+            focusValues.ProjectName = true;
+
+            if (addProjectNameTextBox.TextLength == 0)
+            {
+                commonMethod.BackColorError(addProjectNameTextBox);
+            }
+            else
+            {
+                commonMethod.BackColorDefault(addProjectNameTextBox);
+            }
+        }
+
+        private void AddProjectIDTextBox_LostFocus(object sender, EventArgs e)
+        {
+            focusValues.ProjectID = true;
+
+            if (addProjectIDTextBox.TextLength == 0 || !commonMethod.StringIsANumber(addProjectIDTextBox.Text))
+            {
+                commonMethod.BackColorError(addProjectIDTextBox);
+            }else
+            {
+                commonMethod.BackColorDefault(addProjectIDTextBox);
+            }
+        }
+
+        private void AddProjectNameTextBox_GotFocus(object sender, EventArgs e)
+        {
+            commonMethod.BackColorDefault(addProjectNameTextBox);
+        }
+
+        private void AddProjectIDTextBox_GotFocus(object sender, EventArgs e)
+        {
+            commonMethod.BackColorDefault(addProjectIDTextBox);
+        }
+
+        #endregion
+
     }
 }
