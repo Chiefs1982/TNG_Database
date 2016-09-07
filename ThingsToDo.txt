@@ -80,8 +80,8 @@ TODO
 - Add control coloring to LightCoral when there is an error to highlight error(see tapelist form addprojectid_lostfocus)
 	* TapeList
 	* Projects
-	- People
-	- MasterList
+	* People
+	* MasterList
 	- Master Archive
 - Add first focus bool in to keep track of if the user has visited the control
 

@@ -17,10 +17,15 @@ namespace TNG_Database
         private Point groupboxPoint = new Point(345, 94);
         private TNG_Database.MainForm mainform;
 
+        //CommonMethod reference
+        CommonMethods commonMethod = CommonMethods.Instance();
         UpdateStatus updateStatus = UpdateStatus.Instance();
 
         //list to capture multiple selected itemms for deletion
         List<PeopleValues> peopleValues = null;
+
+        //focus values
+        FirstFocusValues focusValues = new FirstFocusValues();
         
         //Initialize People Form
         public PeopleForm()
@@ -51,12 +56,28 @@ namespace TNG_Database
             defaultEditGroupBox.Location = groupboxPoint;
             defaultEditGroupBox.Visible = true;
 
+            //Got Focus For Controls
+            addUserNameTextbox.GotFocus += AddUserNameTextbox_GotFocus;
+            editUserPeopleTB.GotFocus += EditUserPeopleTB_GotFocus;
+
+            //Lost Focus For Controls
+            addUserNameTextbox.LostFocus += AddUserNameTextbox_LostFocus;
+            editUserPeopleTB.LostFocus += EditUserPeopleTB_LostFocus;
+
+
             peopleFormListBox.SelectionMode = SelectionMode.MultiExtended;
+
+            focusValues.Reset();
         }
+
+        
+
+        
 
         //------------------------------------------------
         //--------PEOPLEFORM METHODS----------------------
         //------------------------------------------------
+        #region Class Methods
 
         //Get all users and populate list on form startup
         public void PopulateUserList()
@@ -99,11 +120,14 @@ namespace TNG_Database
                 deleteUserPeopleButton.Enabled = true;
 
                 deleteUserPeopleButton.Text = "Delete User";
+                SetDefaultControls("all");
+                CloseOpenGroupBox("default");
                 updateStatus.UpdateStatusBar(peopleFormListBox.SelectedItem.ToString() + " selected", mainform,0);
             }
             else if (peopleFormListBox.SelectedItems.Count > 1)
             {
                 //more than one item selected
+                SetDefaultControls("all");
                 CloseOpenGroupBox("default");
 
                 editUserPeopleButton.Enabled = false;
@@ -113,6 +137,10 @@ namespace TNG_Database
             }
             else if(peopleFormListBox.SelectedItems.Count == 0)
             {
+                //more than one item selected
+                SetDefaultControls("all");
+                CloseOpenGroupBox("default");
+
                 editUserPeopleButton.Enabled = false;
                 deleteUserPeopleButton.Enabled = false;
 
@@ -120,7 +148,9 @@ namespace TNG_Database
             }
         }
 
-        //update listbox
+        /// <summary>
+        /// Updates the ListBox.
+        /// </summary>
         public void UpdateListBox()
         {
             PopulateUserList();
@@ -131,9 +161,12 @@ namespace TNG_Database
             deleteUserPeopleButton.Enabled = false;
 
         }
-
-        //Clear and close Open GroupBox
-        private void CloseOpenGroupBox(string groupBoxOpen)
+    
+        /// <summary>
+        /// Clear and close Open GroupBox.
+        /// </summary>
+        /// <param name="groupBoxOpen">The group box open.</param>
+        private void CloseOpenGroupBox(string groupBoxOpen = "")
         {
             //determine which groupbox is open, clear and close appropriate box, and show default box
             switch (groupBoxOpen)
@@ -162,9 +195,50 @@ namespace TNG_Database
             peopleFormListBox.SelectionMode = SelectionMode.MultiExtended;
         }
 
+        /// <summary>
+        /// Sets the default controls.
+        /// </summary>
+        /// <param name="controls">The controls.</param>
+        private void SetDefaultControls(string controls)
+        {
+            switch (controls.ToLower())
+            {
+                case "add":
+                    commonMethod.BackColorDefault(addUserNameTextbox);
+                    break;
+                case "edit":
+                    commonMethod.BackColorDefault(editUserPeopleTB);
+                    break;
+                case "all":
+                    commonMethod.BackColorDefault(addUserNameTextbox);
+                    commonMethod.BackColorDefault(editUserPeopleTB);
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Sets the error controls.
+        /// </summary>
+        /// <param name="controls">The controls.</param>
+        private void SetErrorControls(string controls)
+        {
+            switch (controls.ToLower())
+            {
+                case "add":
+                    commonMethod.BackColorError(addUserNameTextbox);
+                    break;
+                case "edit":
+                    commonMethod.BackColorError(editUserPeopleTB);
+                    break;
+            }
+        }
+
+        #endregion
+
         //---------------------------------------------------------
         //---ADD, EDIT, DELETE USER FROM DATABASE BUTTON CLICKS----
         //---------------------------------------------------------
+        #region Add, Update, Delte Button pressed
 
         //Edit user button click
         private void editUserPeopleButton_Click(object sender, EventArgs e)
@@ -187,6 +261,10 @@ namespace TNG_Database
                 editUserGroupBox.Visible = true;
                 editUserPeopleTB.Focus();
             }
+
+            //reset focus values and make all controls default color
+            focusValues.Reset();
+            SetDefaultControls("edit");
         }
 
         //Delete user button click
@@ -274,12 +352,19 @@ namespace TNG_Database
             addUserGroupBox.Location = groupboxPoint;
             addUserGroupBox.Visible = true;
             addUserNameTextbox.Focus();
+
+            //reset focus values and make all controls default color
+            focusValues.Reset();
+            SetDefaultControls("add");
         }
+
+        #endregion
 
         //--------------------------------------------------------
         //--------EDIT USER GROUP BOX CONTROLS--------------------
         //--------------------------------------------------------
-        
+
+        #region Edit Controls
         //Edit user button clicked
         private void editUserEditButton_Click(object sender, EventArgs e)
         {
@@ -323,11 +408,22 @@ namespace TNG_Database
         //Text Changed in edit group box
         private void editUserPeopleTB_TextChanged(object sender, EventArgs e)
         {
-            if(editUserPeopleTB.Text.Length > 0)
+            if(editUserPeopleTB.TextLength > 0)
             {
                 editUserEditButton.Enabled = true;
-            }else
+                commonMethod.BackColorDefault(editUserPeopleTB);
+            }
+            else if (editUserPeopleTB.TextLength == 0 && !focusValues.PersonEntered)
             {
+                commonMethod.BackColorDefault(editUserPeopleTB);
+            }
+            else
+            {
+                if (editUserPeopleTB.TextLength == 0 && focusValues.PersonEntered)
+                {
+                    commonMethod.BackColorError(editUserPeopleTB);
+                }
+
                 editUserEditButton.Enabled = false;
             }
         }
@@ -345,14 +441,40 @@ namespace TNG_Database
             }
         }
 
+        //Focus Controls
+        private void EditUserPeopleTB_LostFocus(object sender, EventArgs e)
+        {
+            focusValues.PersonEntered = true;
+
+            //set control color based on textbox entry
+            if (editUserPeopleTB.TextLength == 0)
+            {
+                commonMethod.BackColorError(editUserPeopleTB);
+            }
+            else
+            {
+                commonMethod.BackColorDefault(editUserPeopleTB);
+            }
+        }
+
+        private void EditUserPeopleTB_GotFocus(object sender, EventArgs e)
+        {
+            //set textbox to default color
+            commonMethod.BackColorDefault(editUserPeopleTB);
+        }
+
+        #endregion
+
         //--------------------------------------------------------
         //--------ADD USER GROUP BOX CONTROLS---------------------
         //--------------------------------------------------------
 
+        #region Add Controls
+
         //add user add button clicked
         private void addUserAddButton_Click(object sender, EventArgs e)
         {
-            if(addUserNameTextbox.Text.Length > 0)
+            if(addUserNameTextbox.TextLength > 0)
             {
                 AddToDatabase addUser = new AddToDatabase();
                 PeopleValues peopleValues = new PeopleValues(addUserNameTextbox.Text);
@@ -380,12 +502,22 @@ namespace TNG_Database
         //add user textbox changed event
         private void addUserNameTextbox_TextChanged(object sender, EventArgs e)
         {
-            if (addUserNameTextbox.Text.Length > 0)
+            if (addUserNameTextbox.TextLength > 0)
             {
                 addUserAddButton.Enabled = true;
+                commonMethod.BackColorDefault(addUserNameTextbox);
+            }
+            else if (addUserNameTextbox.TextLength == 0 && !focusValues.PersonEntered)
+            {
+                commonMethod.BackColorDefault(addUserNameTextbox);
             }
             else
             {
+                if (addUserNameTextbox.TextLength == 0 && focusValues.PersonEntered)
+                {
+                    commonMethod.BackColorError(addUserNameTextbox);
+                }
+
                 addUserAddButton.Enabled = false;
             }
         }
@@ -404,9 +536,35 @@ namespace TNG_Database
             }
         }
 
+        //Focus Controls
+        private void AddUserNameTextbox_LostFocus(object sender, EventArgs e)
+        {
+            focusValues.PersonEntered = true;
+
+            //set control color based on textbox entry
+            if (addUserNameTextbox.TextLength == 0)
+            {
+                commonMethod.BackColorError(addUserNameTextbox);
+            }
+            else
+            {
+                commonMethod.BackColorDefault(addUserNameTextbox);
+            }
+        }
+
+        private void AddUserNameTextbox_GotFocus(object sender, EventArgs e)
+        {
+            //set textbox to default color
+            commonMethod.BackColorDefault(addUserNameTextbox);
+        }
+
+        #endregion
+
         //--------------------------------------------------------
         //--------DELETE USER GROUP BOX CONTROLS------------------
         //--------------------------------------------------------
+
+        #region Delete Controls
 
         //delete user Delete button clicked
         private void deleteUserDeleteButton_Click(object sender, EventArgs e)
@@ -443,6 +601,7 @@ namespace TNG_Database
             CloseOpenGroupBox("delete");
         }
 
+        #endregion
 
 
 

@@ -17,14 +17,16 @@ namespace TNG_Database
         private TNG_Database.MainForm mainform;
         private List<MasterListValues> masterList;
         private MasterListValues sendValues = new MasterListValues();
-
-        UpdateStatus updateStatus = UpdateStatus.Instance();
-
+        
         //Reference to CommonMethods
         CommonMethods commonMethod = CommonMethods.Instance();
+        UpdateStatus updateStatus = UpdateStatus.Instance();
 
         //list to capture multiple selected itemms for deletion
         List<MasterListValues> masterListValues = null;
+
+        //focus values
+        FirstFocusValues focusValues = new FirstFocusValues();
 
         public MasterListForm()
         {
@@ -58,6 +60,12 @@ namespace TNG_Database
             defaultArchiveNameMasterListLabel.Visible = false;
             defaultCameraNameMasterListLabel.Visible = false;
 
+            //Focus changed methods
+            addMasterListNameTextbox.GotFocus += AddMasterListNameTextbox_GotFocus;
+            editNewNameMasterTextbox.GotFocus += EditNewNameMasterTextbox_GotFocus;
+            addMasterListNameTextbox.LostFocus += AddMasterListNameTextbox_LostFocus;
+            editNewNameMasterTextbox.LostFocus += EditNewNameMasterTextbox_LostFocus;
+
             //Change name of default GB and make default label visible
             defaultMasterGroupBox.Text = "";
             defaultMasterGroupBox.Height = 41;
@@ -65,8 +73,9 @@ namespace TNG_Database
 
             //Load all the dropdowns
             LoadDropdowns();
+            SetDefaultColors("all");
         }
-
+        
         //-------------------------------------------------
         //---------CLASS METHODS---------------------------
         //-------------------------------------------------
@@ -240,7 +249,53 @@ namespace TNG_Database
             cameraAddMasterCombo.Items.AddRange(camera);
             editCameraNewMasterDropdown.Items.AddRange(camera);
         }
+
+        /// <summary>
+        /// Sets the default colors.
+        /// </summary>
+        /// <param name="controls">The controls.</param>
+        private void SetDefaultColors(string controls)
+        {
+            switch (controls.ToLower())
+            {
+                case "add":
+                    commonMethod.BackColorDefault(addMasterListNameTextbox);
+                    commonMethod.BackColorDefault(cameraAddMasterCombo);
+                    break;
+                case "edit":
+                    commonMethod.BackColorDefault(editNewNameMasterTextbox);
+                    commonMethod.BackColorDefault(editCameraNewMasterDropdown);
+                    break;
+                case "all":
+                    commonMethod.BackColorDefault(addMasterListNameTextbox);
+                    commonMethod.BackColorDefault(cameraAddMasterCombo);
+                    commonMethod.BackColorDefault(editNewNameMasterTextbox);
+                    commonMethod.BackColorDefault(editCameraNewMasterDropdown);
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Sets the error colors.
+        /// </summary>
+        /// <param name="controls">The controls.</param>
+        private void SetErrorColors(string controls)
+        {
+            switch (controls.ToLower())
+            {
+                case "add":
+                    commonMethod.BackColorDefault(addMasterListNameTextbox);
+                    commonMethod.BackColorDefault(cameraAddMasterCombo);
+                    break;
+                case "edit":
+                    commonMethod.BackColorDefault(editNewNameMasterTextbox);
+                    commonMethod.BackColorDefault(editCameraNewMasterDropdown);
+                    break;
+            }
+        }
+
         #endregion ClassMethods
+
         //---------------------------------------------------
         //--------ADD, DELETE, UPDATE BUTTONS PRESSED--------
         //---------------------------------------------------
@@ -257,7 +312,11 @@ namespace TNG_Database
             
             //Make add GB visible
             addMasterListGroupBox.Visible = true;
+            addMasterListNameTextbox.Focus();
 
+            //reset focus values
+            focusValues.Reset();
+            SetDefaultColors("add");
         }
 
         //Edit button pressed
@@ -282,6 +341,11 @@ namespace TNG_Database
 
             //make edit GB visible
             editMasterListGroupBox.Visible = true;
+            editNewNameMasterTextbox.Focus();
+
+            //reset focus values
+            focusValues.Reset();
+            SetDefaultColors("edit");
         }
 
         //Delete button pressed
@@ -367,13 +431,23 @@ namespace TNG_Database
         //Edit Textbox text changed
         private void editNewNameMasterTextbox_TextChanged(object sender, EventArgs e)
         {
-            if (editNewNameMasterTextbox.Text.Length > 0)
+            if (editNewNameMasterTextbox.TextLength > 0)
             {
                 editMasterEditButton.Enabled = true;
+                commonMethod.BackColorDefault(editNewNameMasterTextbox);
+            }
+            else if (editNewNameMasterTextbox.TextLength == 0 && !focusValues.MasterTape)
+            {
+                commonMethod.BackColorDefault(editNewNameMasterTextbox);
             }
             else
             {
                 editMasterEditButton.Enabled = false;
+
+                if(editNewNameMasterTextbox.TextLength == 0 && focusValues.MasterTape)
+                {
+                    commonMethod.BackColorError(editNewNameMasterTextbox);
+                }
             }
         }
 
@@ -418,6 +492,31 @@ namespace TNG_Database
         {
             MakeGroupboxesInvisible();
         }
+
+        //Focus Methods
+
+        private void EditNewNameMasterTextbox_LostFocus(object sender, EventArgs e)
+        {
+            //set focus values
+            focusValues.MasterTape = true;
+
+            //set control color based on textbox text
+            if (editNewNameMasterTextbox.TextLength > 0)
+            {
+                commonMethod.BackColorDefault(editNewNameMasterTextbox);
+            }
+            else
+            {
+                commonMethod.BackColorError(editNewNameMasterTextbox);
+            }
+        }
+
+        private void EditNewNameMasterTextbox_GotFocus(object sender, EventArgs e)
+        {
+            //set to default color on focus
+            commonMethod.BackColorDefault(editNewNameMasterTextbox);
+        }
+
         #endregion
         //---------------------------------------------------
         //--------------ADD GB METHODS-----------------------
@@ -471,14 +570,49 @@ namespace TNG_Database
         //Add Textbox text changed
         private void addMasterListNameTextbox_TextChanged(object sender, EventArgs e)
         {
-            if(addMasterListNameTextbox.Text.Length > 0)
+            if(addMasterListNameTextbox.TextLength > 0)
             {
                 addMasterListAddButton.Enabled = true;
-            }else
+            }
+            else if(addMasterListNameTextbox.TextLength == 0 && !focusValues.MasterTape)
+            {
+                commonMethod.BackColorDefault(addMasterListNameTextbox);
+            }
+            else
             {
                 addMasterListAddButton.Enabled = false;
+
+                if(addMasterListNameTextbox.TextLength == 0 && focusValues.MasterTape)
+                {
+                    commonMethod.BackColorError(addMasterListNameTextbox);
+                }
             }
         }
+
+        //Focus Methods
+
+        private void AddMasterListNameTextbox_LostFocus(object sender, EventArgs e)
+        {
+            //set focus values
+            focusValues.MasterTape = true;
+
+            //set control color based on textbox text
+            if(addMasterListNameTextbox.TextLength > 0)
+            {
+                commonMethod.BackColorDefault(addMasterListNameTextbox);
+            }
+            else
+            {
+                commonMethod.BackColorError(addMasterListNameTextbox);
+            }
+        }
+
+        private void AddMasterListNameTextbox_GotFocus(object sender, EventArgs e)
+        {
+            //set to default color on focus
+            commonMethod.BackColorDefault(addMasterListNameTextbox);
+        }
+
         #endregion
         //---------------------------------------------------
         //-------------DELETE GB METHODS---------------------
@@ -537,9 +671,7 @@ namespace TNG_Database
             MakeGroupboxesInvisible();
         }
         #endregion
-
-
-
+        
         //-----------------------------------------------------
         //ListBox selection change
         private void masterListListBox_SelectedIndexChanged(object sender, EventArgs e)
