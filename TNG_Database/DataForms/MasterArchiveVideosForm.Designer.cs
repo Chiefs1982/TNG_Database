@@ -40,13 +40,13 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.editArchiveGroupBox = new System.Windows.Forms.GroupBox();
+            this.editArchiveNameTextBox = new System.Windows.Forms.TextBox();
             this.editArchiveMasterTapeComboBox = new System.Windows.Forms.ComboBox();
             this.editArchiveClipNumberTextbox = new System.Windows.Forms.TextBox();
             this.label15 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.editArchiveCancelButton = new System.Windows.Forms.Button();
             this.editArchiveEditButton = new System.Windows.Forms.Button();
-            this.editArchiveNameTextBox = new System.Windows.Forms.TextBox();
             this.editArchiveIDTextBox = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -201,13 +201,13 @@
             // 
             // editArchiveGroupBox
             // 
+            this.editArchiveGroupBox.Controls.Add(this.editArchiveNameTextBox);
             this.editArchiveGroupBox.Controls.Add(this.editArchiveMasterTapeComboBox);
             this.editArchiveGroupBox.Controls.Add(this.editArchiveClipNumberTextbox);
             this.editArchiveGroupBox.Controls.Add(this.label15);
             this.editArchiveGroupBox.Controls.Add(this.label16);
             this.editArchiveGroupBox.Controls.Add(this.editArchiveCancelButton);
             this.editArchiveGroupBox.Controls.Add(this.editArchiveEditButton);
-            this.editArchiveGroupBox.Controls.Add(this.editArchiveNameTextBox);
             this.editArchiveGroupBox.Controls.Add(this.editArchiveIDTextBox);
             this.editArchiveGroupBox.Controls.Add(this.label5);
             this.editArchiveGroupBox.Controls.Add(this.label6);
@@ -217,6 +217,13 @@
             this.editArchiveGroupBox.TabIndex = 18;
             this.editArchiveGroupBox.TabStop = false;
             this.editArchiveGroupBox.Text = "Edit Project";
+            // 
+            // editArchiveNameTextBox
+            // 
+            this.editArchiveNameTextBox.Location = new System.Drawing.Point(104, 64);
+            this.editArchiveNameTextBox.Name = "editArchiveNameTextBox";
+            this.editArchiveNameTextBox.Size = new System.Drawing.Size(291, 20);
+            this.editArchiveNameTextBox.TabIndex = 3;
             // 
             // editArchiveMasterTapeComboBox
             // 
@@ -270,13 +277,6 @@
             this.editArchiveEditButton.Text = "Edit";
             this.editArchiveEditButton.UseVisualStyleBackColor = true;
             this.editArchiveEditButton.Click += new System.EventHandler(this.editArchiveEditButton_Click);
-            // 
-            // editArchiveNameTextBox
-            // 
-            this.editArchiveNameTextBox.Location = new System.Drawing.Point(104, 60);
-            this.editArchiveNameTextBox.Name = "editArchiveNameTextBox";
-            this.editArchiveNameTextBox.Size = new System.Drawing.Size(291, 20);
-            this.editArchiveNameTextBox.TabIndex = 3;
             // 
             // editArchiveIDTextBox
             // 
@@ -636,7 +636,6 @@
         private System.Windows.Forms.GroupBox editArchiveGroupBox;
         private System.Windows.Forms.Button editArchiveCancelButton;
         private System.Windows.Forms.Button editArchiveEditButton;
-        private System.Windows.Forms.TextBox editArchiveNameTextBox;
         private System.Windows.Forms.TextBox editArchiveIDTextBox;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
@@ -679,5 +678,6 @@
         private System.Windows.Forms.Label defaultArchiveMasterTapeLabel;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.TextBox editArchiveNameTextBox;
     }
 }

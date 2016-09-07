@@ -221,38 +221,47 @@ namespace TNG_Database
         /// <returns>A List of strings of all users</returns>
         public static List<string> GetAllUsers()
         {
-            List<string> userList;
+            List<string> userList = new List<string>();
 
-            //start new sqlite connection
-            SQLiteConnection populateConnection = new SQLiteConnection(database);
-            populateConnection.Open();
-
-            //Get all users and id and populate a new User class per user
-            string query = "select person_name from People";
-            SQLiteCommand queryCommand = new SQLiteCommand(query, populateConnection);
-            SQLiteDataReader reader = queryCommand.ExecuteReader();
-
-            //check to make sure query returned a string
-            if (reader.HasRows)
+            try
             {
-                //create list with the number of entries
-                userList = new List<string>(reader.StepCount);
+                //start new sqlite connection
+                SQLiteConnection populateConnection = new SQLiteConnection(database);
+                populateConnection.Open();
 
-                //go through each entry and add to listview
-                while (reader.Read())
+                //Get all users and id and populate a new User class per user
+                string query = "select person_name from People";
+                SQLiteCommand queryCommand = new SQLiteCommand(query, populateConnection);
+
+                using(SQLiteDataReader reader = queryCommand.ExecuteReader())
                 {
-                    //add user to list
-                    userList.Add(reader["person_name"].ToString());
-                }
-            }
-            else
-            {
-                //start list with one entry
-                userList = new List<string>(1);
-                userList.Add("No Users");
-            }
+                    //check to make sure query returned a string
+                    if (reader.HasRows)
+                    {
+                        //create list with the number of entries
+                        userList = new List<string>(reader.StepCount);
 
-            CloseConnections(queryCommand, populateConnection);
+                        //go through each entry and add to listview
+                        while (reader.Read())
+                        {
+                            //add user to list
+                            userList.Add(reader["person_name"].ToString());
+                        }
+                    }
+                    else
+                    {
+                        //start list with one entry
+                        userList = new List<string>(1);
+                        userList.Add("No Users");
+                    }
+
+                    CloseConnections(queryCommand, populateConnection);
+                }
+            }catch(SQLiteException e)
+            {
+                MainForm.LogFile("SQLite Error: " + e.Message);
+            }
+            
             return userList;
         }
 
@@ -265,33 +274,44 @@ namespace TNG_Database
         {
             List<MasterListValues> masterList = new List<MasterListValues>();
 
-            //start new sqlite connection
-            SQLiteConnection populateConnection = new SQLiteConnection(database);
-            populateConnection.Open();
-
-            //Query the database for all items in the Master list
-            string query = "select * from MasterList order by master_archive asc";
-            SQLiteCommand command = new SQLiteCommand(query, populateConnection);
-            SQLiteDataReader reader = command.ExecuteReader();
-
-            //check to see if database has rows
-            if (reader.HasRows)
+            try
             {
-                //Set list size as the size of the items returned
-                masterList = new List<MasterListValues>(reader.StepCount);
+                //start new sqlite connection
+                SQLiteConnection populateConnection = new SQLiteConnection(database);
+                populateConnection.Open();
 
-                //Iterate through reader
-                while (reader.Read())
+                //Query the database for all items in the Master list
+                string query = "select * from MasterList order by master_archive asc";
+                SQLiteCommand command = new SQLiteCommand(query, populateConnection);
+
+                using (SQLiteDataReader reader = command.ExecuteReader())
                 {
-                    masterList.Add(new MasterListValues(reader["master_archive"].ToString(), Convert.ToInt32(reader["master_media"]), Convert.ToInt32(reader["id"])));
+                    //check to see if database has rows
+                    if (reader.HasRows)
+                    {
+                        //Set list size as the size of the items returned
+                        masterList = new List<MasterListValues>(reader.StepCount);
+
+                        //Iterate through reader
+                        while (reader.Read())
+                        {
+                            masterList.Add(new MasterListValues(reader["master_archive"].ToString(), Convert.ToInt32(reader["master_media"]), Convert.ToInt32(reader["id"])));
+                        }
+                    }
+                    else
+                    {
+                        masterList = new List<MasterListValues>(1);
+                        masterList.Add(new MasterListValues("Nothing in database", 2));
+                    }
+
+                    CloseConnections(command, populateConnection);
                 }
-            } else
+            }
+            catch (SQLiteException e)
             {
-                masterList = new List<MasterListValues>(1);
-                masterList.Add(new MasterListValues("Nothing in database", 2));
+                MainForm.LogFile("SQLite Error: " + e.Message);
             }
 
-            CloseConnections(command, populateConnection);
             return masterList;
         }
 
@@ -305,28 +325,38 @@ namespace TNG_Database
             List<ProjectValues> values = new List<ProjectValues>();
             ProjectValues projectValue;
 
-            //start SQLite Connection
-            SQLiteConnection projectsConnection = new SQLiteConnection(database);
-            projectsConnection.Open();
-            SQLiteCommand command = new SQLiteCommand(projectsConnection);
-
-            command.CommandText = "select * from Projects order by project_id asc";
-            SQLiteDataReader reader = command.ExecuteReader();
-
-            if (reader.HasRows)
+            try
             {
-                while (reader.Read())
+                //start SQLite Connection
+                SQLiteConnection projectsConnection = new SQLiteConnection(database);
+                projectsConnection.Open();
+                SQLiteCommand command = new SQLiteCommand(projectsConnection);
+
+                command.CommandText = "select * from Projects order by project_id asc";
+
+                using (SQLiteDataReader reader = command.ExecuteReader())
                 {
-                    projectValue = new ProjectValues(reader["project_id"].ToString(), reader["project_name"].ToString(), Convert.ToInt32(reader["id"]));
-                    values.Add(projectValue);
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            projectValue = new ProjectValues(reader["project_id"].ToString(), reader["project_name"].ToString(), Convert.ToInt32(reader["id"]));
+                            values.Add(projectValue);
 
+                        }
+                        CloseConnections(command, projectsConnection);
+                    }
+                    else
+                    {
+                        CloseConnections(command, projectsConnection);
+                    }
                 }
-                CloseConnections(command, projectsConnection);
-            } else
-            {
-                CloseConnections(command, projectsConnection);
             }
-
+            catch (SQLiteException e)
+            {
+                MainForm.LogFile("SQLite Error: " + e.Message);
+            }
+            
             return values;
         }
         //-------------------------------------------
@@ -337,37 +367,46 @@ namespace TNG_Database
         /// <returns></returns>
         public List<TapeDatabaseValues> GetAllTapeValues()
         {
-            List<TapeDatabaseValues> tapeList;
+            List<TapeDatabaseValues> tapeList = new List<TapeDatabaseValues>();
 
-            //start new sqlite connection
-            SQLiteConnection populateConnection = new SQLiteConnection(database);
-            populateConnection.Open();
-
-            //Query the database for all items in the Master list
-            string query = "select * from TapeDatabase order by project_id asc";
-            SQLiteCommand command = new SQLiteCommand(query, populateConnection);
-            SQLiteDataReader reader = command.ExecuteReader();
-
-            //check to see if database has rows
-            if (reader.HasRows)
+            try
             {
-                //Set list size as the size of the items returned
-                tapeList = new List<TapeDatabaseValues>(reader.StepCount);
+                //start new sqlite connection
+                SQLiteConnection populateConnection = new SQLiteConnection(database);
+                populateConnection.Open();
 
-                //Iterate through reader
-                while (reader.Read())
+                //Query the database for all items in the Master list
+                string query = "select * from TapeDatabase order by project_id asc";
+                SQLiteCommand command = new SQLiteCommand(query, populateConnection);
+
+                using (SQLiteDataReader reader = command.ExecuteReader())
                 {
-                    tapeList.Add(new TapeDatabaseValues(reader["tape_name"].ToString(), reader["tape_number"].ToString(), reader["project_id"].ToString(), reader["project_name"].ToString(), Convert.ToInt32(reader["camera"]), reader["tape_tags"].ToString(), reader["date_shot"].ToString(), reader["master_archive"].ToString(), reader["person_entered"].ToString(), Convert.ToInt32(reader["id"])));
+                    //check to see if database has rows
+                    if (reader.HasRows)
+                    {
+                        //Set list size as the size of the items returned
+                        tapeList = new List<TapeDatabaseValues>(reader.StepCount);
+
+                        //Iterate through reader
+                        while (reader.Read())
+                        {
+                            tapeList.Add(new TapeDatabaseValues(reader["tape_name"].ToString(), reader["tape_number"].ToString(), reader["project_id"].ToString(), reader["project_name"].ToString(), Convert.ToInt32(reader["camera"]), reader["tape_tags"].ToString(), reader["date_shot"].ToString(), reader["master_archive"].ToString(), reader["person_entered"].ToString(), Convert.ToInt32(reader["id"])));
+                        }
+                    }
+                    else
+                    {
+                        tapeList = new List<TapeDatabaseValues>(1);
+                        tapeList.Add(new TapeDatabaseValues());
+                    }
+
+                    CloseConnections(command, populateConnection);
                 }
             }
-            else
+            catch (SQLiteException e)
             {
-                tapeList = new List<TapeDatabaseValues>(1);
-                tapeList.Add(new TapeDatabaseValues());
+                MainForm.LogFile("SQLite Error: " + e.Message);
             }
-
-            CloseConnections(command, populateConnection);
-
+            
             return tapeList;
         }
 
@@ -391,29 +430,29 @@ namespace TNG_Database
                 //add query
                 command.CommandText = "select * from MasterArchiveVideos order by project_id asc";
 
-                SQLiteDataReader reader = command.ExecuteReader();
-
-                if (reader.HasRows)
+                using (SQLiteDataReader reader = command.ExecuteReader())
                 {
-                    //data has been returned
-                    while (reader.Read())
+                    if (reader.HasRows)
                     {
-                        value = new MasterTapeValues(reader["project_id"].ToString(), reader["video_name"].ToString(), reader["master_tape"].ToString(), reader["clip_number"].ToString(), Convert.ToInt32(reader["id"]));
-                        mList.Add(value);
+                        //data has been returned
+                        while (reader.Read())
+                        {
+                            value = new MasterTapeValues(reader["project_id"].ToString(), reader["video_name"].ToString(), reader["master_tape"].ToString(), reader["clip_number"].ToString(), Convert.ToInt32(reader["id"]));
+                            mList.Add(value);
+                        }
+                        CloseConnections(command, archiveConnection);
                     }
-                    CloseConnections(command, archiveConnection);
+                    else
+                    {
+                        //returned nothing
+                        CloseConnections(command, archiveConnection);
+                    }
                 }
-                else
-                {
-                    //returned nothing
-                    CloseConnections(command, archiveConnection);
-                }
-
-                
             }catch(SQLiteException e)
             {
                 MainForm.LogFile("SQLite Error: " + e.Message);
             }
+
             return mList;
         }
 
@@ -446,7 +485,10 @@ namespace TNG_Database
                     }
                 }
             }
-            catch { }
+            catch (SQLiteException e)
+            {
+                MainForm.LogFile("SQLite Error: " + e.Message);
+            }
 
             return values;
         }
@@ -458,32 +500,42 @@ namespace TNG_Database
         /// <returns></returns>
         public static string[] GetPersonListForDropdown()
         {
-            List<string> personList;
+            List<string> personList = new List<string>();
 
-            //start new sqlite connection
-            SQLiteConnection dropdownConnection = new SQLiteConnection(database);
-            dropdownConnection.Open();
-
-            string query = "select person_name from People order by person_name asc";
-            SQLiteCommand command = new SQLiteCommand(query, dropdownConnection);
-            SQLiteDataReader reader = command.ExecuteReader();
-
-            if (reader.HasRows)
+            try
             {
-                personList = new List<string>(reader.StepCount);
+                //start new sqlite connection
+                SQLiteConnection dropdownConnection = new SQLiteConnection(database);
+                dropdownConnection.Open();
 
-                while (reader.Read())
+                string query = "select person_name from People order by person_name asc";
+                SQLiteCommand command = new SQLiteCommand(query, dropdownConnection);
+
+                using (SQLiteDataReader reader = command.ExecuteReader())
                 {
-                    personList.Add(reader["person_name"].ToString());
+                    if (reader.HasRows)
+                    {
+                        personList = new List<string>(reader.StepCount);
+
+                        while (reader.Read())
+                        {
+                            personList.Add(reader["person_name"].ToString());
+                        }
+                    }
+                    else
+                    {
+                        personList = new List<string>();
+                        personList.AddRange(new string[] { "Brendan Burghardt", "Brett Snyder", "Aaron Primmer", "Dan Schultz", "Jerome Rigoroso", "Kelcy Erbele" });
+                    }
+                    
+                    CloseConnections(command, dropdownConnection);
                 }
-            }else
+            }
+            catch (SQLiteException e)
             {
-                personList = new List<string>();
-                personList.AddRange(new string[] {"Brendan Burghardt", "Brett Snyder", "Aaron Primmer", "Dan Schultz","Jerome Rigoroso", "Kelcy Erbele"});
+                MainForm.LogFile("SQLite Error: " + e.Message);
             }
             
-
-            CloseConnections(command, dropdownConnection);
             return personList.ToArray();
         }
 
@@ -532,186 +584,190 @@ namespace TNG_Database
             string preQuery = "";
             string query = "";
 
-            //start new sqlite connection
-            SQLiteConnection searchConnection = new SQLiteConnection(database);
-            searchConnection.Open();
-            SQLiteCommand command = new SQLiteCommand(searchConnection);
-
-            //start of query pieces for tape Database
-            preQuery = "select * from TapeDatabase";
-
-            //add query based on number of entries
-            if(input.Length > 0)
+            try
             {
-                //iterate over all entries
-                for (int i = 0; i < input.Length; i++)
+                //start new sqlite connection
+                SQLiteConnection searchConnection = new SQLiteConnection(database);
+                searchConnection.Open();
+                SQLiteCommand command = new SQLiteCommand(searchConnection);
+
+                //start of query pieces for tape Database
+                preQuery = "select * from TapeDatabase";
+
+                //add query based on number of entries
+                if (input.Length > 0)
                 {
-                    //set up value for each input
-                    string term = "@input" + i;
-                    string value = "'%" + input[i].ToLower() + "%'";
-                    if (i == 0)
+                    //iterate over all entries
+                    for (int i = 0; i < input.Length; i++)
                     {
-                        preQuery += " where";
-                    }
+                        //set up value for each input
+                        string term = "@input" + i;
+                        string value = "'%" + input[i].ToLower() + "%'";
+                        if (i == 0)
+                        {
+                            preQuery += " where";
+                        }
 
-                    if(i > 0)
-                    {
-                        preQuery += " or";
-                    }
+                        if (i > 0)
+                        {
+                            preQuery += " or";
+                        }
 
-                    //set up the regex part of the query
-                    preQuery += String.Format(" project_id like {0} or project_name like {0} or tape_name like {0} or tape_tags like {0} or date_shot like {0} or master_archive like {0}",value);
-                    Console.WriteLine(input[i].ToLower());
+                        //set up the regex part of the query
+                        preQuery += String.Format(" project_id like {0} or project_name like {0} or tape_name like {0} or tape_tags like {0} or date_shot like {0} or master_archive like {0}", value);
+                        Console.WriteLine(input[i].ToLower());
+                    }
                 }
+                preQuery += " order by project_id asc";
+                Console.WriteLine(preQuery);
+
+                //Set assembled query to final query
+                query = preQuery;
+                command.CommandText = query;
+                Console.WriteLine("Command Text: " + command.CommandText);
+
+                using (SQLiteDataReader reader = command.ExecuteReader())
+                {
+                    //If there are return values then parse them and display them
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            SearchValues dbData = new SearchValues();
+                            dbData.TapeName = reader["tape_name"].ToString();
+                            dbData.TapeNumber = reader["tape_number"].ToString();
+                            dbData.ProjectID = reader["project_id"].ToString();
+                            dbData.ProjectName = reader["project_name"].ToString();
+                            dbData.Camera = commonMethod.GetCameraName(Convert.ToInt32(reader["camera"]));
+                            dbData.TapeTags = reader["tape_tags"].ToString();
+                            dbData.DateShot = reader["date_shot"].ToString();
+                            dbData.MasterArchive = reader["master_archive"].ToString();
+                            dbData.Person = reader["person_entered"].ToString();
+                            dbData.ID = Convert.ToInt32(reader["id"]);
+                            dbData.FilterName = "tapes";
+
+                            tapeDBValues.Add(dbData);
+                        }
+                    }
+                }
+
+                //start of query pieces for Projects
+                preQuery = "select * from Projects";
+
+                //add query based on number of entries
+                if (input.Length > 0)
+                {
+                    //iterate over all entries
+                    for (int i = 0; i < input.Length; i++)
+                    {
+                        //set up value for each input
+                        string value = "'%" + input[i].ToLower() + "%'";
+                        if (i == 0)
+                        {
+                            preQuery += " where";
+                        }
+
+                        if (i > 0)
+                        {
+                            preQuery += " or";
+                        }
+
+                        //set up the regex part of the query
+                        preQuery += String.Format(" project_id like {0} or project_name like {0}", value);
+                        Console.WriteLine(input[i].ToLower());
+                    }
+                }
+                preQuery += " order by project_id asc";
+                Console.WriteLine(preQuery);
+
+                //Set assembled query to final query
+                query = preQuery;
+                command.CommandText = query;
+                Console.WriteLine("Command Text: " + command.CommandText);
+
+                using (SQLiteDataReader reader = command.ExecuteReader())
+                {
+                    //If there are return values then parse them and display them
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            //Add values to returned list
+                            SearchValues dbData = new SearchValues();
+                            dbData.ProjectID = reader["project_id"].ToString();
+                            dbData.ProjectName = reader["project_name"].ToString();
+                            dbData.ID = Convert.ToInt32(reader["id"]);
+                            dbData.FilterName = "projects";
+
+                            tapeDBValues.Add(dbData);
+                        }
+                    }
+                }
+
+                //start of query pieces for Master Archive Videos
+                preQuery = "select * from MasterArchiveVideos";
+
+                //add query based on number of entries
+                if (input.Length > 0)
+                {
+                    //iterate over all entries
+                    for (int i = 0; i < input.Length; i++)
+                    {
+                        //set up value for each input
+                        string value = "'%" + input[i].ToLower() + "%'";
+                        if (i == 0)
+                        {
+                            preQuery += " where";
+                        }
+
+                        if (i > 0)
+                        {
+                            preQuery += " or";
+                        }
+
+                        //set up the regex part of the query
+                        preQuery += String.Format(" project_id like {0} or video_name like {0} or master_tape like {0}", value);
+                        Console.WriteLine(input[i].ToLower());
+                    }
+                }
+                preQuery += " order by project_id asc";
+                Console.WriteLine(preQuery);
+
+                //Set assembled query to final query
+                query = preQuery;
+                command.CommandText = query;
+                Console.WriteLine("Command Text: " + command.CommandText);
+
+                using (SQLiteDataReader reader = command.ExecuteReader())
+                {
+                    //If there are return values then parse them and display them
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            //Add values to returned list
+                            SearchValues dbData = new SearchValues();
+                            dbData.ProjectID = reader["project_id"].ToString();
+                            dbData.ProjectName = reader["video_name"].ToString();
+                            dbData.MasterArchive = reader["master_tape"].ToString();
+                            dbData.ClipNumber = reader["clip_number"].ToString();
+                            dbData.ID = Convert.ToInt32(reader["id"]);
+                            dbData.FilterName = "archive";
+
+                            tapeDBValues.Add(dbData);
+                        }
+                    }
+                }
+
+                //close connection and return final list
+                searchConnection.Close();
             }
-            preQuery += " order by project_id asc";
-            Console.WriteLine(preQuery);
-
-            //Set assembled query to final query
-            query = preQuery;
-            command.CommandText = query;
-            Console.WriteLine("Command Text: "+command.CommandText);
-            SQLiteDataReader reader = command.ExecuteReader();
-
-            //If there are return values then parse them and display them
-            if (reader.HasRows)
+            catch (SQLiteException e)
             {
-                while (reader.Read())
-                {
-                    SearchValues dbData = new SearchValues();
-                    dbData.TapeName = reader["tape_name"].ToString();
-                    dbData.TapeNumber =  reader["tape_number"].ToString();
-                    dbData.ProjectID = reader["project_id"].ToString();
-                    dbData.ProjectName = reader["project_name"].ToString();
-                    dbData.Camera = commonMethod.GetCameraName(Convert.ToInt32(reader["camera"]));
-                    dbData.TapeTags = reader["tape_tags"].ToString();
-                    dbData.DateShot = reader["date_shot"].ToString();
-                    dbData.MasterArchive = reader["master_archive"].ToString();
-                    dbData.Person = reader["person_entered"].ToString();
-                    dbData.ID = Convert.ToInt32(reader["id"]);
-                    dbData.FilterName = "tapes";
-
-                    tapeDBValues.Add(dbData);
-                }
+                MainForm.LogFile("SQLite Error: " + e.Message);
             }
-
-            //close reader for next query
-            reader.Close();
-
-            //start of query pieces for Projects
-            preQuery = "select * from Projects";
-
-            //add query based on number of entries
-            if (input.Length > 0)
-            {
-                //iterate over all entries
-                for (int i = 0; i < input.Length; i++)
-                {
-                    //set up value for each input
-                    string value = "'%" + input[i].ToLower() + "%'";
-                    if (i == 0)
-                    {
-                        preQuery += " where";
-                    }
-
-                    if (i > 0)
-                    {
-                        preQuery += " or";
-                    }
-
-                    //set up the regex part of the query
-                    preQuery += String.Format(" project_id like {0} or project_name like {0}", value);
-                    Console.WriteLine(input[i].ToLower());
-                }
-            }
-            preQuery += " order by project_id asc";
-            Console.WriteLine(preQuery);
-
-            //Set assembled query to final query
-            query = preQuery;
-            command.CommandText = query;
-            Console.WriteLine("Command Text: " + command.CommandText);
-            reader = command.ExecuteReader();
-
-            //If there are return values then parse them and display them
-            if (reader.HasRows)
-            {
-                while (reader.Read())
-                {
-                    //Add values to returned list
-                    SearchValues dbData = new SearchValues();
-                    dbData.ProjectID = reader["project_id"].ToString();
-                    dbData.ProjectName = reader["project_name"].ToString();
-                    dbData.ID = Convert.ToInt32(reader["id"]);
-                    dbData.FilterName = "projects";
-
-                    tapeDBValues.Add(dbData);
-                }
-            }
-
-            //close reader for next query
-            reader.Close();
-
-            //start of query pieces for Master Archive Videos
-            preQuery = "select * from MasterArchiveVideos";
-
-            //add query based on number of entries
-            if (input.Length > 0)
-            {
-                //iterate over all entries
-                for (int i = 0; i < input.Length; i++)
-                {
-                    //set up value for each input
-                    string value = "'%" + input[i].ToLower() + "%'";
-                    if (i == 0)
-                    {
-                        preQuery += " where";
-                    }
-
-                    if (i > 0)
-                    {
-                        preQuery += " or";
-                    }
-
-                    //set up the regex part of the query
-                    preQuery += String.Format(" project_id like {0} or video_name like {0} or master_tape like {0}", value);
-                    Console.WriteLine(input[i].ToLower());
-                }
-            }
-            preQuery += " order by project_id asc";
-            Console.WriteLine(preQuery);
-
-            //Set assembled query to final query
-            query = preQuery;
-            command.CommandText = query;
-            Console.WriteLine("Command Text: " + command.CommandText);
-            reader = command.ExecuteReader();
-
-            //If there are return values then parse them and display them
-            if (reader.HasRows)
-            {
-                while (reader.Read())
-                {
-                    //Add values to returned list
-                    SearchValues dbData = new SearchValues();
-                    dbData.ProjectID = reader["project_id"].ToString();
-                    dbData.ProjectName = reader["video_name"].ToString();
-                    dbData.MasterArchive = reader["master_tape"].ToString();
-                    dbData.ClipNumber = reader["clip_number"].ToString();
-                    dbData.ID = Convert.ToInt32(reader["id"]);
-                    dbData.FilterName = "archive";
-
-                    tapeDBValues.Add(dbData);
-                }
-            }
-
-            //close reader for next query
-            reader.Close();
-
-            //close connection and return final list
-            searchConnection.Close();
+            
             return tapeDBValues;
-
         }
 
         /// <summary>
@@ -869,15 +925,13 @@ namespace TNG_Database
 
             if ((importStream = ofd.OpenFile()) != null)
             {
-
                 try
                 {
                     //items for 
                     string line;
                     string newLine;
                     char[] seperators = ",".ToCharArray();
-
-
+                    
                     //streamReader to read csv file
                     StreamReader textReader = new StreamReader(importStream);
                     while ((line = textReader.ReadLine()) != null)
@@ -898,8 +952,6 @@ namespace TNG_Database
                             //only one part, it will not add this value to database
                         }
                     }
-
-
                 }
                 catch (Exception error)
                 {
@@ -1403,7 +1455,7 @@ namespace TNG_Database
             }
             catch (SQLiteException e)
             {
-                MainForm.LogFile(e.Message);
+                MainForm.LogFile("Create Database Error: " + e.Message);
             }
         }
 
@@ -1429,63 +1481,67 @@ namespace TNG_Database
                 command.CommandText = "Select * from ComputerInfo where computer_name = @c_name and computer_hash = @c_hash";
                 command.Parameters.AddWithValue("@c_name", name);
                 command.Parameters.AddWithValue("@c_hash", hash);
-                SQLiteDataReader reader = command.ExecuteReader();
 
-                //check for entry
-                if (reader.HasRows)
+                using (SQLiteDataReader reader = command.ExecuteReader())
                 {
-                    while (reader.Read())
+                    //check for entry
+                    if (reader.HasRows)
                     {
-                        userName = reader["computer_user"].ToString();
-                        break;
-                    }
-                }
-                else
-                {
-                    
-                    //nothing found in database
-                    string[] computers = new string[] { "editer1", "editer2", "editer3", "editer4", "editer5", "editer6" };
-                    string[] people = new string[] { "Brendan Burghardt", "Brett Snyder", "Jerome Rigoroso", "Aaron Primmer", "Kelcy Erbele" };
-
-                    foreach(string computer in computers)
-                    {
-                        int index = name.ToLower().IndexOf(computer);
-
-                        if (index != -1)
+                        while (reader.Read())
                         {
-                            switch (computer.ToLower())
-                            {
-                                case "edit2":
-                                    userName = people[1];
-                                    break;
-                                case "edit3":
-                                    userName = people[2];
-                                    break;
-                                case "edit5":
-                                    userName = people[3];
-                                    break;
-                                case "edit6":
-                                    userName = people[4];
-                                    break;
-                                case "edit1":
-                                case "edit4":
-                                default:
-                                    userName = people[0];
-                                    break;
-                            }
+                            userName = reader["computer_user"].ToString();
+                            break;
                         }
                     }
+                    else
+                    {
+                        //nothing found in database
+                        string[] computers = new string[] { "editer1", "editer2", "editer3", "editer4", "editer5", "editer6" };
+                        string[] people = new string[] { "Brendan Burghardt", "Brett Snyder", "Jerome Rigoroso", "Aaron Primmer", "Kelcy Erbele" };
 
-                    command.CommandText = "insert into ComputerInfo(computer_name, computer_hash, computer_user) values(@c_name, @c_hash, @c_user)";
-                    command.Parameters.Clear();
-                    command.Parameters.AddWithValue("@c_name", name);
-                    command.Parameters.AddWithValue("@c_hash", hash);
-                    command.Parameters.AddWithValue("@c_user", userName);
-                    command.ExecuteNonQuery();
+                        foreach (string computer in computers)
+                        {
+                            int index = name.ToLower().IndexOf(computer);
+
+                            if (index != -1)
+                            {
+                                switch (computer.ToLower())
+                                {
+                                    case "edit2":
+                                        userName = people[1];
+                                        break;
+                                    case "edit3":
+                                        userName = people[2];
+                                        break;
+                                    case "edit5":
+                                        userName = people[3];
+                                        break;
+                                    case "edit6":
+                                        userName = people[4];
+                                        break;
+                                    case "edit1":
+                                    case "edit4":
+                                    default:
+                                        userName = people[0];
+                                        break;
+                                }
+                            }
+                        }
+
+                        command.CommandText = "insert into ComputerInfo(computer_name, computer_hash, computer_user) values(@c_name, @c_hash, @c_user)";
+                        command.Parameters.Clear();
+                        command.Parameters.AddWithValue("@c_name", name);
+                        command.Parameters.AddWithValue("@c_hash", hash);
+                        command.Parameters.AddWithValue("@c_user", userName);
+                        command.ExecuteNonQuery();
+                    }
                 }
             }
-            catch { }
-            
+            catch (SQLiteException e)
+            {
+                MainForm.LogFile("SQLite Error: " + e.Message);
+            }
+
             return userName;
         }
 
@@ -1507,7 +1563,10 @@ namespace TNG_Database
 
                 command.ExecuteNonQuery();
             }
-            catch { }
+            catch (SQLiteException e)
+            {
+                MainForm.LogFile("SQLite Error: " + e.Message);
+            }
         }
 
         #endregion

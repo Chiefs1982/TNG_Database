@@ -35,6 +35,9 @@ namespace TNG_Database
         //list to delete multiple selections
         List<MasterArchiveVideoValues> archivesToDelete = null;
 
+        //Focus values
+        FirstFocusValues focusValues = new FirstFocusValues();
+
         public MasterArchiveVideosForm(TNG_Database.MainForm parent)
         {
             InitializeComponent();
@@ -67,14 +70,35 @@ namespace TNG_Database
             addArchiveMasterTapeComboBox.Items.AddRange(masterDropDown);
             editArchiveMasterTapeComboBox.Items.AddRange(masterDropDown);
 
+            //Got focus event methods
+            addArchiveIDTextBox.GotFocus += AddArchiveIDTextBox_GotFocus;
+            addArchiveNameTextBox.GotFocus += AddArchiveNameTextBox_GotFocus;
+            addArchiveClipNumberTextbox.GotFocus += AddArchiveClipNumberTextbox_GotFocus;
+            editArchiveIDTextBox.GotFocus += EditArchiveIDTextBox_GotFocus;
+            editArchiveNameTextBox.GotFocus += EditArchiveNameTextBox_GotFocus;
+            editArchiveClipNumberTextbox.GotFocus += EditArchiveClipNumberTextbox_GotFocus;
+
+            //Lost focus event methods
+            addArchiveIDTextBox.LostFocus += AddArchiveIDTextBox_LostFocus;
+            addArchiveNameTextBox.LostFocus += AddArchiveNameTextBox_LostFocus;
+            addArchiveClipNumberTextbox.LostFocus += AddArchiveClipNumberTextbox_LostFocus;
+            editArchiveIDTextBox.LostFocus += EditArchiveIDTextBox_LostFocus;
+            editArchiveNameTextBox.LostFocus += EditArchiveNameTextBox_LostFocus;
+            editArchiveClipNumberTextbox.LostFocus += EditArchiveClipNumberTextbox_LostFocus;
+
+
             //close all groupboxes
             CloseGroupBox();
 
             //Event for sorting each column
             CommonMethods.ListViewItemComparer.SortColumn = -1;
             archiveListView.ColumnClick += new ColumnClickEventHandler(CommonMethods.ListViewItemComparer.SearchListView_ColumnClick);
-        }
 
+            //reset focus values and set colors to default
+            focusValues.Reset();
+            SetDefaultColors("all");
+        }
+        
         private void ArchiveClipNumberTextbox_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
@@ -86,15 +110,32 @@ namespace TNG_Database
         private void AddProjectTextBox_TextChanged(object sender, EventArgs e)
         {
             //check to make sure both textboxes have something in them
-            if (addArchiveIDTextBox.Text.Length > 0 && addArchiveNameTextBox.Text.Length > 0 && addArchiveClipNumberTextbox.Text.Length > 0)
+            if (addArchiveIDTextBox.TextLength > 0 && addArchiveNameTextBox.TextLength > 0 && addArchiveClipNumberTextbox.TextLength > 0)
             {
                 //Not empty
                 addArchiveAddButton.Enabled = true;
+            }
+            else if (addArchiveIDTextBox.TextLength == 0 && !focusValues.ProjectID)
+            {
+                commonMethod.BackColorDefault(addArchiveIDTextBox);
+            }
+            else if (addArchiveNameTextBox.TextLength == 0 && !focusValues.VideoName)
+            {
+                commonMethod.BackColorDefault(addArchiveNameTextBox);
+            }
+            else if(addArchiveClipNumberTextbox.TextLength == 0 && !focusValues.ClipNumber)
+            {
+                commonMethod.BackColorDefault(addArchiveClipNumberTextbox);
             }
             else
             {
                 //empty
                 addArchiveAddButton.Enabled = false;
+
+                //change colors to errors if criteria is met
+                if (addArchiveIDTextBox.TextLength == 0 && focusValues.ProjectID) { commonMethod.BackColorError(addArchiveIDTextBox); }
+                if (addArchiveNameTextBox.TextLength == 0 && focusValues.VideoName) { commonMethod.BackColorError(addArchiveNameTextBox); }
+                if (addArchiveClipNumberTextbox.TextLength == 0 && focusValues.ClipNumber) { commonMethod.BackColorError(addArchiveClipNumberTextbox); }
             }
         }
 
@@ -234,6 +275,56 @@ namespace TNG_Database
             }
         }
 
+        /// <summary>
+        /// Sets the default colors.
+        /// </summary>
+        /// <param name="controls">The controls.</param>
+        private void SetDefaultColors(string controls)
+        {
+            switch (controls.ToLower())
+            {
+                case "add":
+                    commonMethod.BackColorDefault(addArchiveIDTextBox);
+                    commonMethod.BackColorDefault(addArchiveNameTextBox);
+                    commonMethod.BackColorDefault(addArchiveClipNumberTextbox);
+                    break;
+                case "edit":
+                    commonMethod.BackColorDefault(editArchiveIDTextBox);
+                    commonMethod.BackColorDefault(editArchiveNameTextBox);
+                    commonMethod.BackColorDefault(editArchiveClipNumberTextbox);
+                    break;
+                case "all":
+                    commonMethod.BackColorDefault(addArchiveIDTextBox);
+                    commonMethod.BackColorDefault(addArchiveNameTextBox);
+                    commonMethod.BackColorDefault(addArchiveClipNumberTextbox);
+                    commonMethod.BackColorDefault(editArchiveIDTextBox);
+                    commonMethod.BackColorDefault(editArchiveNameTextBox);
+                    commonMethod.BackColorDefault(editArchiveClipNumberTextbox);
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Sets the error colors.
+        /// </summary>
+        /// <param name="controls">The controls.</param>
+        private void SetErrorColors(string controls)
+        {
+            switch (controls.ToLower())
+            {
+                case "add":
+                    commonMethod.BackColorError(addArchiveIDTextBox);
+                    commonMethod.BackColorError(addArchiveNameTextBox);
+                    commonMethod.BackColorError(addArchiveClipNumberTextbox);
+                    break;
+                case "edit":
+                    commonMethod.BackColorError(editArchiveIDTextBox);
+                    commonMethod.BackColorError(editArchiveNameTextBox);
+                    commonMethod.BackColorError(editArchiveClipNumberTextbox);
+                    break;
+            }
+        }
+
         #endregion
 
         //---------------------------------------------------------
@@ -251,6 +342,10 @@ namespace TNG_Database
             addArchiveMasterTapeComboBox.SelectedIndex = 0;
             //open groupbox
             CloseGroupBox("add");
+
+            //reset focus values and set colors to default
+            focusValues.Reset();
+            SetDefaultColors("add");
         }
         
         //Update Button Pressed
@@ -267,6 +362,10 @@ namespace TNG_Database
 
             //give focus to the cancel button
             editArchiveCancelButton.Focus();
+
+            //reset focus values and set colors to default
+            focusValues.Reset();
+            SetDefaultColors("edit");
         }
 
         //Delete Button Pressed
@@ -317,9 +416,8 @@ namespace TNG_Database
 
                         archivesToDelete.Add(value);
                     }
-
-
-
+                    
+                    //
                     if (archiveListView.SelectedItems.Count > 1 && archivesToDelete.Count > 0)
                     {
                         Console.WriteLine("sending " + archivesToDelete.Count + " items to delete");
@@ -334,9 +432,7 @@ namespace TNG_Database
                 {
                     //No Pressed, nothing will be done
                 }
-        }
-
-            
+            }
         }
 
         #endregion
@@ -396,8 +492,6 @@ namespace TNG_Database
                 //project id was NOT a number
                 updateStatus.UpdateStatusBar("Project ID must be a number", mainform);
             }
-
-            
         }
 
         //Cancel Button pressed
@@ -410,6 +504,64 @@ namespace TNG_Database
             addArchiveMasterTapeComboBox.SelectedIndex = 0;
             //close groupbox and open default
             CloseGroupBox();
+        }
+        
+        //Focus event methods
+        private void AddArchiveClipNumberTextbox_LostFocus(object sender, EventArgs e)
+        {
+            focusValues.ClipNumber = true;
+
+            if (addArchiveClipNumberTextbox.TextLength == 0)
+            {
+                commonMethod.BackColorError(addArchiveClipNumberTextbox);
+            }
+            else
+            {
+                commonMethod.BackColorDefault(addArchiveClipNumberTextbox);
+            }
+        }
+
+        private void AddArchiveNameTextBox_LostFocus(object sender, EventArgs e)
+        {
+            focusValues.VideoName = true;
+
+            if (addArchiveNameTextBox.TextLength == 0)
+            {
+                commonMethod.BackColorError(addArchiveNameTextBox);
+            }
+            else
+            {
+                commonMethod.BackColorDefault(addArchiveNameTextBox);
+            }
+        }
+
+        private void AddArchiveIDTextBox_LostFocus(object sender, EventArgs e)
+        {
+            focusValues.ProjectID = true;
+
+            if (addArchiveIDTextBox.TextLength == 0)
+            {
+                commonMethod.BackColorError(addArchiveIDTextBox);
+            }
+            else
+            {
+                commonMethod.BackColorDefault(addArchiveIDTextBox);
+            }
+        }
+
+        private void AddArchiveClipNumberTextbox_GotFocus(object sender, EventArgs e)
+        {
+            commonMethod.BackColorDefault(addArchiveClipNumberTextbox);
+        }
+
+        private void AddArchiveNameTextBox_GotFocus(object sender, EventArgs e)
+        {
+            commonMethod.BackColorDefault(addArchiveNameTextBox);
+        }
+
+        private void AddArchiveIDTextBox_GotFocus(object sender, EventArgs e)
+        {
+            commonMethod.BackColorDefault(addArchiveIDTextBox);
         }
 
         #endregion
@@ -468,8 +620,6 @@ namespace TNG_Database
                 //project id was NOT a number
                 updateStatus.UpdateStatusBar("Project ID must be a number", mainform);
             }
-
-            
         }
         
         //Cancel button pressed
@@ -483,6 +633,66 @@ namespace TNG_Database
 
             //close edit groupbox
             CloseGroupBox();
+        }
+
+
+        //Focus event methods
+
+        private void EditArchiveClipNumberTextbox_LostFocus(object sender, EventArgs e)
+        {
+            focusValues.ClipNumber = true;
+
+            if (editArchiveClipNumberTextbox.TextLength == 0)
+            {
+                commonMethod.BackColorError(editArchiveClipNumberTextbox);
+            }
+            else
+            {
+                commonMethod.BackColorDefault(editArchiveClipNumberTextbox);
+            }
+        }
+
+        private void EditArchiveNameTextBox_LostFocus(object sender, EventArgs e)
+        {
+            focusValues.VideoName = true;
+
+            if (editArchiveNameTextBox.TextLength == 0)
+            {
+                commonMethod.BackColorError(editArchiveNameTextBox);
+            }
+            else
+            {
+                commonMethod.BackColorDefault(editArchiveNameTextBox);
+            }
+        }
+
+        private void EditArchiveIDTextBox_LostFocus(object sender, EventArgs e)
+        {
+            focusValues.ProjectID = true;
+
+            if (editArchiveIDTextBox.TextLength == 0)
+            {
+                commonMethod.BackColorError(editArchiveIDTextBox);
+            }
+            else
+            {
+                commonMethod.BackColorDefault(editArchiveIDTextBox);
+            }
+        }
+
+        private void EditArchiveClipNumberTextbox_GotFocus(object sender, EventArgs e)
+        {
+            commonMethod.BackColorDefault(editArchiveClipNumberTextbox);
+        }
+
+        private void EditArchiveNameTextBox_GotFocus(object sender, EventArgs e)
+        {
+            commonMethod.BackColorDefault(editArchiveNameTextBox);
+        }
+
+        private void EditArchiveIDTextBox_GotFocus(object sender, EventArgs e)
+        {
+            commonMethod.BackColorDefault(editArchiveIDTextBox);
         }
 
         #endregion
@@ -550,8 +760,7 @@ namespace TNG_Database
         }
 
         #endregion
-
-
+        
         //Listview index changed
         private void archiveListView_SelectedIndexChanged(object sender, EventArgs e)
         {

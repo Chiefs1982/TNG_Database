@@ -83,8 +83,7 @@ namespace TNG_Database
                     command.Parameters.AddWithValue("@dateShot", tapeDBValues.DateShot);
                     command.Parameters.AddWithValue("@masterArchive", tapeDBValues.MasterArchive);
                     command.Parameters.AddWithValue("@personEntered", tapeDBValues.PersonEntered);
-
-
+                    
                     if (command.ExecuteNonQuery() == 1)
                     {
                         //Entry inserts successfully
@@ -113,10 +112,6 @@ namespace TNG_Database
                         CloseConnections(command, tapeDBConnection);
                         return false;
                     }
-
-                    
-
-
                 }
                 else
                 {
@@ -131,7 +126,6 @@ namespace TNG_Database
                 MainForm.LogFile("Add Tape List Error: " + e.Message);
                 return false;
             }
-            
         }
 
         //----------------------------------------------
@@ -207,8 +201,6 @@ namespace TNG_Database
                     CloseConnections(command, tapeDBConnection);
                     return false;
                 }
-
-                
             }
             catch (Exception e)
             {
@@ -324,21 +316,15 @@ namespace TNG_Database
                     command.Parameters.AddWithValue("@masterArchive", tapeValues.MasterArchive);
                     command.Parameters.AddWithValue("@personEntered", tapeValues.PersonEntered);
                     if(command.ExecuteNonQuery() == 1) { /* Success */ }
-                    /*
-                    //Entry double checked to match
-                    command.CommandText = "delete from TapeDatabase where id = @id and project_id = @projectID";
-                    command.ExecuteNonQuery();
-                    */
                     deleted++;
                 }
-
-                return deleted;
             }
             catch (Exception e)
             {
                 MainForm.LogFile("Delete Tape List Error: " + e.Message);
-                return deleted;
             }
+
+            return deleted;
         }
         
         #endregion
@@ -406,7 +392,6 @@ namespace TNG_Database
                         CloseConnections(command, masterConnection);
                         return false;
                     }
-
                 }
                 else
                 {
@@ -419,7 +404,6 @@ namespace TNG_Database
                 MainForm.LogFile("Master List Add Error: " + e.Message);
                 return false;
             }
-            
         }
 
         //-----------------------------------
@@ -659,7 +643,6 @@ namespace TNG_Database
                         CloseConnections(command, personConnection);
                         return false;
                     }
-
                 }
                 else
                 {
@@ -821,14 +804,13 @@ namespace TNG_Database
                     */
                     deleted++;
                 }
-
-                return deleted;
             }
             catch (Exception e)
             {
                 MainForm.LogFile("Delete Project List Error: " + e.Message);
-                return deleted;
             }
+
+            return deleted;
         }
 
         #endregion
@@ -848,8 +830,7 @@ namespace TNG_Database
             {
                 SQLiteConnection projectsConnection = new SQLiteConnection(tngDatabaseConnectString);
                 projectsConnection.Open();
-
-
+                
                 SQLiteCommand command = new SQLiteCommand(projectsConnection);
 
                 //create sqlite query to check to see if name is already in database
@@ -1044,14 +1025,13 @@ namespace TNG_Database
                     */
                     deleted++;
                 }
-
-                return deleted;
             }
             catch (Exception e)
             {
                 MainForm.LogFile("Delete Project List Error: " + e.Message);
-                return deleted;
             }
+
+            return deleted;
         }
 
         #endregion
@@ -1218,8 +1198,7 @@ namespace TNG_Database
 
                 command.CommandText = "select count(*) from MasterArchiveVideos where id = @id";
                 command.Parameters.AddWithValue("@id", oldVideo.ID);
-
-
+                
                 if (Convert.ToInt32(command.ExecuteScalar()) == 1)
                 {
                     //entry found to update
@@ -1292,17 +1271,15 @@ namespace TNG_Database
                     */
                     deleted++;
                 }
-
-                return deleted;
             }
             catch (Exception e)
             {
                 MainForm.LogFile("Delete Tape List Error: " + e.Message);
-                return deleted;
             }
+
+            return deleted;
         }
 
         #endregion
-
     }
 }

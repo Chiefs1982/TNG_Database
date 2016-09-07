@@ -63,27 +63,32 @@ DONE
 * add what is in textbox for tags onto end of entry when entered
 * check for same entries into tags
 * Make sure all project IDs can evaluate to numbers
+* Add control coloring to LightCoral when there is an error to highlight error(see tapelist form addprojectid_lostfocus)
+	* TapeList
+	* Projects
+	* People
+	* MasterList
+	* Master Archive
+* Add first focus bool in to keep track of if the user has visited the control
+* PUT TRY & USING STATEMENTS AROUND SQL stuff
 
 
 TODO
-- PUT TRY & USING STATEMENTS AROUND SQL stuff
 - Create Preferences
 	- how often to backup database
 	- default export directory
 	- default import directory
-	- 
+	- number of master tapes
+	- number of tapes in database
+	- number of projects
+	- number of users
+	- number of archived videos
 - Create Layout for Input, Search, Edit, Stats (possibly in tabs or upper bar)
 - Add a backup feature that backs everything up every month or so
 - Add export and import feature for database file
 - Be able to save the old databases and recall them if needed
 - Add tooltips to everything
-- Add control coloring to LightCoral when there is an error to highlight error(see tapelist form addprojectid_lostfocus)
-	* TapeList
-	* Projects
-	* People
-	* MasterList
-	- Master Archive
-- Add first focus bool in to keep track of if the user has visited the control
+
 
 1541918047
 
