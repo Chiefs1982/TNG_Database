@@ -74,7 +74,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(215, 186);
+            this.label1.Location = new System.Drawing.Point(215, 213);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(84, 13);
             this.label1.TabIndex = 0;
@@ -83,7 +83,7 @@
             // masterListListBox
             // 
             this.masterListListBox.FormattingEnabled = true;
-            this.masterListListBox.Location = new System.Drawing.Point(12, 40);
+            this.masterListListBox.Location = new System.Drawing.Point(12, 67);
             this.masterListListBox.Name = "masterListListBox";
             this.masterListListBox.Size = new System.Drawing.Size(181, 368);
             this.masterListListBox.TabIndex = 4;
@@ -91,7 +91,7 @@
             // 
             // masterListAddButton
             // 
-            this.masterListAddButton.Location = new System.Drawing.Point(208, 40);
+            this.masterListAddButton.Location = new System.Drawing.Point(208, 67);
             this.masterListAddButton.Name = "masterListAddButton";
             this.masterListAddButton.Size = new System.Drawing.Size(91, 23);
             this.masterListAddButton.TabIndex = 1;
@@ -101,7 +101,7 @@
             // 
             // masterListEditButton
             // 
-            this.masterListEditButton.Location = new System.Drawing.Point(208, 69);
+            this.masterListEditButton.Location = new System.Drawing.Point(208, 96);
             this.masterListEditButton.Name = "masterListEditButton";
             this.masterListEditButton.Size = new System.Drawing.Size(91, 23);
             this.masterListEditButton.TabIndex = 2;
@@ -111,7 +111,7 @@
             // 
             // masterListDeleteButton
             // 
-            this.masterListDeleteButton.Location = new System.Drawing.Point(208, 98);
+            this.masterListDeleteButton.Location = new System.Drawing.Point(208, 125);
             this.masterListDeleteButton.Name = "masterListDeleteButton";
             this.masterListDeleteButton.Size = new System.Drawing.Size(91, 23);
             this.masterListDeleteButton.TabIndex = 3;
@@ -126,7 +126,7 @@
             this.defaultMasterGroupBox.Controls.Add(this.defaultArchiveNameMasterListLabel);
             this.defaultMasterGroupBox.Controls.Add(this.defaultCameraMasterListLabel);
             this.defaultMasterGroupBox.Controls.Add(this.defaultArchiveMasterListLabel);
-            this.defaultMasterGroupBox.Location = new System.Drawing.Point(316, 40);
+            this.defaultMasterGroupBox.Location = new System.Drawing.Point(316, 67);
             this.defaultMasterGroupBox.Name = "defaultMasterGroupBox";
             this.defaultMasterGroupBox.Size = new System.Drawing.Size(408, 109);
             this.defaultMasterGroupBox.TabIndex = 5;
@@ -184,7 +184,7 @@
             // masterListBoxLabel
             // 
             this.masterListBoxLabel.AutoSize = true;
-            this.masterListBoxLabel.Location = new System.Drawing.Point(12, 22);
+            this.masterListBoxLabel.Location = new System.Drawing.Point(12, 49);
             this.masterListBoxLabel.Name = "masterListBoxLabel";
             this.masterListBoxLabel.Size = new System.Drawing.Size(89, 13);
             this.masterListBoxLabel.TabIndex = 6;
@@ -198,7 +198,7 @@
             this.addMasterListGroupBox.Controls.Add(this.cameraAddMasterCombo);
             this.addMasterListGroupBox.Controls.Add(this.cameraAddMasterListLabel);
             this.addMasterListGroupBox.Controls.Add(this.masterTapeAddNameLabel);
-            this.addMasterListGroupBox.Location = new System.Drawing.Point(316, 343);
+            this.addMasterListGroupBox.Location = new System.Drawing.Point(316, 370);
             this.addMasterListGroupBox.Name = "addMasterListGroupBox";
             this.addMasterListGroupBox.Size = new System.Drawing.Size(408, 162);
             this.addMasterListGroupBox.TabIndex = 7;
@@ -275,7 +275,7 @@
             this.editMasterListGroupBox.Controls.Add(this.cameraOldMasterLabel);
             this.editMasterListGroupBox.Controls.Add(this.editOldNameMasterLabel);
             this.editMasterListGroupBox.Controls.Add(this.editOldMasterNameLabel);
-            this.editMasterListGroupBox.Location = new System.Drawing.Point(316, 527);
+            this.editMasterListGroupBox.Location = new System.Drawing.Point(316, 554);
             this.editMasterListGroupBox.Name = "editMasterListGroupBox";
             this.editMasterListGroupBox.Size = new System.Drawing.Size(408, 205);
             this.editMasterListGroupBox.TabIndex = 8;
@@ -386,7 +386,7 @@
             this.deleteMasterListGroupBox.Controls.Add(this.deleteMasterNameMasterListLabel);
             this.deleteMasterListGroupBox.Controls.Add(this.deleteCameraMasterListLabel);
             this.deleteMasterListGroupBox.Controls.Add(this.deleteMasterMasterListLabel);
-            this.deleteMasterListGroupBox.Location = new System.Drawing.Point(316, 155);
+            this.deleteMasterListGroupBox.Location = new System.Drawing.Point(316, 182);
             this.deleteMasterListGroupBox.Name = "deleteMasterListGroupBox";
             this.deleteMasterListGroupBox.Size = new System.Drawing.Size(408, 143);
             this.deleteMasterListGroupBox.TabIndex = 9;
@@ -466,6 +466,7 @@
             this.Controls.Add(this.masterListAddButton);
             this.Controls.Add(this.masterListListBox);
             this.Controls.Add(this.label1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.MinimizeBox = false;
             this.Name = "MasterListForm";
             this.ShowIcon = false;

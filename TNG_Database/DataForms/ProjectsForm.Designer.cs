@@ -76,7 +76,7 @@
             this.columnProjectID,
             this.columnProjectName});
             this.projectsListView.FullRowSelect = true;
-            this.projectsListView.Location = new System.Drawing.Point(12, 54);
+            this.projectsListView.Location = new System.Drawing.Point(12, 68);
             this.projectsListView.Name = "projectsListView";
             this.projectsListView.Size = new System.Drawing.Size(311, 440);
             this.projectsListView.TabIndex = 4;
@@ -97,7 +97,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 27);
+            this.label1.Location = new System.Drawing.Point(12, 52);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(45, 13);
             this.label1.TabIndex = 1;
@@ -105,7 +105,7 @@
             // 
             // projectsAddButton
             // 
-            this.projectsAddButton.Location = new System.Drawing.Point(340, 54);
+            this.projectsAddButton.Location = new System.Drawing.Point(340, 68);
             this.projectsAddButton.Name = "projectsAddButton";
             this.projectsAddButton.Size = new System.Drawing.Size(75, 23);
             this.projectsAddButton.TabIndex = 1;
@@ -115,7 +115,7 @@
             // 
             // projectsUpdateButton
             // 
-            this.projectsUpdateButton.Location = new System.Drawing.Point(340, 83);
+            this.projectsUpdateButton.Location = new System.Drawing.Point(340, 97);
             this.projectsUpdateButton.Name = "projectsUpdateButton";
             this.projectsUpdateButton.Size = new System.Drawing.Size(75, 23);
             this.projectsUpdateButton.TabIndex = 2;
@@ -125,7 +125,7 @@
             // 
             // projectsDeleteButton
             // 
-            this.projectsDeleteButton.Location = new System.Drawing.Point(340, 112);
+            this.projectsDeleteButton.Location = new System.Drawing.Point(340, 126);
             this.projectsDeleteButton.Name = "projectsDeleteButton";
             this.projectsDeleteButton.Size = new System.Drawing.Size(75, 23);
             this.projectsDeleteButton.TabIndex = 3;
@@ -137,7 +137,7 @@
             // 
             this.projectsDefaultGroupBox.Controls.Add(this.defaultLabelPanel);
             this.projectsDefaultGroupBox.Controls.Add(this.defaultLabel);
-            this.projectsDefaultGroupBox.Location = new System.Drawing.Point(431, 239);
+            this.projectsDefaultGroupBox.Location = new System.Drawing.Point(431, 253);
             this.projectsDefaultGroupBox.Name = "projectsDefaultGroupBox";
             this.projectsDefaultGroupBox.Size = new System.Drawing.Size(401, 149);
             this.projectsDefaultGroupBox.TabIndex = 5;
@@ -207,7 +207,7 @@
             this.projectAddGroupBox.Controls.Add(this.addProjectIDTextBox);
             this.projectAddGroupBox.Controls.Add(this.label2);
             this.projectAddGroupBox.Controls.Add(this.label4);
-            this.projectAddGroupBox.Location = new System.Drawing.Point(431, 394);
+            this.projectAddGroupBox.Location = new System.Drawing.Point(431, 408);
             this.projectAddGroupBox.Name = "projectAddGroupBox";
             this.projectAddGroupBox.Size = new System.Drawing.Size(401, 140);
             this.projectAddGroupBox.TabIndex = 6;
@@ -274,7 +274,7 @@
             this.editProjectsGroupBox.Controls.Add(this.editProjectIDTextBox);
             this.editProjectsGroupBox.Controls.Add(this.label5);
             this.editProjectsGroupBox.Controls.Add(this.label6);
-            this.editProjectsGroupBox.Location = new System.Drawing.Point(431, 549);
+            this.editProjectsGroupBox.Location = new System.Drawing.Point(431, 563);
             this.editProjectsGroupBox.Name = "editProjectsGroupBox";
             this.editProjectsGroupBox.Size = new System.Drawing.Size(401, 140);
             this.editProjectsGroupBox.TabIndex = 9;
@@ -341,7 +341,7 @@
             this.deleteProjectsGroupBox.Controls.Add(this.deleteProjectDeleteButton);
             this.deleteProjectsGroupBox.Controls.Add(this.label7);
             this.deleteProjectsGroupBox.Controls.Add(this.label8);
-            this.deleteProjectsGroupBox.Location = new System.Drawing.Point(431, 54);
+            this.deleteProjectsGroupBox.Location = new System.Drawing.Point(431, 68);
             this.deleteProjectsGroupBox.Name = "deleteProjectsGroupBox";
             this.deleteProjectsGroupBox.Size = new System.Drawing.Size(401, 140);
             this.deleteProjectsGroupBox.TabIndex = 10;

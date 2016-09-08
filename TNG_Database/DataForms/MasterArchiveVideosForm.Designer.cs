@@ -100,7 +100,7 @@
             this.deleteArchiveGroupBox.Controls.Add(this.deleteArchiveDeleteButton);
             this.deleteArchiveGroupBox.Controls.Add(this.label7);
             this.deleteArchiveGroupBox.Controls.Add(this.label8);
-            this.deleteArchiveGroupBox.Location = new System.Drawing.Point(431, 48);
+            this.deleteArchiveGroupBox.Location = new System.Drawing.Point(431, 90);
             this.deleteArchiveGroupBox.Name = "deleteArchiveGroupBox";
             this.deleteArchiveGroupBox.Size = new System.Drawing.Size(401, 155);
             this.deleteArchiveGroupBox.TabIndex = 19;
@@ -211,7 +211,7 @@
             this.editArchiveGroupBox.Controls.Add(this.editArchiveIDTextBox);
             this.editArchiveGroupBox.Controls.Add(this.label5);
             this.editArchiveGroupBox.Controls.Add(this.label6);
-            this.editArchiveGroupBox.Location = new System.Drawing.Point(15, 368);
+            this.editArchiveGroupBox.Location = new System.Drawing.Point(15, 410);
             this.editArchiveGroupBox.Name = "editArchiveGroupBox";
             this.editArchiveGroupBox.Size = new System.Drawing.Size(401, 213);
             this.editArchiveGroupBox.TabIndex = 18;
@@ -315,7 +315,7 @@
             this.archiveAddGroupBox.Controls.Add(this.addArchiveIDTextBox);
             this.archiveAddGroupBox.Controls.Add(this.label2);
             this.archiveAddGroupBox.Controls.Add(this.label4);
-            this.archiveAddGroupBox.Location = new System.Drawing.Point(431, 406);
+            this.archiveAddGroupBox.Location = new System.Drawing.Point(431, 448);
             this.archiveAddGroupBox.Name = "archiveAddGroupBox";
             this.archiveAddGroupBox.Size = new System.Drawing.Size(401, 201);
             this.archiveAddGroupBox.TabIndex = 17;
@@ -411,7 +411,7 @@
             // 
             this.archiveDefaultGroupBox.Controls.Add(this.defaultLabelPanel);
             this.archiveDefaultGroupBox.Controls.Add(this.defaultLabel);
-            this.archiveDefaultGroupBox.Location = new System.Drawing.Point(431, 225);
+            this.archiveDefaultGroupBox.Location = new System.Drawing.Point(431, 267);
             this.archiveDefaultGroupBox.Name = "archiveDefaultGroupBox";
             this.archiveDefaultGroupBox.Size = new System.Drawing.Size(401, 149);
             this.archiveDefaultGroupBox.TabIndex = 16;
@@ -515,7 +515,7 @@
             // 
             // archiveDeleteButton
             // 
-            this.archiveDeleteButton.Location = new System.Drawing.Point(340, 106);
+            this.archiveDeleteButton.Location = new System.Drawing.Point(340, 148);
             this.archiveDeleteButton.Name = "archiveDeleteButton";
             this.archiveDeleteButton.Size = new System.Drawing.Size(75, 23);
             this.archiveDeleteButton.TabIndex = 3;
@@ -525,7 +525,7 @@
             // 
             // archiveUpdateButton
             // 
-            this.archiveUpdateButton.Location = new System.Drawing.Point(340, 77);
+            this.archiveUpdateButton.Location = new System.Drawing.Point(340, 119);
             this.archiveUpdateButton.Name = "archiveUpdateButton";
             this.archiveUpdateButton.Size = new System.Drawing.Size(75, 23);
             this.archiveUpdateButton.TabIndex = 2;
@@ -535,7 +535,7 @@
             // 
             // archiveAddButton
             // 
-            this.archiveAddButton.Location = new System.Drawing.Point(340, 48);
+            this.archiveAddButton.Location = new System.Drawing.Point(340, 90);
             this.archiveAddButton.Name = "archiveAddButton";
             this.archiveAddButton.Size = new System.Drawing.Size(75, 23);
             this.archiveAddButton.TabIndex = 1;
@@ -546,7 +546,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(11, 32);
+            this.label1.Location = new System.Drawing.Point(11, 74);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(78, 13);
             this.label1.TabIndex = 12;
@@ -560,7 +560,7 @@
             this.columnMaster,
             this.columnClip});
             this.archiveListView.FullRowSelect = true;
-            this.archiveListView.Location = new System.Drawing.Point(12, 48);
+            this.archiveListView.Location = new System.Drawing.Point(12, 90);
             this.archiveListView.Name = "archiveListView";
             this.archiveListView.Size = new System.Drawing.Size(322, 440);
             this.archiveListView.TabIndex = 4;

@@ -70,8 +70,11 @@
             this.mainFormProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.personStatusDropdown = new System.Windows.Forms.ToolStripDropDownButton();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.testButton1 = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -404,11 +407,32 @@
             this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
             this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
             // 
+            // panel1
+            // 
+            this.panel1.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.panel1.Controls.Add(this.testButton1);
+            this.panel1.Location = new System.Drawing.Point(2, 25);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(842, 40);
+            this.panel1.TabIndex = 4;
+            // 
+            // testButton1
+            // 
+            this.testButton1.Location = new System.Drawing.Point(10, 5);
+            this.testButton1.Name = "testButton1";
+            this.testButton1.Size = new System.Drawing.Size(75, 30);
+            this.testButton1.TabIndex = 0;
+            this.testButton1.Text = "button1";
+            this.testButton1.UseVisualStyleBackColor = true;
+            this.testButton1.Click += new System.EventHandler(this.testButton1_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(846, 646);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -424,6 +448,7 @@
             this.menuStrip1.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -471,6 +496,8 @@
         private System.Windows.Forms.ToolStripMenuItem homeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem archiveListsToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Button testButton1;
     }
 }
 

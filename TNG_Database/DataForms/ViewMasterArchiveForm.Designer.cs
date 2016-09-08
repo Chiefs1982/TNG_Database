@@ -31,16 +31,16 @@
             this.viewMasterListBox = new System.Windows.Forms.ListBox();
             this.label1 = new System.Windows.Forms.Label();
             this.viewMasterListView = new System.Windows.Forms.ListView();
-            this.viewMasterListMainLabel = new System.Windows.Forms.Label();
             this.columnID = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnClip = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.viewMasterListMainLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // viewMasterListBox
             // 
             this.viewMasterListBox.FormattingEnabled = true;
-            this.viewMasterListBox.Location = new System.Drawing.Point(12, 53);
+            this.viewMasterListBox.Location = new System.Drawing.Point(12, 75);
             this.viewMasterListBox.Name = "viewMasterListBox";
             this.viewMasterListBox.Size = new System.Drawing.Size(233, 446);
             this.viewMasterListBox.TabIndex = 0;
@@ -49,7 +49,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 32);
+            this.label1.Location = new System.Drawing.Point(12, 54);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(128, 13);
             this.label1.TabIndex = 1;
@@ -62,22 +62,13 @@
             this.columnName,
             this.columnClip});
             this.viewMasterListView.FullRowSelect = true;
-            this.viewMasterListView.Location = new System.Drawing.Point(304, 53);
+            this.viewMasterListView.Location = new System.Drawing.Point(304, 75);
             this.viewMasterListView.MultiSelect = false;
             this.viewMasterListView.Name = "viewMasterListView";
             this.viewMasterListView.Size = new System.Drawing.Size(456, 446);
             this.viewMasterListView.TabIndex = 1;
             this.viewMasterListView.UseCompatibleStateImageBehavior = false;
             this.viewMasterListView.View = System.Windows.Forms.View.Details;
-            // 
-            // viewMasterListMainLabel
-            // 
-            this.viewMasterListMainLabel.AutoSize = true;
-            this.viewMasterListMainLabel.Location = new System.Drawing.Point(301, 32);
-            this.viewMasterListMainLabel.Name = "viewMasterListMainLabel";
-            this.viewMasterListMainLabel.Size = new System.Drawing.Size(58, 13);
-            this.viewMasterListMainLabel.TabIndex = 0;
-            this.viewMasterListMainLabel.Text = "Master List";
             // 
             // columnID
             // 
@@ -93,6 +84,15 @@
             // 
             this.columnClip.Text = "Clip #";
             this.columnClip.Width = 100;
+            // 
+            // viewMasterListMainLabel
+            // 
+            this.viewMasterListMainLabel.AutoSize = true;
+            this.viewMasterListMainLabel.Location = new System.Drawing.Point(301, 54);
+            this.viewMasterListMainLabel.Name = "viewMasterListMainLabel";
+            this.viewMasterListMainLabel.Size = new System.Drawing.Size(58, 13);
+            this.viewMasterListMainLabel.TabIndex = 0;
+            this.viewMasterListMainLabel.Text = "Master List";
             // 
             // ViewMasterArchiveForm
             // 

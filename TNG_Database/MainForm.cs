@@ -49,9 +49,7 @@ namespace TNG_Database
 
         //status label static
         private static ToolStripStatusLabel updateStatusLabel;
-
-        System.Timers.Timer statTimer;
-
+        
         List<string> people;
 
         public MainForm()
@@ -784,7 +782,16 @@ namespace TNG_Database
             searchTapeForm = new SearchTapeForm(this);
 
             //close child of mdi if there is one active
-            if (ActiveMdiChild != null) { ActiveMdiChild.Close(); }
+            if (ActiveMdiChild != null)
+            {
+                if(ActiveMdiChild is SearchTapeForm)
+                {
+                    Console.WriteLine("Page Already open...do nothing");
+                }else
+                {
+                    ActiveMdiChild.Close();
+                }
+            }
 
             //Show people form and maximize it instantly
             searchTapeForm.Show();
@@ -1105,6 +1112,11 @@ namespace TNG_Database
         private void wordTestToolStripMenuItem_Click(object sender, EventArgs e)
         {
             
+        }
+
+        private void testButton1_Click(object sender, EventArgs e)
+        {
+            OpenSearchPage();
         }
     }
 }

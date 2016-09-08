@@ -71,6 +71,7 @@ DONE
 	* Master Archive
 * Add first focus bool in to keep track of if the user has visited the control
 * PUT TRY & USING STATEMENTS AROUND SQL stuff
+* Move Forms down 40 for top ribbon
 
 
 TODO
@@ -83,12 +84,14 @@ TODO
 	- number of projects
 	- number of users
 	- number of archived videos
+- Create an about page
 - Create Layout for Input, Search, Edit, Stats (possibly in tabs or upper bar)
 - Add a backup feature that backs everything up every month or so
 - Add export and import feature for database file
 - Be able to save the old databases and recall them if needed
 - Add tooltips to everything
-
+- Add own controls with preset icons for ribbon
+- reset progress bar periodically
 
 1541918047
 

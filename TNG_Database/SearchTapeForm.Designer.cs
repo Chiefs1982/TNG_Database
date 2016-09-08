@@ -62,7 +62,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(370, 9);
+            this.label1.Location = new System.Drawing.Point(370, 49);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(95, 13);
             this.label1.TabIndex = 0;
@@ -70,7 +70,7 @@
             // 
             // searchTextbox
             // 
-            this.searchTextbox.Location = new System.Drawing.Point(12, 25);
+            this.searchTextbox.Location = new System.Drawing.Point(12, 65);
             this.searchTextbox.Name = "searchTextbox";
             this.searchTextbox.Size = new System.Drawing.Size(675, 20);
             this.searchTextbox.TabIndex = 1;
@@ -79,7 +79,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 9);
+            this.label2.Location = new System.Drawing.Point(12, 49);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(93, 13);
             this.label2.TabIndex = 2;
@@ -87,7 +87,7 @@
             // 
             // searchButton
             // 
-            this.searchButton.Location = new System.Drawing.Point(693, 23);
+            this.searchButton.Location = new System.Drawing.Point(693, 63);
             this.searchButton.Name = "searchButton";
             this.searchButton.Size = new System.Drawing.Size(139, 23);
             this.searchButton.TabIndex = 2;
@@ -109,7 +109,7 @@
             this.columnPerson,
             this.columnClip});
             this.searchListView.FullRowSelect = true;
-            this.searchListView.Location = new System.Drawing.Point(12, 79);
+            this.searchListView.Location = new System.Drawing.Point(12, 119);
             this.searchListView.MultiSelect = false;
             this.searchListView.Name = "searchListView";
             this.searchListView.Size = new System.Drawing.Size(820, 250);
@@ -168,7 +168,7 @@
             // searchFilterCombo
             // 
             this.searchFilterCombo.FormattingEnabled = true;
-            this.searchFilterCombo.Location = new System.Drawing.Point(693, 52);
+            this.searchFilterCombo.Location = new System.Drawing.Point(693, 92);
             this.searchFilterCombo.Name = "searchFilterCombo";
             this.searchFilterCombo.Size = new System.Drawing.Size(139, 21);
             this.searchFilterCombo.TabIndex = 3;
@@ -179,7 +179,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(640, 55);
+            this.label3.Location = new System.Drawing.Point(640, 95);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(47, 13);
             this.label3.TabIndex = 7;
@@ -188,7 +188,7 @@
             // searchTotalFoundLabel
             // 
             this.searchTotalFoundLabel.AutoSize = true;
-            this.searchTotalFoundLabel.Location = new System.Drawing.Point(12, 63);
+            this.searchTotalFoundLabel.Location = new System.Drawing.Point(12, 103);
             this.searchTotalFoundLabel.Name = "searchTotalFoundLabel";
             this.searchTotalFoundLabel.Size = new System.Drawing.Size(93, 13);
             this.searchTotalFoundLabel.TabIndex = 8;
@@ -205,9 +205,9 @@
             this.defaultTapeGroupbox.Controls.Add(this.searchFlowPanel3);
             this.defaultTapeGroupbox.Controls.Add(this.searchFlowPanel2);
             this.defaultTapeGroupbox.Controls.Add(this.searchFlowPanel1);
-            this.defaultTapeGroupbox.Location = new System.Drawing.Point(12, 335);
+            this.defaultTapeGroupbox.Location = new System.Drawing.Point(12, 375);
             this.defaultTapeGroupbox.Name = "defaultTapeGroupbox";
-            this.defaultTapeGroupbox.Size = new System.Drawing.Size(820, 251);
+            this.defaultTapeGroupbox.Size = new System.Drawing.Size(820, 218);
             this.defaultTapeGroupbox.TabIndex = 9;
             this.defaultTapeGroupbox.TabStop = false;
             // 

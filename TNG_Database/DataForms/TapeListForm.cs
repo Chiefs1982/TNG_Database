@@ -15,7 +15,7 @@ namespace TNG_Database
     public partial class TapeListForm : Form
     {
         //location for the groupboxes
-        private Point boxLocation = new Point(12, 317);
+        private Point boxLocation = new Point(15, 355);
         //reference for the mainform
         private TNG_Database.MainForm mainform;
         private List<TapeDatabaseValues> tapeListValues;

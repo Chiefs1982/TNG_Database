@@ -14,7 +14,7 @@ namespace TNG_Database
     public partial class MasterArchiveVideosForm : Form
     {
         //location for the groupboxes
-        private Point boxLocation = new Point(431, 48);
+        private Point boxLocation = new Point(431, 90);
 
         //current index of item selected in listview
         int listViewIndex = -1;

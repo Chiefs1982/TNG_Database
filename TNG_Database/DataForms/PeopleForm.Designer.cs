@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
             this.peopleFormListBox = new System.Windows.Forms.ListBox();
             this.currentUsersLabel = new System.Windows.Forms.Label();
             this.addUserPeopleButton = new System.Windows.Forms.Button();
@@ -59,19 +58,10 @@
             this.defaultEditGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(66, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "People Form";
-            // 
             // peopleFormListBox
             // 
             this.peopleFormListBox.FormattingEnabled = true;
-            this.peopleFormListBox.Location = new System.Drawing.Point(12, 94);
+            this.peopleFormListBox.Location = new System.Drawing.Point(12, 69);
             this.peopleFormListBox.Name = "peopleFormListBox";
             this.peopleFormListBox.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
             this.peopleFormListBox.Size = new System.Drawing.Size(156, 238);
@@ -81,7 +71,7 @@
             // currentUsersLabel
             // 
             this.currentUsersLabel.AutoSize = true;
-            this.currentUsersLabel.Location = new System.Drawing.Point(12, 78);
+            this.currentUsersLabel.Location = new System.Drawing.Point(12, 53);
             this.currentUsersLabel.Name = "currentUsersLabel";
             this.currentUsersLabel.Size = new System.Drawing.Size(74, 13);
             this.currentUsersLabel.TabIndex = 2;
@@ -89,7 +79,7 @@
             // 
             // addUserPeopleButton
             // 
-            this.addUserPeopleButton.Location = new System.Drawing.Point(174, 94);
+            this.addUserPeopleButton.Location = new System.Drawing.Point(174, 69);
             this.addUserPeopleButton.Name = "addUserPeopleButton";
             this.addUserPeopleButton.Size = new System.Drawing.Size(117, 23);
             this.addUserPeopleButton.TabIndex = 1;
@@ -99,7 +89,7 @@
             // 
             // editUserPeopleButton
             // 
-            this.editUserPeopleButton.Location = new System.Drawing.Point(174, 123);
+            this.editUserPeopleButton.Location = new System.Drawing.Point(174, 98);
             this.editUserPeopleButton.Name = "editUserPeopleButton";
             this.editUserPeopleButton.Size = new System.Drawing.Size(117, 23);
             this.editUserPeopleButton.TabIndex = 2;
@@ -109,7 +99,7 @@
             // 
             // deleteUserPeopleButton
             // 
-            this.deleteUserPeopleButton.Location = new System.Drawing.Point(174, 152);
+            this.deleteUserPeopleButton.Location = new System.Drawing.Point(174, 127);
             this.deleteUserPeopleButton.Name = "deleteUserPeopleButton";
             this.deleteUserPeopleButton.Size = new System.Drawing.Size(117, 23);
             this.deleteUserPeopleButton.TabIndex = 3;
@@ -125,7 +115,7 @@
             this.editUserGroupBox.Controls.Add(this.editUserOldPersonName);
             this.editUserGroupBox.Controls.Add(this.editPersonNewNameLabel);
             this.editUserGroupBox.Controls.Add(this.editUserOldNameLabel);
-            this.editUserGroupBox.Location = new System.Drawing.Point(345, 94);
+            this.editUserGroupBox.Location = new System.Drawing.Point(345, 69);
             this.editUserGroupBox.Name = "editUserGroupBox";
             this.editUserGroupBox.Size = new System.Drawing.Size(443, 156);
             this.editUserGroupBox.TabIndex = 6;
@@ -196,7 +186,7 @@
             this.addUserGroupBox.Controls.Add(this.addUserAddButton);
             this.addUserGroupBox.Controls.Add(this.addUserLabel);
             this.addUserGroupBox.Controls.Add(this.addUserNameTextbox);
-            this.addUserGroupBox.Location = new System.Drawing.Point(345, 256);
+            this.addUserGroupBox.Location = new System.Drawing.Point(345, 231);
             this.addUserGroupBox.Name = "addUserGroupBox";
             this.addUserGroupBox.Size = new System.Drawing.Size(443, 123);
             this.addUserGroupBox.TabIndex = 7;
@@ -249,7 +239,7 @@
             this.deleteUserGroupBox.Controls.Add(this.deleteUserDeleteButton);
             this.deleteUserGroupBox.Controls.Add(this.deleteUserNameLabel);
             this.deleteUserGroupBox.Controls.Add(this.deleteUserLabel);
-            this.deleteUserGroupBox.Location = new System.Drawing.Point(345, 386);
+            this.deleteUserGroupBox.Location = new System.Drawing.Point(345, 361);
             this.deleteUserGroupBox.Name = "deleteUserGroupBox";
             this.deleteUserGroupBox.Size = new System.Drawing.Size(443, 100);
             this.deleteUserGroupBox.TabIndex = 8;
@@ -298,7 +288,7 @@
             // defaultEditGroupBox
             // 
             this.defaultEditGroupBox.Controls.Add(this.label2);
-            this.defaultEditGroupBox.Location = new System.Drawing.Point(345, 12);
+            this.defaultEditGroupBox.Location = new System.Drawing.Point(345, 480);
             this.defaultEditGroupBox.Name = "defaultEditGroupBox";
             this.defaultEditGroupBox.Size = new System.Drawing.Size(443, 54);
             this.defaultEditGroupBox.TabIndex = 9;
@@ -328,7 +318,6 @@
             this.Controls.Add(this.addUserPeopleButton);
             this.Controls.Add(this.currentUsersLabel);
             this.Controls.Add(this.peopleFormListBox);
-            this.Controls.Add(this.label1);
             this.MinimizeBox = false;
             this.Name = "PeopleForm";
             this.ShowIcon = false;
@@ -348,8 +337,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ListBox peopleFormListBox;
         private System.Windows.Forms.Label currentUsersLabel;
         private System.Windows.Forms.Button addUserPeopleButton;

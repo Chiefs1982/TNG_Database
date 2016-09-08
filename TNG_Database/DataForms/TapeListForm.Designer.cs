@@ -150,7 +150,7 @@
             this.columnPerson});
             this.tapeListListView.FullRowSelect = true;
             this.tapeListListView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.tapeListListView.Location = new System.Drawing.Point(12, 27);
+            this.tapeListListView.Location = new System.Drawing.Point(15, 45);
             this.tapeListListView.Name = "tapeListListView";
             this.tapeListListView.Size = new System.Drawing.Size(726, 284);
             this.tapeListListView.TabIndex = 4;
@@ -204,7 +204,7 @@
             // 
             // tapeListAddNewButton
             // 
-            this.tapeListAddNewButton.Location = new System.Drawing.Point(744, 27);
+            this.tapeListAddNewButton.Location = new System.Drawing.Point(754, 45);
             this.tapeListAddNewButton.Name = "tapeListAddNewButton";
             this.tapeListAddNewButton.Size = new System.Drawing.Size(75, 23);
             this.tapeListAddNewButton.TabIndex = 1;
@@ -214,7 +214,7 @@
             // 
             // tapeListEditEntryButton
             // 
-            this.tapeListEditEntryButton.Location = new System.Drawing.Point(744, 56);
+            this.tapeListEditEntryButton.Location = new System.Drawing.Point(754, 76);
             this.tapeListEditEntryButton.Name = "tapeListEditEntryButton";
             this.tapeListEditEntryButton.Size = new System.Drawing.Size(75, 23);
             this.tapeListEditEntryButton.TabIndex = 2;
@@ -224,7 +224,7 @@
             // 
             // tapeListDeleteEntryButton
             // 
-            this.tapeListDeleteEntryButton.Location = new System.Drawing.Point(744, 85);
+            this.tapeListDeleteEntryButton.Location = new System.Drawing.Point(754, 105);
             this.tapeListDeleteEntryButton.Name = "tapeListDeleteEntryButton";
             this.tapeListDeleteEntryButton.Size = new System.Drawing.Size(75, 23);
             this.tapeListDeleteEntryButton.TabIndex = 3;
@@ -236,7 +236,7 @@
             // 
             this.defaultTapeGroupbox.Controls.Add(this.defaultItemsPanel);
             this.defaultTapeGroupbox.Controls.Add(this.defaultNoItemSelectedLabel);
-            this.defaultTapeGroupbox.Location = new System.Drawing.Point(12, 317);
+            this.defaultTapeGroupbox.Location = new System.Drawing.Point(15, 355);
             this.defaultTapeGroupbox.Name = "defaultTapeGroupbox";
             this.defaultTapeGroupbox.Size = new System.Drawing.Size(726, 195);
             this.defaultTapeGroupbox.TabIndex = 4;
@@ -461,7 +461,7 @@
             this.addTapeGroupbox.Controls.Add(this.addProjectIDTextbox);
             this.addTapeGroupbox.Controls.Add(this.addProjectLabel);
             this.addTapeGroupbox.Controls.Add(this.addIDLabel);
-            this.addTapeGroupbox.Location = new System.Drawing.Point(744, 333);
+            this.addTapeGroupbox.Location = new System.Drawing.Point(766, 156);
             this.addTapeGroupbox.Name = "addTapeGroupbox";
             this.addTapeGroupbox.Size = new System.Drawing.Size(726, 218);
             this.addTapeGroupbox.TabIndex = 5;
@@ -687,7 +687,7 @@
             this.deleteTapeGroupbox.Controls.Add(this.label10);
             this.deleteTapeGroupbox.Controls.Add(this.deleteProjectIDLabel);
             this.deleteTapeGroupbox.Controls.Add(this.deleteProjectNameLabel);
-            this.deleteTapeGroupbox.Location = new System.Drawing.Point(12, 535);
+            this.deleteTapeGroupbox.Location = new System.Drawing.Point(766, 380);
             this.deleteTapeGroupbox.Name = "deleteTapeGroupbox";
             this.deleteTapeGroupbox.Size = new System.Drawing.Size(726, 195);
             this.deleteTapeGroupbox.TabIndex = 6;
@@ -897,7 +897,7 @@
             this.editTapeGroupbox.Controls.Add(this.editProjectIDTextbox);
             this.editTapeGroupbox.Controls.Add(this.label24);
             this.editTapeGroupbox.Controls.Add(this.label25);
-            this.editTapeGroupbox.Location = new System.Drawing.Point(6, 85);
+            this.editTapeGroupbox.Location = new System.Drawing.Point(15, 576);
             this.editTapeGroupbox.Name = "editTapeGroupbox";
             this.editTapeGroupbox.Size = new System.Drawing.Size(726, 195);
             this.editTapeGroupbox.TabIndex = 7;

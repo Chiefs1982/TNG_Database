@@ -14,7 +14,7 @@ namespace TNG_Database
     public partial class ProjectsForm : Form
     {
         //location for the groupboxes
-        private Point boxLocation = new Point(431, 54);
+        private Point boxLocation = new Point(431, 68);
 
         //current index of item selected in listview
         int listViewIndex = -1;

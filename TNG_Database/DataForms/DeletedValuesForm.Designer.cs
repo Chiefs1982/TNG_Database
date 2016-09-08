@@ -68,7 +68,7 @@
             this.columnPerson});
             this.databaseListView.FullRowSelect = true;
             this.databaseListView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.databaseListView.Location = new System.Drawing.Point(12, 34);
+            this.databaseListView.Location = new System.Drawing.Point(12, 73);
             this.databaseListView.MultiSelect = false;
             this.databaseListView.Name = "databaseListView";
             this.databaseListView.Size = new System.Drawing.Size(786, 282);
@@ -132,9 +132,9 @@
             this.tapeDatabasePanel.Controls.Add(this.flowLayoutPanel3);
             this.tapeDatabasePanel.Controls.Add(this.flowLayoutPanel2);
             this.tapeDatabasePanel.Controls.Add(this.flowLayoutPanel1);
-            this.tapeDatabasePanel.Location = new System.Drawing.Point(12, 322);
+            this.tapeDatabasePanel.Location = new System.Drawing.Point(12, 361);
             this.tapeDatabasePanel.Name = "tapeDatabasePanel";
-            this.tapeDatabasePanel.Size = new System.Drawing.Size(786, 276);
+            this.tapeDatabasePanel.Size = new System.Drawing.Size(786, 204);
             this.tapeDatabasePanel.TabIndex = 2;
             // 
             // deleteReinstateButton
@@ -214,7 +214,7 @@
             // deleteFormSelectCombo
             // 
             this.deleteFormSelectCombo.FormattingEnabled = true;
-            this.deleteFormSelectCombo.Location = new System.Drawing.Point(81, 7);
+            this.deleteFormSelectCombo.Location = new System.Drawing.Point(81, 46);
             this.deleteFormSelectCombo.Name = "deleteFormSelectCombo";
             this.deleteFormSelectCombo.Size = new System.Drawing.Size(181, 21);
             this.deleteFormSelectCombo.TabIndex = 1;
@@ -225,7 +225,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 10);
+            this.label1.Location = new System.Drawing.Point(9, 49);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(66, 13);
             this.label1.TabIndex = 4;

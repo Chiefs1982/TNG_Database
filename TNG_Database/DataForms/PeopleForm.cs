@@ -14,7 +14,7 @@ namespace TNG_Database
 {
     public partial class PeopleForm : Form
     {
-        private Point groupboxPoint = new Point(345, 94);
+        private Point groupboxPoint = new Point(345, 69);
         private TNG_Database.MainForm mainform;
 
         //CommonMethod reference

@@ -13,7 +13,7 @@ namespace TNG_Database
 {
     public partial class MasterListForm : Form
     {
-        private Point boxLocation = new Point(316, 40);
+        private Point boxLocation = new Point(316, 67);
         private TNG_Database.MainForm mainform;
         private List<MasterListValues> masterList;
         private MasterListValues sendValues = new MasterListValues();
