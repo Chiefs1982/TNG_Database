@@ -71,7 +71,11 @@
             this.personStatusDropdown = new System.Windows.Forms.ToolStripDropDownButton();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.testButton1 = new System.Windows.Forms.Button();
+            this.ribbonButtons5 = new TNG_Database.RibbonButtons();
+            this.ribbonButtons4 = new TNG_Database.RibbonButtons();
+            this.ribbonButtons3 = new TNG_Database.RibbonButtons();
+            this.ribbonButtons2 = new TNG_Database.RibbonButtons();
+            this.ribbonButtons1 = new TNG_Database.RibbonButtons();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -410,21 +414,59 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.panel1.Controls.Add(this.testButton1);
+            this.panel1.Controls.Add(this.ribbonButtons5);
+            this.panel1.Controls.Add(this.ribbonButtons4);
+            this.panel1.Controls.Add(this.ribbonButtons3);
+            this.panel1.Controls.Add(this.ribbonButtons2);
+            this.panel1.Controls.Add(this.ribbonButtons1);
             this.panel1.Location = new System.Drawing.Point(2, 25);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(842, 40);
             this.panel1.TabIndex = 4;
             // 
-            // testButton1
+            // ribbonButtons5
             // 
-            this.testButton1.Location = new System.Drawing.Point(10, 5);
-            this.testButton1.Name = "testButton1";
-            this.testButton1.Size = new System.Drawing.Size(75, 30);
-            this.testButton1.TabIndex = 0;
-            this.testButton1.Text = "button1";
-            this.testButton1.UseVisualStyleBackColor = true;
-            this.testButton1.Click += new System.EventHandler(this.testButton1_Click);
+            this.ribbonButtons5.ImageType = TNG_Database.RibbonButtons.ImageForButton.ImportArchive;
+            this.ribbonButtons5.Location = new System.Drawing.Point(357, 2);
+            this.ribbonButtons5.Name = "ribbonButtons5";
+            this.ribbonButtons5.Size = new System.Drawing.Size(60, 36);
+            this.ribbonButtons5.TabIndex = 4;
+            this.ribbonButtons5.Text = "Import Archive";
+            // 
+            // ribbonButtons4
+            // 
+            this.ribbonButtons4.ImageType = TNG_Database.RibbonButtons.ImageForButton.ImportTapes;
+            this.ribbonButtons4.Location = new System.Drawing.Point(270, 2);
+            this.ribbonButtons4.Name = "ribbonButtons4";
+            this.ribbonButtons4.Size = new System.Drawing.Size(60, 36);
+            this.ribbonButtons4.TabIndex = 3;
+            this.ribbonButtons4.Text = "Import Tapes";
+            // 
+            // ribbonButtons3
+            // 
+            this.ribbonButtons3.ImageType = TNG_Database.RibbonButtons.ImageForButton.MasterList;
+            this.ribbonButtons3.Location = new System.Drawing.Point(183, 2);
+            this.ribbonButtons3.Name = "ribbonButtons3";
+            this.ribbonButtons3.Size = new System.Drawing.Size(60, 36);
+            this.ribbonButtons3.TabIndex = 2;
+            this.ribbonButtons3.Text = "Archive";
+            // 
+            // ribbonButtons2
+            // 
+            this.ribbonButtons2.ImageType = TNG_Database.RibbonButtons.ImageForButton.Search;
+            this.ribbonButtons2.Location = new System.Drawing.Point(97, 2);
+            this.ribbonButtons2.Name = "ribbonButtons2";
+            this.ribbonButtons2.Size = new System.Drawing.Size(60, 36);
+            this.ribbonButtons2.TabIndex = 1;
+            this.ribbonButtons2.Text = "Search";
+            // 
+            // ribbonButtons1
+            // 
+            this.ribbonButtons1.Location = new System.Drawing.Point(10, 2);
+            this.ribbonButtons1.Name = "ribbonButtons1";
+            this.ribbonButtons1.Size = new System.Drawing.Size(60, 36);
+            this.ribbonButtons1.TabIndex = 0;
+            this.ribbonButtons1.Text = "Home";
             // 
             // MainForm
             // 
@@ -497,7 +539,11 @@
         private System.Windows.Forms.ToolStripMenuItem archiveListsToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Button testButton1;
+        private RibbonButtons ribbonButtons3;
+        private RibbonButtons ribbonButtons2;
+        private RibbonButtons ribbonButtons1;
+        private RibbonButtons ribbonButtons5;
+        private RibbonButtons ribbonButtons4;
     }
 }
 

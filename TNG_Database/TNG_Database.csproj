@@ -152,6 +152,12 @@
     <Compile Include="PreferencesForm.Designer.cs">
       <DependentUpon>PreferencesForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="RibbonButtons.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="RibbonButtons.Designer.cs">
+      <DependentUpon>RibbonButtons.cs</DependentUpon>
+    </Compile>
     <Compile Include="Values\FirstFocusValues.cs" />
     <Compile Include="Values\MasterArchiveVideoValues.cs" />
     <Compile Include="DataForms\MasterListForm.cs">
@@ -232,6 +238,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="SearchTapeForm.resx">
       <DependentUpon>SearchTapeForm.cs</DependentUpon>
@@ -268,6 +275,13 @@
     <Content Include="icons\xout.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\plusIcon.png" />
+    <None Include="Resources\TapeDriveIcon.png" />
+    <None Include="Resources\SearchIcon.png" />
+    <None Include="Resources\HomeIcon.png" />
+    <None Include="Resources\ImportArchiveIcon.png" />
+    <None Include="Resources\ImportTapesIcon.png" />
+    <None Include="Resources\TrashIcon.png" />
     <Content Include="textFiles\ALL_Projects.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
