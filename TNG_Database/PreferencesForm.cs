@@ -12,9 +12,17 @@ namespace TNG_Database
 {
     public partial class PreferencesForm : Form
     {
-        public PreferencesForm()
+
+        private TNG_Database.MainForm mainform;
+
+
+        public PreferencesForm(TNG_Database.MainForm parent)
         {
             InitializeComponent();
+            this.MdiParent = parent;
+            mainform = parent;
         }
+
+        
     }
 }

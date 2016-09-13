@@ -30,6 +30,7 @@ namespace TNG_Database
         public TNG_Database.MasterArchiveVideosForm masterArchiveForm;
         public TNG_Database.DeletedValuesForm deletedValuesForm;
         public TNG_Database.ViewMasterArchiveForm viewMasterArchiveForm;
+        public TNG_Database.PreferencesForm preferencesForm;
 
         //the current form
         Form currentForm;
@@ -650,6 +651,126 @@ namespace TNG_Database
             return newFilename;
         }
 
+        /// <summary>
+        /// Inports XDCam master file into database
+        /// </summary>
+        private void XDCAMMasterImport()
+        {
+            string importMaster = "masters";
+            ofd = new OpenFileDialog();
+            ofd.InitialDirectory = Properties.TNG_Settings.Default.LastFolder;
+            ofd.Filter = "word document (*.doc)|*.doc;*.docx|comma seperated files (*.csv)|*.csv|text files (*.txt)|*.txt";
+            ofd.RestoreDirectory = true;
+
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                if (ofd.OpenFile() != null)
+                {
+                    Properties.TNG_Settings.Default.LastFolder = Path.GetDirectoryName(ofd.FileName);
+                    Console.WriteLine(Properties.TNG_Settings.Default.LastFolder);
+                    if (backgroundWorker1.IsBusy != true)
+                    {
+                        mainFormProgressBar.Value = 0;
+                        backgroundWorker1.RunWorkerAsync(importMaster);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Import tape info into database
+        /// </summary>
+        private void TapesImport()
+        {
+            string importTapes = "tapes";
+            ofd = new OpenFileDialog();
+            ofd.InitialDirectory = Properties.TNG_Settings.Default.LastFolder;
+            ofd.Filter = "comma seperated files (*.csv)|*.csv";
+            ofd.RestoreDirectory = true;
+
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                if (ofd.OpenFile() != null)
+                {
+                    Properties.TNG_Settings.Default.LastFolder = Path.GetDirectoryName(ofd.FileName);
+                    Console.WriteLine(Properties.TNG_Settings.Default.LastFolder);
+                    if (backgroundWorker1.IsBusy != true)
+                    {
+                        mainFormProgressBar.Value = 0;
+                        backgroundWorker1.RunWorkerAsync(importTapes);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Import porjects into database
+        /// </summary>
+        private void ProjectsImport()
+        {
+            string importSetting = "projects";
+            ofd = new OpenFileDialog();
+            ofd.InitialDirectory = Properties.TNG_Settings.Default.LastFolder;
+            ofd.Filter = "comma seperated files (*.csv)|*.csv|text files (*.txt)|*.txt";
+            ofd.RestoreDirectory = true;
+
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                if (ofd.OpenFile() != null)
+                {
+                    Properties.TNG_Settings.Default.LastFolder = Path.GetDirectoryName(ofd.FileName);
+                    Console.WriteLine(Properties.TNG_Settings.Default.LastFolder);
+                    if (backgroundWorker1.IsBusy != true)
+                    {
+                        mainFormProgressBar.Value = 0;
+                        backgroundWorker1.RunWorkerAsync(importSetting);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Backup the database.
+        /// </summary>
+        private void BackupDatabase()
+        {
+            string fileName = "TNG_TapeDatabase.sqlite";
+            string newFileName = "TNG_TapeDatabaseBackup_" + DateTime.Now.ToFileTime() + ".sqlite";
+            string databaseFileName = @"database";
+            string databaseBackupFileName = @"backups";
+
+            string sourceFile = System.IO.Path.Combine(databaseFileName, fileName);
+            string destinationFile = Path.Combine(databaseBackupFileName, fileName);
+            string newDestinationFile = Path.Combine(databaseBackupFileName, newFileName);
+
+            //Copy database file
+            try
+            {
+                if (!Directory.Exists(@"backups"))
+                {
+                    Directory.CreateDirectory(@"backups");
+                }
+                System.IO.File.Copy(sourceFile, destinationFile, true);
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine("File Copy: " + e.Message);
+            }
+
+            //Rename file
+            try
+            {
+                if (File.Exists(sourceFile))
+                {
+                    File.Move(destinationFile, newDestinationFile);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("File Rename: " + e.Message);
+            }
+        }
+
         #endregion
 
         //Click on Close
@@ -663,104 +784,45 @@ namespace TNG_Database
         //Opens up people form to add, delete or update user list
         private void usersToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //create new instance of form
-            peopleForm = new PeopleForm(this);
-
-            //close child of mdi if there is one active
-            if (ActiveMdiChild != null) { ActiveMdiChild.Close(); }
-
-            //Show people form and maximize it instantly
-            peopleForm.Show();
-            peopleForm.WindowState = FormWindowState.Maximized;
+            OpenPeoplePage();
         }
 
         //-----------------------------------
         //Opens up search tape database form to search tape database
         private void tapeDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //create new instance of form SearchTapeForm
-            tapeListForm = new TNG_Database.TapeListForm(this);
-
-            //close child of mdi if there is one active
-            if(ActiveMdiChild != null){ ActiveMdiChild.Close(); }
-
-            //Show search tape database form and maximize it instantly
-            tapeListForm.Show();
-            tapeListForm.WindowState = FormWindowState.Maximized;
+            OpenTapeDatebasePage();
         }
 
         //-----------------------------------
         //Opens up Master list form to add, delete, update master archive list
         private void masterArchiveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //Create new instance of form MasterListForm
-            masterListForm = new TNG_Database.MasterListForm(this);
-
-            //close chold of mdi if there is one active
-            if(ActiveMdiChild != null) { ActiveMdiChild.Close(); }
-
-            //show Master list form and maximize it instantly
-            masterListForm.Show();
-            masterListForm.WindowState = FormWindowState.Maximized;
-            
+            OpenMasterListArchivePage();
         }
 
         //Open projects data form menu
         private void projectsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //Create new instance of form MasterListForm
-            projectsForm = new TNG_Database.ProjectsForm(this);
-
-            //close chold of mdi if there is one active
-            if (ActiveMdiChild != null) { ActiveMdiChild.Close(); }
-
-            //show Master list form and maximize it instantly
-            projectsForm.Show();
-            projectsForm.WindowState = FormWindowState.Maximized;
+            OpenProjectsPage();
         }
 
         //Open Archive videos data form menu
         private void archiveVideosToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //Create new instance of form MasterListForm
-            masterArchiveForm = new TNG_Database.MasterArchiveVideosForm(this);
-
-            //close chold of mdi if there is one active
-            if (ActiveMdiChild != null) { ActiveMdiChild.Close(); }
-
-            //show Master list form and maximize it instantly
-            masterArchiveForm.Show();
-            masterArchiveForm.WindowState = FormWindowState.Maximized;
+            OpenMasterArchiveVideosPage();
         }
 
         //Open Deleted Database data form
         private void deletedDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //Create new instance of form MasterListForm
-            deletedValuesForm = new TNG_Database.DeletedValuesForm(this);
-
-            //close chold of mdi if there is one active
-            if (ActiveMdiChild != null) { ActiveMdiChild.Close(); }
-
-            //show Master list form and maximize it instantly
-            deletedValuesForm.Show();
-            deletedValuesForm.WindowState = FormWindowState.Maximized;
+            OpenDeletedValuesPage();
         }
 
         //Open Archive Lists data form
         private void archiveListsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //Go to ViewMasterArchiveForm
-            //Create new instance of form MasterListForm
-            viewMasterArchiveForm = new TNG_Database.ViewMasterArchiveForm(this);
-
-            //close chold of mdi if there is one active
-            if (ActiveMdiChild != null) { ActiveMdiChild.Close(); }
-
-            //show Master list form and maximize it instantly
-            viewMasterArchiveForm.Show();
-            viewMasterArchiveForm.WindowState = FormWindowState.Maximized;
-
+            OpenArchiveListsPage();
         }
 
         //Open to Home data form
@@ -776,6 +838,9 @@ namespace TNG_Database
             OpenSearchPage();
         }
 
+        /// <summary>
+        /// Opens the search page.
+        /// </summary>
         private void OpenSearchPage()
         {
             //create new instance of form
@@ -796,6 +861,222 @@ namespace TNG_Database
             //Show people form and maximize it instantly
             searchTapeForm.Show();
             searchTapeForm.WindowState = FormWindowState.Maximized;
+        }
+
+        /// <summary>
+        /// Opens the tape datebase page.
+        /// </summary>
+        private void OpenTapeDatebasePage()
+        {
+            //create new instance of form SearchTapeForm
+            tapeListForm = new TNG_Database.TapeListForm(this);
+
+            //close child of mdi if there is one active
+            if (ActiveMdiChild != null)
+            {
+                if(ActiveMdiChild is TapeListForm)
+                {
+                    //Do nothing
+                }else
+                {
+                    //Close child
+                    ActiveMdiChild.Close();
+                }
+            }
+
+            //Show search tape database form and maximize it instantly
+            tapeListForm.Show();
+            tapeListForm.WindowState = FormWindowState.Maximized;
+        }
+
+        /// <summary>
+        /// Opens the master list archive page.
+        /// </summary>
+        private void OpenMasterListArchivePage()
+        {
+            //Create new instance of form MasterListForm
+            masterListForm = new TNG_Database.MasterListForm(this);
+
+            //close chold of mdi if there is one active
+            if (ActiveMdiChild != null)
+            {
+                if(ActiveMdiChild is MasterListForm)
+                {
+                    //Do Nothing
+                }else
+                {
+                    //Close child
+                    ActiveMdiChild.Close();
+                }
+
+            }
+
+            //show Master list form and maximize it instantly
+            masterListForm.Show();
+            masterListForm.WindowState = FormWindowState.Maximized;
+        }
+
+        /// <summary>
+        /// Opens the projects page.
+        /// </summary>
+        private void OpenProjectsPage()
+        {
+            //Create new instance of form MasterListForm
+            projectsForm = new TNG_Database.ProjectsForm(this);
+
+            //close chold of mdi if there is one active
+            if (ActiveMdiChild != null)
+            {
+                if(ActiveMdiChild is ProjectsForm)
+                {
+                    //Do Nothing
+                }else
+                {
+                    //Close child
+                    ActiveMdiChild.Close();
+                }
+            }
+
+            //show Master list form and maximize it instantly
+            projectsForm.Show();
+            projectsForm.WindowState = FormWindowState.Maximized;
+        }
+
+        /// <summary>
+        /// Opens the master archive videos page.
+        /// </summary>
+        private void OpenMasterArchiveVideosPage()
+        {
+            //Create new instance of form MasterListForm
+            masterArchiveForm = new TNG_Database.MasterArchiveVideosForm(this);
+
+            //close chold of mdi if there is one active
+            if (ActiveMdiChild != null)
+            {
+                if (ActiveMdiChild is MasterArchiveVideosForm)
+                {
+                    //Do Nothing
+                }
+                else
+                {
+                    //Close child
+                    ActiveMdiChild.Close();
+                }
+            }
+
+            //show Master list form and maximize it instantly
+            masterArchiveForm.Show();
+            masterArchiveForm.WindowState = FormWindowState.Maximized;
+        }
+
+        /// <summary>
+        /// Opens the deleted values page.
+        /// </summary>
+        private void OpenDeletedValuesPage()
+        {
+            //Create new instance of form MasterListForm
+            deletedValuesForm = new TNG_Database.DeletedValuesForm(this);
+
+            //close chold of mdi if there is one active
+            if (ActiveMdiChild != null)
+            {
+                if (ActiveMdiChild is DeletedValuesForm)
+                {
+                    //Do Nothing
+                }
+                else
+                {
+                    //Close child
+                    ActiveMdiChild.Close();
+                }
+            }
+
+            //show Master list form and maximize it instantly
+            deletedValuesForm.Show();
+            deletedValuesForm.WindowState = FormWindowState.Maximized;
+        }
+
+        /// <summary>
+        /// Opens the archive lists page.
+        /// </summary>
+        private void OpenArchiveListsPage()
+        {
+            //Go to ViewMasterArchiveForm
+            //Create new instance of form MasterListForm
+            viewMasterArchiveForm = new TNG_Database.ViewMasterArchiveForm(this);
+
+            //close chold of mdi if there is one active
+            if (ActiveMdiChild != null)
+            {
+                if (ActiveMdiChild is ViewMasterArchiveForm)
+                {
+                    //Do Nothing
+                }
+                else
+                {
+                    //Close child
+                    ActiveMdiChild.Close();
+                }
+            }
+
+            //show Master list form and maximize it instantly
+            viewMasterArchiveForm.Show();
+            viewMasterArchiveForm.WindowState = FormWindowState.Maximized;
+            
+        }
+
+        /// <summary>
+        /// Opens the people page.
+        /// </summary>
+        private void OpenPeoplePage()
+        {
+            //create new instance of form
+            peopleForm = new PeopleForm(this);
+
+            //close child of mdi if there is one active
+            if (ActiveMdiChild != null)
+            {
+                if (ActiveMdiChild is PeopleForm)
+                {
+                    //Do Nothing
+                }
+                else
+                {
+                    //Close child
+                    ActiveMdiChild.Close();
+                }
+            }
+
+            //Show people form and maximize it instantly
+            peopleForm.Show();
+            peopleForm.WindowState = FormWindowState.Maximized;
+        }
+
+        /// <summary>
+        /// Opens the preferences page.
+        /// </summary>
+        private void OpenPreferencesPage()
+        {
+            //create new instance of form
+            preferencesForm = new PreferencesForm(this);
+
+            //close child of mdi if there is one active
+            if (ActiveMdiChild != null)
+            {
+                if (ActiveMdiChild is PreferencesForm)
+                {
+                    //Do Nothing
+                }
+                else
+                {
+                    //Close child
+                    ActiveMdiChild.Close();
+                }
+            }
+
+            //Show people form and maximize it instantly
+            preferencesForm.Show();
+            preferencesForm.WindowState = FormWindowState.Maximized;
         }
 
         #endregion
@@ -823,25 +1104,7 @@ namespace TNG_Database
         //Import->Projects
         private void textFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string importSetting = "projects";
-            ofd = new OpenFileDialog();
-            ofd.InitialDirectory = Properties.TNG_Settings.Default.LastFolder;
-            ofd.Filter = "comma seperated files (*.csv)|*.csv|text files (*.txt)|*.txt";
-            ofd.RestoreDirectory = true;
-
-            if (ofd.ShowDialog() == DialogResult.OK)
-            {
-                if (ofd.OpenFile() != null)
-                {
-                    Properties.TNG_Settings.Default.LastFolder = Path.GetDirectoryName(ofd.FileName);
-                    Console.WriteLine(Properties.TNG_Settings.Default.LastFolder);
-                    if (backgroundWorker1.IsBusy != true)
-                    {
-                        mainFormProgressBar.Value = 0;
-                        backgroundWorker1.RunWorkerAsync(importSetting);
-                    }
-                }
-            }
+            ProjectsImport();
         }
 
         /// <summary>
@@ -935,49 +1198,13 @@ namespace TNG_Database
         //Import a XDCam master csv file click
         private void xDCamMasterToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string importMaster = "masters";
-            ofd = new OpenFileDialog();
-            ofd.InitialDirectory = Properties.TNG_Settings.Default.LastFolder;
-            ofd.Filter = "word document (*.doc)|*.doc;*.docx|comma seperated files (*.csv)|*.csv|text files (*.txt)|*.txt";
-            ofd.RestoreDirectory = true;
-
-            if (ofd.ShowDialog() == DialogResult.OK)
-            {
-                if (ofd.OpenFile() != null)
-                {
-                    Properties.TNG_Settings.Default.LastFolder = Path.GetDirectoryName(ofd.FileName);
-                    Console.WriteLine(Properties.TNG_Settings.Default.LastFolder);
-                    if (backgroundWorker1.IsBusy != true)
-                    {
-                        mainFormProgressBar.Value = 0;
-                        backgroundWorker1.RunWorkerAsync(importMaster);
-                    }
-                }
-            }
+            XDCAMMasterImport();
         }
 
         //Import a tapes csv file
         private void tapesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string importTapes = "tapes";
-            ofd = new OpenFileDialog();
-            ofd.InitialDirectory = Properties.TNG_Settings.Default.LastFolder;
-            ofd.Filter = "comma seperated files (*.csv)|*.csv";
-            ofd.RestoreDirectory = true;
-
-            if (ofd.ShowDialog() == DialogResult.OK)
-            {
-                if (ofd.OpenFile() != null)
-                {
-                    Properties.TNG_Settings.Default.LastFolder = Path.GetDirectoryName(ofd.FileName);
-                    Console.WriteLine(Properties.TNG_Settings.Default.LastFolder);
-                    if (backgroundWorker1.IsBusy != true)
-                    {
-                        mainFormProgressBar.Value = 0;
-                        backgroundWorker1.RunWorkerAsync(importTapes);
-                    }
-                }
-            }
+            TapesImport();
         }
 
         
@@ -1118,5 +1345,53 @@ namespace TNG_Database
         {
             OpenSearchPage();
         }
+
+        
+
+        #region Ribbon Buttons
+
+        private void homeRibbonButton_Click(object sender, EventArgs e)
+        {
+            //Home page
+            OpenSearchPage();
+        }
+
+        private void searchRibbonButton_Click(object sender, EventArgs e)
+        {
+            OpenSearchPage();
+        }
+
+        private void archiveRibbonButton_Click(object sender, EventArgs e)
+        {
+            OpenArchiveListsPage();
+        }
+
+        private void importTapesRibbonButton_Click(object sender, EventArgs e)
+        {
+            TapesImport();
+        }
+
+        private void importArchiveRibbonButton_Click(object sender, EventArgs e)
+        {
+            XDCAMMasterImport();
+        }
+
+        private void importProjectsRibbonButton_Click(object sender, EventArgs e)
+        {
+            ProjectsImport();
+        }
+
+        private void backupDatabaseRibbonButton_Click(object sender, EventArgs e)
+        {
+            BackupDatabase();
+        }
+
+        private void settingsRibbonButton_Click(object sender, EventArgs e)
+        {
+            OpenPreferencesPage();
+        }
+
+        #endregion
+
     }
 }

@@ -72,6 +72,7 @@ DONE
 * Add first focus bool in to keep track of if the user has visited the control
 * PUT TRY & USING STATEMENTS AROUND SQL stuff
 * Move Forms down 40 for top ribbon
+* Add own controls with preset icons for ribbon
 
 
 TODO
@@ -90,10 +91,11 @@ TODO
 - Add export and import feature for database file
 - Be able to save the old databases and recall them if needed
 - Add tooltips to everything
-- Add own controls with preset icons for ribbon
 - reset progress bar periodically
 
 1541918047
+
+131182583587001233
 
 60, 200, 120, 50, 50, 62, 78, 95, 60
 

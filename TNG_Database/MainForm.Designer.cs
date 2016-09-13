@@ -68,14 +68,17 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.applicationStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.mainFormProgressBar = new System.Windows.Forms.ToolStripProgressBar();
-            this.personStatusDropdown = new System.Windows.Forms.ToolStripDropDownButton();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.ribbonButtons5 = new TNG_Database.RibbonButtons();
-            this.ribbonButtons4 = new TNG_Database.RibbonButtons();
-            this.ribbonButtons3 = new TNG_Database.RibbonButtons();
-            this.ribbonButtons2 = new TNG_Database.RibbonButtons();
-            this.ribbonButtons1 = new TNG_Database.RibbonButtons();
+            this.personStatusDropdown = new System.Windows.Forms.ToolStripDropDownButton();
+            this.backupDatabaseRibbonButton = new TNG_Database.RibbonButtons();
+            this.ImportProjectsRibbonButton = new TNG_Database.RibbonButtons();
+            this.importArchiveRibbonButton = new TNG_Database.RibbonButtons();
+            this.importTapesRibbonButton = new TNG_Database.RibbonButtons();
+            this.archiveRibbonButton = new TNG_Database.RibbonButtons();
+            this.searchRibbonButton = new TNG_Database.RibbonButtons();
+            this.homeRibbonButton = new TNG_Database.RibbonButtons();
+            this.settingsRibbonButton = new TNG_Database.RibbonButtons();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -391,6 +394,30 @@
             this.mainFormProgressBar.Size = new System.Drawing.Size(100, 16);
             this.mainFormProgressBar.Step = 1;
             // 
+            // backgroundWorker1
+            // 
+            this.backgroundWorker1.WorkerReportsProgress = true;
+            this.backgroundWorker1.WorkerSupportsCancellation = true;
+            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+            this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
+            this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
+            // 
+            // panel1
+            // 
+            this.panel1.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.panel1.Controls.Add(this.settingsRibbonButton);
+            this.panel1.Controls.Add(this.backupDatabaseRibbonButton);
+            this.panel1.Controls.Add(this.ImportProjectsRibbonButton);
+            this.panel1.Controls.Add(this.importArchiveRibbonButton);
+            this.panel1.Controls.Add(this.importTapesRibbonButton);
+            this.panel1.Controls.Add(this.archiveRibbonButton);
+            this.panel1.Controls.Add(this.searchRibbonButton);
+            this.panel1.Controls.Add(this.homeRibbonButton);
+            this.panel1.Location = new System.Drawing.Point(2, 25);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(842, 40);
+            this.panel1.TabIndex = 4;
+            // 
             // personStatusDropdown
             // 
             this.personStatusDropdown.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
@@ -403,70 +430,84 @@
             this.personStatusDropdown.Text = "Person";
             this.personStatusDropdown.ToolTipText = "Select Person";
             // 
-            // backgroundWorker1
+            // backupDatabaseRibbonButton
             // 
-            this.backgroundWorker1.WorkerReportsProgress = true;
-            this.backgroundWorker1.WorkerSupportsCancellation = true;
-            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
-            this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
-            this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
+            this.backupDatabaseRibbonButton.ImageType = TNG_Database.RibbonButtons.ImageForButton.DatabaseBackup;
+            this.backupDatabaseRibbonButton.Location = new System.Drawing.Point(531, 2);
+            this.backupDatabaseRibbonButton.Name = "backupDatabaseRibbonButton";
+            this.backupDatabaseRibbonButton.Size = new System.Drawing.Size(60, 36);
+            this.backupDatabaseRibbonButton.TabIndex = 6;
+            this.backupDatabaseRibbonButton.Text = "DB Backup";
+            this.backupDatabaseRibbonButton.Click += new System.EventHandler(this.backupDatabaseRibbonButton_Click);
             // 
-            // panel1
+            // ImportProjectsRibbonButton
             // 
-            this.panel1.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.panel1.Controls.Add(this.ribbonButtons5);
-            this.panel1.Controls.Add(this.ribbonButtons4);
-            this.panel1.Controls.Add(this.ribbonButtons3);
-            this.panel1.Controls.Add(this.ribbonButtons2);
-            this.panel1.Controls.Add(this.ribbonButtons1);
-            this.panel1.Location = new System.Drawing.Point(2, 25);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(842, 40);
-            this.panel1.TabIndex = 4;
+            this.ImportProjectsRibbonButton.ImageType = TNG_Database.RibbonButtons.ImageForButton.ImportProjects;
+            this.ImportProjectsRibbonButton.Location = new System.Drawing.Point(444, 2);
+            this.ImportProjectsRibbonButton.Name = "ImportProjectsRibbonButton";
+            this.ImportProjectsRibbonButton.Size = new System.Drawing.Size(60, 36);
+            this.ImportProjectsRibbonButton.TabIndex = 5;
+            this.ImportProjectsRibbonButton.Text = "Import Projects";
+            this.ImportProjectsRibbonButton.Click += new System.EventHandler(this.importProjectsRibbonButton_Click);
             // 
-            // ribbonButtons5
+            // importArchiveRibbonButton
             // 
-            this.ribbonButtons5.ImageType = TNG_Database.RibbonButtons.ImageForButton.ImportArchive;
-            this.ribbonButtons5.Location = new System.Drawing.Point(357, 2);
-            this.ribbonButtons5.Name = "ribbonButtons5";
-            this.ribbonButtons5.Size = new System.Drawing.Size(60, 36);
-            this.ribbonButtons5.TabIndex = 4;
-            this.ribbonButtons5.Text = "Import Archive";
+            this.importArchiveRibbonButton.ImageType = TNG_Database.RibbonButtons.ImageForButton.ImportArchive;
+            this.importArchiveRibbonButton.Location = new System.Drawing.Point(357, 2);
+            this.importArchiveRibbonButton.Name = "importArchiveRibbonButton";
+            this.importArchiveRibbonButton.Size = new System.Drawing.Size(60, 36);
+            this.importArchiveRibbonButton.TabIndex = 4;
+            this.importArchiveRibbonButton.Text = "Import Archive";
+            this.importArchiveRibbonButton.Click += new System.EventHandler(this.importArchiveRibbonButton_Click);
             // 
-            // ribbonButtons4
+            // importTapesRibbonButton
             // 
-            this.ribbonButtons4.ImageType = TNG_Database.RibbonButtons.ImageForButton.ImportTapes;
-            this.ribbonButtons4.Location = new System.Drawing.Point(270, 2);
-            this.ribbonButtons4.Name = "ribbonButtons4";
-            this.ribbonButtons4.Size = new System.Drawing.Size(60, 36);
-            this.ribbonButtons4.TabIndex = 3;
-            this.ribbonButtons4.Text = "Import Tapes";
+            this.importTapesRibbonButton.ImageType = TNG_Database.RibbonButtons.ImageForButton.ImportTapes;
+            this.importTapesRibbonButton.Location = new System.Drawing.Point(270, 2);
+            this.importTapesRibbonButton.Name = "importTapesRibbonButton";
+            this.importTapesRibbonButton.Size = new System.Drawing.Size(60, 36);
+            this.importTapesRibbonButton.TabIndex = 3;
+            this.importTapesRibbonButton.Text = "Import Tapes";
+            this.importTapesRibbonButton.Click += new System.EventHandler(this.importTapesRibbonButton_Click);
             // 
-            // ribbonButtons3
+            // archiveRibbonButton
             // 
-            this.ribbonButtons3.ImageType = TNG_Database.RibbonButtons.ImageForButton.MasterList;
-            this.ribbonButtons3.Location = new System.Drawing.Point(183, 2);
-            this.ribbonButtons3.Name = "ribbonButtons3";
-            this.ribbonButtons3.Size = new System.Drawing.Size(60, 36);
-            this.ribbonButtons3.TabIndex = 2;
-            this.ribbonButtons3.Text = "Archive";
+            this.archiveRibbonButton.ImageType = TNG_Database.RibbonButtons.ImageForButton.MasterList;
+            this.archiveRibbonButton.Location = new System.Drawing.Point(183, 2);
+            this.archiveRibbonButton.Name = "archiveRibbonButton";
+            this.archiveRibbonButton.Size = new System.Drawing.Size(60, 36);
+            this.archiveRibbonButton.TabIndex = 2;
+            this.archiveRibbonButton.Text = "Archive";
+            this.archiveRibbonButton.Click += new System.EventHandler(this.archiveRibbonButton_Click);
             // 
-            // ribbonButtons2
+            // searchRibbonButton
             // 
-            this.ribbonButtons2.ImageType = TNG_Database.RibbonButtons.ImageForButton.Search;
-            this.ribbonButtons2.Location = new System.Drawing.Point(97, 2);
-            this.ribbonButtons2.Name = "ribbonButtons2";
-            this.ribbonButtons2.Size = new System.Drawing.Size(60, 36);
-            this.ribbonButtons2.TabIndex = 1;
-            this.ribbonButtons2.Text = "Search";
+            this.searchRibbonButton.ImageType = TNG_Database.RibbonButtons.ImageForButton.Search;
+            this.searchRibbonButton.Location = new System.Drawing.Point(97, 2);
+            this.searchRibbonButton.Name = "searchRibbonButton";
+            this.searchRibbonButton.Size = new System.Drawing.Size(60, 36);
+            this.searchRibbonButton.TabIndex = 1;
+            this.searchRibbonButton.Text = "Search";
+            this.searchRibbonButton.Click += new System.EventHandler(this.searchRibbonButton_Click);
             // 
-            // ribbonButtons1
+            // homeRibbonButton
             // 
-            this.ribbonButtons1.Location = new System.Drawing.Point(10, 2);
-            this.ribbonButtons1.Name = "ribbonButtons1";
-            this.ribbonButtons1.Size = new System.Drawing.Size(60, 36);
-            this.ribbonButtons1.TabIndex = 0;
-            this.ribbonButtons1.Text = "Home";
+            this.homeRibbonButton.Location = new System.Drawing.Point(10, 2);
+            this.homeRibbonButton.Name = "homeRibbonButton";
+            this.homeRibbonButton.Size = new System.Drawing.Size(60, 36);
+            this.homeRibbonButton.TabIndex = 0;
+            this.homeRibbonButton.Text = "Home";
+            this.homeRibbonButton.Click += new System.EventHandler(this.homeRibbonButton_Click);
+            // 
+            // settingsRibbonButton
+            // 
+            this.settingsRibbonButton.ImageType = TNG_Database.RibbonButtons.ImageForButton.Preferences;
+            this.settingsRibbonButton.Location = new System.Drawing.Point(742, 2);
+            this.settingsRibbonButton.Name = "settingsRibbonButton";
+            this.settingsRibbonButton.Size = new System.Drawing.Size(60, 36);
+            this.settingsRibbonButton.TabIndex = 7;
+            this.settingsRibbonButton.Text = "Settings";
+            this.settingsRibbonButton.Click += new System.EventHandler(this.settingsRibbonButton_Click);
             // 
             // MainForm
             // 
@@ -478,6 +519,7 @@
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.IsMdiContainer = true;
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
@@ -539,11 +581,14 @@
         private System.Windows.Forms.ToolStripMenuItem archiveListsToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.Panel panel1;
-        private RibbonButtons ribbonButtons3;
-        private RibbonButtons ribbonButtons2;
-        private RibbonButtons ribbonButtons1;
-        private RibbonButtons ribbonButtons5;
-        private RibbonButtons ribbonButtons4;
+        private RibbonButtons archiveRibbonButton;
+        private RibbonButtons searchRibbonButton;
+        private RibbonButtons homeRibbonButton;
+        private RibbonButtons importArchiveRibbonButton;
+        private RibbonButtons importTapesRibbonButton;
+        private RibbonButtons backupDatabaseRibbonButton;
+        private RibbonButtons ImportProjectsRibbonButton;
+        private RibbonButtons settingsRibbonButton;
     }
 }
 

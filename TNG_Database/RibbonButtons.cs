@@ -36,7 +36,10 @@ namespace TNG_Database
             MasterList,
             Deleted,
             ImportArchive,
-            ImportTapes
+            ImportTapes,
+            ImportProjects,
+            DatabaseBackup,
+            Preferences
         }
 
         //To keep track of selected value for the button
@@ -263,6 +266,21 @@ namespace TNG_Database
                 {
                     fileName = Properties.Resources.ImportTapesIcon;
                     Text = "Import Tapes";
+                }
+                else if (imageType == ImageForButton.ImportProjects)
+                {
+                    fileName = Properties.Resources.DBImportIcon;
+                    Text = "Import Projects";
+                }
+                else if (imageType == ImageForButton.DatabaseBackup)
+                {
+                    fileName = Properties.Resources.DataBackupIcon;
+                    Text = "DB Backup";
+                }
+                else if (imageType == ImageForButton.Preferences)
+                {
+                    fileName = Properties.Resources.PreferencesIcon;
+                    Text = "Settings";
                 }
                 else
                 {

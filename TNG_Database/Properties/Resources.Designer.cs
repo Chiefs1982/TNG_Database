@@ -63,6 +63,26 @@ namespace TNG_Database.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap DataBackupIcon {
+            get {
+                object obj = ResourceManager.GetObject("DataBackupIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap DBImportIcon {
+            get {
+                object obj = ResourceManager.GetObject("DBImportIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap HomeIcon {
             get {
                 object obj = ResourceManager.GetObject("HomeIcon", resourceCulture);
@@ -86,6 +106,16 @@ namespace TNG_Database.Properties {
         internal static System.Drawing.Bitmap ImportTapesIcon {
             get {
                 object obj = ResourceManager.GetObject("ImportTapesIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PreferencesIcon {
+            get {
+                object obj = ResourceManager.GetObject("PreferencesIcon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
