@@ -46,5 +46,52 @@ namespace TNG_Database.Properties {
                 this["LastFolder"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.DateTime LastDBExport {
+            get {
+                return ((global::System.DateTime)(this["LastDBExport"]));
+            }
+            set {
+                this["LastDBExport"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int DBBackupSetting {
+            get {
+                return ((int)(this["DBBackupSetting"]));
+            }
+            set {
+                this["DBBackupSetting"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ExportFolder {
+            get {
+                return ((string)(this["ExportFolder"]));
+            }
+            set {
+                this["ExportFolder"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ImportFolder {
+            get {
+                return ((string)(this["ImportFolder"]));
+            }
+            set {
+                this["ImportFolder"] = value;
+            }
+        }
     }
 }

@@ -50,6 +50,9 @@ namespace TNG_Database
 
         //status label static
         private static ToolStripStatusLabel updateStatusLabel;
+
+        //Progress bar for static
+        private static ToolStripProgressBar progressBar;
         
         List<string> people;
 
@@ -72,8 +75,18 @@ namespace TNG_Database
             //check to see if this is the first time the program has ran
             if (Properties.TNG_Settings.Default.FirstRun)
             {
+                //create database
                 CreateSQLDatabase();
+
+                SaveExportDate();
+            }else if((DateTime.Now - Properties.TNG_Settings.Default.LastDBExport).TotalDays >= Properties.TNG_Settings.Default.DBBackupSetting)
+            {
+                //check if last time export occurred and backup database
+                //TODO export database
+
+                SaveExportDate();
             }
+            
 
             //event for context menu
             peopleContext.Opening += new System.ComponentModel.CancelEventHandler(cms_Opening);
@@ -93,6 +106,8 @@ namespace TNG_Database
             pasteToolStripMenuItem.Enabled = false;
 
             updateStatusLabel = applicationStatusLabel;
+
+            progressBar = mainFormProgressBar;
         }
 
         #region Class Methods
@@ -734,13 +749,15 @@ namespace TNG_Database
         /// </summary>
         private void BackupDatabase()
         {
+            string timestamp = DateTime.UtcNow.ToString("yyyy-MM-dd_HH-mm-ss-fff",
+                                            CultureInfo.InvariantCulture);
+
             string fileName = "TNG_TapeDatabase.sqlite";
-            string newFileName = "TNG_TapeDatabaseBackup_" + DateTime.Now.ToFileTime() + ".sqlite";
+            string newFileName = "TNG_TapeDatabaseBackup_" + timestamp + ".sqlite";
             string databaseFileName = @"database";
             string databaseBackupFileName = @"backups";
 
-            string sourceFile = System.IO.Path.Combine(databaseFileName, fileName);
-            string destinationFile = Path.Combine(databaseBackupFileName, fileName);
+            string sourceFile = Path.Combine(databaseFileName, fileName);
             string newDestinationFile = Path.Combine(databaseBackupFileName, newFileName);
 
             //Copy database file
@@ -750,25 +767,41 @@ namespace TNG_Database
                 {
                     Directory.CreateDirectory(@"backups");
                 }
-                System.IO.File.Copy(sourceFile, destinationFile, true);
+                File.Copy(sourceFile, newDestinationFile, false);
+                UpdateStatusBarBottom("Database backed up");
             }
             catch(Exception e)
             {
                 Console.WriteLine("File Copy: " + e.Message);
             }
 
-            //Rename file
+            //Delete backup files older than 1 year
             try
             {
-                if (File.Exists(sourceFile))
+                string[] files = Directory.GetFiles(@"backups");
+
+                foreach (string file in files)
                 {
-                    File.Move(destinationFile, newDestinationFile);
+                    FileInfo fi = new FileInfo(file);
+                    if (fi.CreationTime < DateTime.Now.AddYears(-1))
+                    {
+                        fi.Delete();
+                    }
                 }
-            }
-            catch (Exception e)
+            }catch(Exception e)
             {
-                Console.WriteLine("File Rename: " + e.Message);
+                Console.WriteLine("Deleting old files: " + e.Message);
             }
+        }
+
+        /// <summary>
+        /// Saves the export date.
+        /// </summary>
+        private void SaveExportDate()
+        {
+            //set last export setting
+            Properties.TNG_Settings.Default.LastDBExport = DateTime.Now;
+            Properties.TNG_Settings.Default.Save();
         }
 
         #endregion
@@ -861,6 +894,8 @@ namespace TNG_Database
             //Show people form and maximize it instantly
             searchTapeForm.Show();
             searchTapeForm.WindowState = FormWindowState.Maximized;
+
+            ResetProgressBar();
         }
 
         /// <summary>
@@ -887,6 +922,8 @@ namespace TNG_Database
             //Show search tape database form and maximize it instantly
             tapeListForm.Show();
             tapeListForm.WindowState = FormWindowState.Maximized;
+
+            ResetProgressBar();
         }
 
         /// <summary>
@@ -914,6 +951,8 @@ namespace TNG_Database
             //show Master list form and maximize it instantly
             masterListForm.Show();
             masterListForm.WindowState = FormWindowState.Maximized;
+
+            ResetProgressBar();
         }
 
         /// <summary>
@@ -940,6 +979,8 @@ namespace TNG_Database
             //show Master list form and maximize it instantly
             projectsForm.Show();
             projectsForm.WindowState = FormWindowState.Maximized;
+
+            ResetProgressBar();
         }
 
         /// <summary>
@@ -967,6 +1008,8 @@ namespace TNG_Database
             //show Master list form and maximize it instantly
             masterArchiveForm.Show();
             masterArchiveForm.WindowState = FormWindowState.Maximized;
+
+            ResetProgressBar();
         }
 
         /// <summary>
@@ -994,6 +1037,8 @@ namespace TNG_Database
             //show Master list form and maximize it instantly
             deletedValuesForm.Show();
             deletedValuesForm.WindowState = FormWindowState.Maximized;
+
+            ResetProgressBar();
         }
 
         /// <summary>
@@ -1022,7 +1067,9 @@ namespace TNG_Database
             //show Master list form and maximize it instantly
             viewMasterArchiveForm.Show();
             viewMasterArchiveForm.WindowState = FormWindowState.Maximized;
-            
+
+            ResetProgressBar();
+
         }
 
         /// <summary>
@@ -1050,6 +1097,8 @@ namespace TNG_Database
             //Show people form and maximize it instantly
             peopleForm.Show();
             peopleForm.WindowState = FormWindowState.Maximized;
+
+            ResetProgressBar();
         }
 
         /// <summary>
@@ -1077,6 +1126,8 @@ namespace TNG_Database
             //Show people form and maximize it instantly
             preferencesForm.Show();
             preferencesForm.WindowState = FormWindowState.Maximized;
+
+            ResetProgressBar();
         }
 
         #endregion
@@ -1099,6 +1150,11 @@ namespace TNG_Database
         private void UpdateProgressBar(int add)
         {
             mainFormProgressBar.Increment(add);
+        }
+
+        public static void ResetProgressBar()
+        {
+            progressBar.Value = 0;
         }
 
         //Import->Projects
@@ -1148,6 +1204,7 @@ namespace TNG_Database
         //does the background work
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
+            ResetProgressBar();
             Stream importStream = null;
             BackgroundWorker worker = sender as BackgroundWorker;
 

@@ -22,7 +22,6 @@ namespace TNG_Database
             this.MdiParent = parent;
             mainform = parent;
         }
-
         
     }
 }

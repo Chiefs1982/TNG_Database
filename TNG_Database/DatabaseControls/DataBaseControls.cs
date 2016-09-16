@@ -1570,5 +1570,34 @@ namespace TNG_Database
         }
 
         #endregion
+
+        /// <summary>
+        /// Counts all entries in each table.
+        /// </summary>
+        /// <returns></returns>
+        public static List<int> CountAllEntries()
+        {
+            List<int> allEntries = new List<int>(5);
+            string[] allDB = new string[] { "TapeDatabase", "Projects", "MasterList", "MasterArchiveVideos", "People" };
+
+            try
+            {
+                SQLiteConnection connection = new SQLiteConnection(database);
+                connection.Open();
+                SQLiteCommand command = new SQLiteCommand(connection);
+
+                foreach(string dbName in allDB)
+                {
+                    command.CommandText = "select count(*) from " + dbName;
+                    allEntries.Add(Convert.ToInt32(command.ExecuteScalar()));
+                }
+                
+            }catch(SQLiteException e)
+            {
+                MainForm.LogFile("SQLite Error: " + e.Message);
+            }
+
+            return allEntries;
+        }
     }
 }
