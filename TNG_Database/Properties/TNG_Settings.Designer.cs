@@ -72,7 +72,7 @@ namespace TNG_Database.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("outputs")]
         public string ExportFolder {
             get {
                 return ((string)(this["ExportFolder"]));
@@ -84,7 +84,7 @@ namespace TNG_Database.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("outputs")]
         public string ImportFolder {
             get {
                 return ((string)(this["ImportFolder"]));

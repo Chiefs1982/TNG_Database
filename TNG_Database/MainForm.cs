@@ -82,7 +82,7 @@ namespace TNG_Database
             }else if((DateTime.Now - Properties.TNG_Settings.Default.LastDBExport).TotalDays >= Properties.TNG_Settings.Default.DBBackupSetting)
             {
                 //check if last time export occurred and backup database
-                //TODO export database
+                BackupDatabase();
 
                 SaveExportDate();
             }
@@ -103,10 +103,13 @@ namespace TNG_Database
             //set the username at the bottom to current user
             computerInfo.UpdateUserName(this);
 
+            //paste option not enabled until something is in clipboard
             pasteToolStripMenuItem.Enabled = false;
 
+            //set static status label
             updateStatusLabel = applicationStatusLabel;
 
+            //set static progress bar
             progressBar = mainFormProgressBar;
         }
 
@@ -676,12 +679,15 @@ namespace TNG_Database
             ofd.InitialDirectory = Properties.TNG_Settings.Default.LastFolder;
             ofd.Filter = "word document (*.doc)|*.doc;*.docx|comma seperated files (*.csv)|*.csv|text files (*.txt)|*.txt";
             ofd.RestoreDirectory = true;
+            ofd.Title = "Select a XDCam Master file to import";
+            ofd.Multiselect = false;
 
             if (ofd.ShowDialog() == DialogResult.OK)
             {
                 if (ofd.OpenFile() != null)
                 {
                     Properties.TNG_Settings.Default.LastFolder = Path.GetDirectoryName(ofd.FileName);
+                    Properties.TNG_Settings.Default.Save();
                     Console.WriteLine(Properties.TNG_Settings.Default.LastFolder);
                     if (backgroundWorker1.IsBusy != true)
                     {
@@ -701,6 +707,8 @@ namespace TNG_Database
             ofd = new OpenFileDialog();
             ofd.InitialDirectory = Properties.TNG_Settings.Default.LastFolder;
             ofd.Filter = "comma seperated files (*.csv)|*.csv";
+            ofd.Title = "Select a tape file to import";
+            ofd.Multiselect = false;
             ofd.RestoreDirectory = true;
 
             if (ofd.ShowDialog() == DialogResult.OK)
@@ -708,6 +716,7 @@ namespace TNG_Database
                 if (ofd.OpenFile() != null)
                 {
                     Properties.TNG_Settings.Default.LastFolder = Path.GetDirectoryName(ofd.FileName);
+                    Properties.TNG_Settings.Default.Save();
                     Console.WriteLine(Properties.TNG_Settings.Default.LastFolder);
                     if (backgroundWorker1.IsBusy != true)
                     {
@@ -802,6 +811,84 @@ namespace TNG_Database
             //set last export setting
             Properties.TNG_Settings.Default.LastDBExport = DateTime.Now;
             Properties.TNG_Settings.Default.Save();
+        }
+
+        /// <summary>
+        /// Exports the database to file to specified name and folder.
+        /// </summary>
+        private void ExportDatabaseToFile()
+        {
+            SaveFileDialog newFile = new SaveFileDialog();
+
+            //set save file properties
+            newFile.InitialDirectory = Properties.TNG_Settings.Default.ExportFolder;
+            newFile.Filter = "SQLite Database File (*.sqlite)|*.sqlite";
+            newFile.Title = "Export a copy of the database";
+            newFile.RestoreDirectory = true;
+            newFile.DefaultExt = "sqlite";
+            newFile.AddExtension = true;
+            newFile.OverwritePrompt = true;
+            newFile.FileName = "TNG_Database";
+
+            if(newFile.ShowDialog() == DialogResult.OK)
+            {
+                //Save File OK clicked
+                string sourceFile = Path.Combine("database", "TNG_TapeDatabase.sqlite");
+
+                File.Copy(sourceFile, newFile.FileName);
+                UpdateStatusBarBottom("Database Exported: " + newFile.FileName);
+            }
+        }
+
+        /// <summary>
+        /// Imports a database file
+        /// </summary>
+        private void ImportDatabaseFromFile()
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+
+            //Set up attributes to import file
+            ofd.Title = "Select Database File to Import";
+            ofd.InitialDirectory = Properties.TNG_Settings.Default.ImportFolder;
+            ofd.Filter = "SQLite Database File (*.sqlite)|*.sqlite";
+            ofd.RestoreDirectory = true;
+
+            if(ofd.ShowDialog() == DialogResult.OK)
+            {
+                //Import file OK clicked
+            }
+        }
+
+        private void OpenTapeToAdd()
+        {
+            
+
+            //close child of mdi if there is one active
+            if (ActiveMdiChild != null)
+            {
+                if (ActiveMdiChild is TapeListForm)
+                {
+                    //Do nothing
+                    TapeListForm form = (TapeListForm)ActiveMdiChild;
+                    Button button = form.Controls.Find("tapeListAddNewButton", true).FirstOrDefault() as Button;
+                    if(button != null)
+                    {
+                        button.PerformClick();
+                    }
+                }
+                else
+                {
+                    //Close child
+                    ActiveMdiChild.Close();
+                    //Show search tape database form and maximize it instantly
+                    //create new instance of form SearchTapeForm
+                    tapeListForm = new TNG_Database.TapeListForm(this, true);
+                    tapeListForm.Show();
+                    tapeListForm.WindowState = FormWindowState.Maximized;
+                }
+            }
+            
+            ResetProgressBar();
         }
 
         #endregion
@@ -1252,17 +1339,7 @@ namespace TNG_Database
         }
         
 
-        //Import a XDCam master csv file click
-        private void xDCamMasterToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            XDCAMMasterImport();
-        }
-
-        //Import a tapes csv file
-        private void tapesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            TapesImport();
-        }
+        
 
         
 
@@ -1366,33 +1443,7 @@ namespace TNG_Database
         }
 
         #endregion
-
-        //Convert a txt to csv toolstrip click
-        private void tocsvToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            //string to tell which button was clicked
-            string importMaster = "tocsv";
-            //open file dialog to ask user which file to convert
-            ofd = new OpenFileDialog();
-            ofd.InitialDirectory = Properties.TNG_Settings.Default.LastFolder;
-            ofd.Filter = "text file (*.txt)|*.txt";
-            ofd.RestoreDirectory = true;
-
-            if (ofd.ShowDialog() == DialogResult.OK)
-            {
-                if (ofd.OpenFile() != null)
-                {
-                    Properties.TNG_Settings.Default.LastFolder = Path.GetDirectoryName(ofd.FileName);
-                    Console.WriteLine(Properties.TNG_Settings.Default.LastFolder);
-                    if (backgroundWorker1.IsBusy != true)
-                    {
-                        mainFormProgressBar.Value = 0;
-                        backgroundWorker1.RunWorkerAsync(importMaster);
-                    }
-                }
-            }
-        }
-
+        
         private void wordTestToolStripMenuItem_Click(object sender, EventArgs e)
         {
             
@@ -1450,5 +1501,67 @@ namespace TNG_Database
 
         #endregion
 
+        #region ToolStrip Events
+
+        //Import a XDCam master csv file click
+        private void xDCamMasterToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            XDCAMMasterImport();
+        }
+
+        //Import a tapes csv file
+        private void tapesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TapesImport();
+        }
+
+        //Convert a txt to csv toolstrip click
+        private void tocsvToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //string to tell which button was clicked
+            string importMaster = "tocsv";
+            //open file dialog to ask user which file to convert
+            ofd = new OpenFileDialog();
+            ofd.InitialDirectory = Properties.TNG_Settings.Default.LastFolder;
+            ofd.Filter = "text file (*.txt)|*.txt";
+            ofd.RestoreDirectory = true;
+
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                if (ofd.OpenFile() != null)
+                {
+                    Properties.TNG_Settings.Default.LastFolder = Path.GetDirectoryName(ofd.FileName);
+                    Console.WriteLine(Properties.TNG_Settings.Default.LastFolder);
+                    if (backgroundWorker1.IsBusy != true)
+                    {
+                        mainFormProgressBar.Value = 0;
+                        backgroundWorker1.RunWorkerAsync(importMaster);
+                    }
+                }
+            }
+        }
+
+        private void exportDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ExportDatabaseToFile();
+        }
+
+        private void importDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ImportDatabaseFromFile();
+        }
+
+        private void newTapeEntryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenTapeToAdd();
+        }
+
+        private void newMasterArchvieToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+
+        #endregion
     }
 }

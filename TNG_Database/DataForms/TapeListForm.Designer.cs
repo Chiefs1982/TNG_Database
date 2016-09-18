@@ -1119,6 +1119,7 @@
             this.ShowInTaskbar = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "TapeListForm";
+            this.Shown += new System.EventHandler(this.TapeListForm_Shown);
             this.defaultTapeGroupbox.ResumeLayout(false);
             this.defaultTapeGroupbox.PerformLayout();
             this.defaultItemsPanel.ResumeLayout(false);

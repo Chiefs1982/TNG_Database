@@ -15,10 +15,10 @@
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="ExportFolder" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">outputs</Value>
     </Setting>
     <Setting Name="ImportFolder" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">outputs</Value>
     </Setting>
   </Settings>
 </SettingsFile>

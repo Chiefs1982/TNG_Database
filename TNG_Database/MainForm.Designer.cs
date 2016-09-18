@@ -68,9 +68,10 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.applicationStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.mainFormProgressBar = new System.Windows.Forms.ToolStripProgressBar();
+            this.personStatusDropdown = new System.Windows.Forms.ToolStripDropDownButton();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.personStatusDropdown = new System.Windows.Forms.ToolStripDropDownButton();
+            this.settingsRibbonButton = new TNG_Database.RibbonButtons();
             this.backupDatabaseRibbonButton = new TNG_Database.RibbonButtons();
             this.ImportProjectsRibbonButton = new TNG_Database.RibbonButtons();
             this.importArchiveRibbonButton = new TNG_Database.RibbonButtons();
@@ -78,7 +79,6 @@
             this.archiveRibbonButton = new TNG_Database.RibbonButtons();
             this.searchRibbonButton = new TNG_Database.RibbonButtons();
             this.homeRibbonButton = new TNG_Database.RibbonButtons();
-            this.settingsRibbonButton = new TNG_Database.RibbonButtons();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -140,6 +140,7 @@
             this.importDatabaseToolStripMenuItem.Name = "importDatabaseToolStripMenuItem";
             this.importDatabaseToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.importDatabaseToolStripMenuItem.Text = "Import Database";
+            this.importDatabaseToolStripMenuItem.Click += new System.EventHandler(this.importDatabaseToolStripMenuItem_Click);
             // 
             // exportDatabaseToolStripMenuItem
             // 
@@ -147,6 +148,7 @@
             this.exportDatabaseToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.exportDatabaseToolStripMenuItem.Text = "Export Database";
             this.exportDatabaseToolStripMenuItem.ToolTipText = "Export a database for portablity";
+            this.exportDatabaseToolStripMenuItem.Click += new System.EventHandler(this.exportDatabaseToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
@@ -168,12 +170,14 @@
             this.newTapeEntryToolStripMenuItem.Name = "newTapeEntryToolStripMenuItem";
             this.newTapeEntryToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.newTapeEntryToolStripMenuItem.Text = "New Tape Entry";
+            this.newTapeEntryToolStripMenuItem.Click += new System.EventHandler(this.newTapeEntryToolStripMenuItem_Click);
             // 
             // newMasterArchvieToolStripMenuItem
             // 
             this.newMasterArchvieToolStripMenuItem.Name = "newMasterArchvieToolStripMenuItem";
             this.newMasterArchvieToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.newMasterArchvieToolStripMenuItem.Text = "New Master Archvie";
+            this.newMasterArchvieToolStripMenuItem.Click += new System.EventHandler(this.newMasterArchvieToolStripMenuItem_Click);
             // 
             // importToolStripMenuItem
             // 
@@ -394,6 +398,18 @@
             this.mainFormProgressBar.Size = new System.Drawing.Size(100, 16);
             this.mainFormProgressBar.Step = 1;
             // 
+            // personStatusDropdown
+            // 
+            this.personStatusDropdown.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.personStatusDropdown.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.personStatusDropdown.Image = ((System.Drawing.Image)(resources.GetObject("personStatusDropdown.Image")));
+            this.personStatusDropdown.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.personStatusDropdown.Margin = new System.Windows.Forms.Padding(0, 2, 10, 0);
+            this.personStatusDropdown.Name = "personStatusDropdown";
+            this.personStatusDropdown.Size = new System.Drawing.Size(56, 20);
+            this.personStatusDropdown.Text = "Person";
+            this.personStatusDropdown.ToolTipText = "Select Person";
+            // 
             // backgroundWorker1
             // 
             this.backgroundWorker1.WorkerReportsProgress = true;
@@ -418,17 +434,15 @@
             this.panel1.Size = new System.Drawing.Size(842, 40);
             this.panel1.TabIndex = 4;
             // 
-            // personStatusDropdown
+            // settingsRibbonButton
             // 
-            this.personStatusDropdown.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.personStatusDropdown.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.personStatusDropdown.Image = ((System.Drawing.Image)(resources.GetObject("personStatusDropdown.Image")));
-            this.personStatusDropdown.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.personStatusDropdown.Margin = new System.Windows.Forms.Padding(0, 2, 10, 0);
-            this.personStatusDropdown.Name = "personStatusDropdown";
-            this.personStatusDropdown.Size = new System.Drawing.Size(56, 20);
-            this.personStatusDropdown.Text = "Person";
-            this.personStatusDropdown.ToolTipText = "Select Person";
+            this.settingsRibbonButton.ImageType = TNG_Database.RibbonButtons.ImageForButton.Preferences;
+            this.settingsRibbonButton.Location = new System.Drawing.Point(742, 2);
+            this.settingsRibbonButton.Name = "settingsRibbonButton";
+            this.settingsRibbonButton.Size = new System.Drawing.Size(60, 36);
+            this.settingsRibbonButton.TabIndex = 7;
+            this.settingsRibbonButton.Text = "Settings";
+            this.settingsRibbonButton.Click += new System.EventHandler(this.settingsRibbonButton_Click);
             // 
             // backupDatabaseRibbonButton
             // 
@@ -498,16 +512,6 @@
             this.homeRibbonButton.TabIndex = 0;
             this.homeRibbonButton.Text = "Home";
             this.homeRibbonButton.Click += new System.EventHandler(this.homeRibbonButton_Click);
-            // 
-            // settingsRibbonButton
-            // 
-            this.settingsRibbonButton.ImageType = TNG_Database.RibbonButtons.ImageForButton.Preferences;
-            this.settingsRibbonButton.Location = new System.Drawing.Point(742, 2);
-            this.settingsRibbonButton.Name = "settingsRibbonButton";
-            this.settingsRibbonButton.Size = new System.Drawing.Size(60, 36);
-            this.settingsRibbonButton.TabIndex = 7;
-            this.settingsRibbonButton.Text = "Settings";
-            this.settingsRibbonButton.Click += new System.EventHandler(this.settingsRibbonButton_Click);
             // 
             // MainForm
             // 

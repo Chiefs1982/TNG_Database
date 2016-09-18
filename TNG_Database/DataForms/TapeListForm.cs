@@ -50,19 +50,22 @@ namespace TNG_Database
         //values for checking if user went to a control
         FirstFocusValues focusValues = new FirstFocusValues();
 
+        //bool to check if button should pressed
+        bool buttonToPress = false;
+
         public TapeListForm()
         {
             InitializeComponent();
         }
 
-        public TapeListForm(TNG_Database.MainForm parent)
+        public TapeListForm(TNG_Database.MainForm parent, bool addEntry = false)
         {
             InitializeComponent();
             this.MdiParent = parent;
             mainform = parent;
 
             PopulateTapeList();
-            
+
             tapeListEditEntryButton.Enabled = false;
             tapeListDeleteEntryButton.Enabled = false;
 
@@ -140,7 +143,7 @@ namespace TNG_Database
             //edit
             editTagsTextbox.MouseHover += AddTagsTextbox_MouseHover;
             editTagsTextbox.MouseLeave += AddTagsTextbox_MouseLeave;
-            
+
             //keep items highlighted
             tapeListListView.HideSelection = false;
 
@@ -152,7 +155,10 @@ namespace TNG_Database
             //Event for sorting each column
             CommonMethods.ListViewItemComparer.SortColumn = -1;
             tapeListListView.ColumnClick += new ColumnClickEventHandler(CommonMethods.ListViewItemComparer.SearchListView_ColumnClick);
+
+            buttonToPress = addEntry;
         }
+
         
         //-------------------------------------------
         //------------CLASS METHODS------------------
@@ -1379,5 +1385,13 @@ namespace TNG_Database
 
 
         #endregion
+
+        private void TapeListForm_Shown(object sender, EventArgs e)
+        {
+            if (buttonToPress)
+            {
+                tapeListAddNewButton.PerformClick();
+            }
+        }
     }
 }

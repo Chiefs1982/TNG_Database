@@ -75,23 +75,25 @@ DONE
 * Add own controls with preset icons for ribbon
 * Create Layout for Input, Search, Edit, Stats (possibly in tabs or upper bar)
 * reset progress bar periodically
+* Create Preferences
+	* how often to backup database
+	* default export directory
+	* default import directory
+	* number of master tapes
+	* number of tapes in database
+	* number of projects
+	* number of users
+	* number of archived videos
+* Add a backup feature that backs everything up every month or so
 
 
 TODO
-- Create Preferences
-	- how often to backup database
-	- default export directory
-	- default import directory
-	- number of master tapes
-	- number of tapes in database
-	- number of projects
-	- number of users
-	- number of archived videos
 - Create an about page
-- Add a backup feature that backs everything up every month or so
 - Add export and import feature for database file
 - Be able to save the old databases and recall them if needed
 - Add tooltips to everything
+- Add ability to open form with add new selected - see TapeForm
+- Add import db file functionality
 
 1541918047
 

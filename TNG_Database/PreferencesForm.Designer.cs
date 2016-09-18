@@ -29,26 +29,26 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.databaseBackupCombobox = new System.Windows.Forms.ComboBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.usersStats = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.archiveVideosStats = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.projectStats = new System.Windows.Forms.Label();
+            this.archiveTapesStats = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.tapeStats = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.exportPrefBrowseButton = new System.Windows.Forms.Button();
             this.importPrefBrowseButton = new System.Windows.Forms.Button();
             this.exportPrefDirTexbox = new System.Windows.Forms.TextBox();
             this.importPrefDirTexbox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.tapeStats = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.archiveTapesStats = new System.Windows.Forms.Label();
-            this.projectStats = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
-            this.archiveVideosStats = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
-            this.usersStats = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.databaseBackupCombobox = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -72,6 +72,144 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Preferences";
             // 
+            // databaseBackupCombobox
+            // 
+            this.databaseBackupCombobox.FormattingEnabled = true;
+            this.databaseBackupCombobox.Location = new System.Drawing.Point(225, 121);
+            this.databaseBackupCombobox.Name = "databaseBackupCombobox";
+            this.databaseBackupCombobox.Size = new System.Drawing.Size(108, 21);
+            this.databaseBackupCombobox.TabIndex = 9;
+            this.databaseBackupCombobox.SelectedIndexChanged += new System.EventHandler(this.databaseBackupCombobox_SelectedIndexChanged);
+            this.databaseBackupCombobox.DropDownClosed += new System.EventHandler(this.databaseBackupCombobox_DropDownClosed);
+            this.databaseBackupCombobox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.databaseBackupCombobox_KeyPress);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(185, 124);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(34, 13);
+            this.label7.TabIndex = 8;
+            this.label7.Text = "Every";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(16, 124);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(148, 13);
+            this.label4.TabIndex = 7;
+            this.label4.Text = "Backup Database Timeframe:";
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.usersStats);
+            this.groupBox2.Controls.Add(this.label11);
+            this.groupBox2.Controls.Add(this.archiveVideosStats);
+            this.groupBox2.Controls.Add(this.label9);
+            this.groupBox2.Controls.Add(this.projectStats);
+            this.groupBox2.Controls.Add(this.archiveTapesStats);
+            this.groupBox2.Controls.Add(this.label6);
+            this.groupBox2.Controls.Add(this.label5);
+            this.groupBox2.Controls.Add(this.tapeStats);
+            this.groupBox2.Controls.Add(this.label3);
+            this.groupBox2.Location = new System.Drawing.Point(586, 207);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(228, 184);
+            this.groupBox2.TabIndex = 6;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Stats";
+            // 
+            // usersStats
+            // 
+            this.usersStats.AutoSize = true;
+            this.usersStats.Location = new System.Drawing.Point(147, 142);
+            this.usersStats.Name = "usersStats";
+            this.usersStats.Size = new System.Drawing.Size(41, 13);
+            this.usersStats.TabIndex = 9;
+            this.usersStats.Text = "label12";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(39, 142);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(37, 13);
+            this.label11.TabIndex = 8;
+            this.label11.Text = "Users:";
+            // 
+            // archiveVideosStats
+            // 
+            this.archiveVideosStats.AutoSize = true;
+            this.archiveVideosStats.Location = new System.Drawing.Point(147, 114);
+            this.archiveVideosStats.Name = "archiveVideosStats";
+            this.archiveVideosStats.Size = new System.Drawing.Size(41, 13);
+            this.archiveVideosStats.TabIndex = 7;
+            this.archiveVideosStats.Text = "label10";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(39, 114);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(87, 13);
+            this.label9.TabIndex = 6;
+            this.label9.Text = "Archived Videos:";
+            // 
+            // projectStats
+            // 
+            this.projectStats.AutoSize = true;
+            this.projectStats.Location = new System.Drawing.Point(147, 61);
+            this.projectStats.Name = "projectStats";
+            this.projectStats.Size = new System.Drawing.Size(35, 13);
+            this.projectStats.TabIndex = 5;
+            this.projectStats.Text = "label8";
+            // 
+            // archiveTapesStats
+            // 
+            this.archiveTapesStats.AutoSize = true;
+            this.archiveTapesStats.Location = new System.Drawing.Point(147, 87);
+            this.archiveTapesStats.Name = "archiveTapesStats";
+            this.archiveTapesStats.Size = new System.Drawing.Size(35, 13);
+            this.archiveTapesStats.TabIndex = 4;
+            this.archiveTapesStats.Text = "label7";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(39, 87);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(79, 13);
+            this.label6.TabIndex = 3;
+            this.label6.Text = "Archive Tapes:";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(39, 61);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(48, 13);
+            this.label5.TabIndex = 2;
+            this.label5.Text = "Projects:";
+            // 
+            // tapeStats
+            // 
+            this.tapeStats.AutoSize = true;
+            this.tapeStats.Location = new System.Drawing.Point(147, 36);
+            this.tapeStats.Name = "tapeStats";
+            this.tapeStats.Size = new System.Drawing.Size(35, 13);
+            this.tapeStats.TabIndex = 1;
+            this.tapeStats.Text = "label4";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(39, 36);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(40, 13);
+            this.label3.TabIndex = 0;
+            this.label3.Text = "Tapes:";
+            // 
             // exportPrefBrowseButton
             // 
             this.exportPrefBrowseButton.Location = new System.Drawing.Point(680, 75);
@@ -80,6 +218,7 @@
             this.exportPrefBrowseButton.TabIndex = 5;
             this.exportPrefBrowseButton.Text = "Browse";
             this.exportPrefBrowseButton.UseVisualStyleBackColor = true;
+            this.exportPrefBrowseButton.Click += new System.EventHandler(this.exportPrefBrowseButton_Click);
             // 
             // importPrefBrowseButton
             // 
@@ -89,6 +228,7 @@
             this.importPrefBrowseButton.TabIndex = 4;
             this.importPrefBrowseButton.Text = "Browse";
             this.importPrefBrowseButton.UseVisualStyleBackColor = true;
+            this.importPrefBrowseButton.Click += new System.EventHandler(this.importPrefBrowseButton_Click);
             // 
             // exportPrefDirTexbox
             // 
@@ -121,141 +261,6 @@
             this.label1.Size = new System.Drawing.Size(84, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "Import Directory:";
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.usersStats);
-            this.groupBox2.Controls.Add(this.label11);
-            this.groupBox2.Controls.Add(this.archiveVideosStats);
-            this.groupBox2.Controls.Add(this.label9);
-            this.groupBox2.Controls.Add(this.projectStats);
-            this.groupBox2.Controls.Add(this.archiveTapesStats);
-            this.groupBox2.Controls.Add(this.label6);
-            this.groupBox2.Controls.Add(this.label5);
-            this.groupBox2.Controls.Add(this.tapeStats);
-            this.groupBox2.Controls.Add(this.label3);
-            this.groupBox2.Location = new System.Drawing.Point(586, 207);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(228, 184);
-            this.groupBox2.TabIndex = 6;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Stats";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(39, 36);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(40, 13);
-            this.label3.TabIndex = 0;
-            this.label3.Text = "Tapes:";
-            // 
-            // tapeStats
-            // 
-            this.tapeStats.AutoSize = true;
-            this.tapeStats.Location = new System.Drawing.Point(147, 36);
-            this.tapeStats.Name = "tapeStats";
-            this.tapeStats.Size = new System.Drawing.Size(35, 13);
-            this.tapeStats.TabIndex = 1;
-            this.tapeStats.Text = "label4";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(39, 61);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(48, 13);
-            this.label5.TabIndex = 2;
-            this.label5.Text = "Projects:";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(39, 87);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(79, 13);
-            this.label6.TabIndex = 3;
-            this.label6.Text = "Archive Tapes:";
-            // 
-            // archiveTapesStats
-            // 
-            this.archiveTapesStats.AutoSize = true;
-            this.archiveTapesStats.Location = new System.Drawing.Point(147, 87);
-            this.archiveTapesStats.Name = "archiveTapesStats";
-            this.archiveTapesStats.Size = new System.Drawing.Size(35, 13);
-            this.archiveTapesStats.TabIndex = 4;
-            this.archiveTapesStats.Text = "label7";
-            // 
-            // projectStats
-            // 
-            this.projectStats.AutoSize = true;
-            this.projectStats.Location = new System.Drawing.Point(147, 61);
-            this.projectStats.Name = "projectStats";
-            this.projectStats.Size = new System.Drawing.Size(35, 13);
-            this.projectStats.TabIndex = 5;
-            this.projectStats.Text = "label8";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(39, 114);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(87, 13);
-            this.label9.TabIndex = 6;
-            this.label9.Text = "Archived Videos:";
-            // 
-            // archiveVideosStats
-            // 
-            this.archiveVideosStats.AutoSize = true;
-            this.archiveVideosStats.Location = new System.Drawing.Point(147, 114);
-            this.archiveVideosStats.Name = "archiveVideosStats";
-            this.archiveVideosStats.Size = new System.Drawing.Size(41, 13);
-            this.archiveVideosStats.TabIndex = 7;
-            this.archiveVideosStats.Text = "label10";
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(39, 142);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(37, 13);
-            this.label11.TabIndex = 8;
-            this.label11.Text = "Users:";
-            // 
-            // usersStats
-            // 
-            this.usersStats.AutoSize = true;
-            this.usersStats.Location = new System.Drawing.Point(147, 142);
-            this.usersStats.Name = "usersStats";
-            this.usersStats.Size = new System.Drawing.Size(41, 13);
-            this.usersStats.TabIndex = 9;
-            this.usersStats.Text = "label12";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(16, 124);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(148, 13);
-            this.label4.TabIndex = 7;
-            this.label4.Text = "Backup Database Timeframe:";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(185, 124);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(34, 13);
-            this.label7.TabIndex = 8;
-            this.label7.Text = "Every";
-            // 
-            // databaseBackupCombobox
-            // 
-            this.databaseBackupCombobox.FormattingEnabled = true;
-            this.databaseBackupCombobox.Location = new System.Drawing.Point(225, 121);
-            this.databaseBackupCombobox.Name = "databaseBackupCombobox";
-            this.databaseBackupCombobox.Size = new System.Drawing.Size(108, 21);
-            this.databaseBackupCombobox.TabIndex = 9;
             // 
             // PreferencesForm
             // 
