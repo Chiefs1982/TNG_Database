@@ -426,6 +426,7 @@
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.Text = "ProjectsForm";
+            this.Shown += new System.EventHandler(this.ProjectsForm_Shown);
             this.projectsDefaultGroupBox.ResumeLayout(false);
             this.projectsDefaultGroupBox.PerformLayout();
             this.defaultLabelPanel.ResumeLayout(false);

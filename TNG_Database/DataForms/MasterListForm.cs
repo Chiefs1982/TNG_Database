@@ -28,13 +28,16 @@ namespace TNG_Database
         //focus values
         FirstFocusValues focusValues = new FirstFocusValues();
 
+        //bool to check if add button is to be clicked
+        private bool clickAddButton = false;
+
         public MasterListForm()
         {
             InitializeComponent();
         }
 
         //Open Form Constructor
-        public MasterListForm(TNG_Database.MainForm parent)
+        public MasterListForm(TNG_Database.MainForm parent, bool addMaster = false)
         {
             InitializeComponent();
             this.MdiParent = parent;
@@ -74,6 +77,9 @@ namespace TNG_Database
             //Load all the dropdowns
             LoadDropdowns();
             SetDefaultColors("all");
+
+            //set bool value
+            clickAddButton = addMaster;
         }
         
         //-------------------------------------------------
@@ -721,6 +727,14 @@ namespace TNG_Database
                 masterListDeleteButton.Enabled = false;
 
                 masterListDeleteButton.Text = "Delete";
+            }
+        }
+
+        private void MasterListForm_Shown(object sender, EventArgs e)
+        {
+            if (clickAddButton)
+            {
+                masterListAddButton.PerformClick();
             }
         }
         //-----------------------------------------------

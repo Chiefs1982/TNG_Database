@@ -609,6 +609,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "MasterArchiveVideosForm";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.Shown += new System.EventHandler(this.MasterArchiveVideosForm_Shown);
             this.deleteArchiveGroupBox.ResumeLayout(false);
             this.deleteArchiveGroupBox.PerformLayout();
             this.editArchiveGroupBox.ResumeLayout(false);

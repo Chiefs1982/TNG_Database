@@ -859,16 +859,17 @@ namespace TNG_Database
             }
         }
 
+        /// <summary>
+        /// Opens the tape database form and/or click the add new button
+        /// </summary>
         private void OpenTapeToAdd()
         {
-            
-
             //close child of mdi if there is one active
             if (ActiveMdiChild != null)
             {
                 if (ActiveMdiChild is TapeListForm)
                 {
-                    //Do nothing
+                    //click on the add button
                     TapeListForm form = (TapeListForm)ActiveMdiChild;
                     Button button = form.Controls.Find("tapeListAddNewButton", true).FirstOrDefault() as Button;
                     if(button != null)
@@ -885,6 +886,134 @@ namespace TNG_Database
                     tapeListForm = new TNG_Database.TapeListForm(this, true);
                     tapeListForm.Show();
                     tapeListForm.WindowState = FormWindowState.Maximized;
+                }
+            }
+            
+            ResetProgressBar();
+        }
+
+        /// <summary>
+        /// Opens the projects form and/or click the add new button
+        /// </summary>
+        private void OpenProjectsToAdd()
+        {
+            //close chold of mdi if there is one active
+            if (ActiveMdiChild != null)
+            {
+                if (ActiveMdiChild is ProjectsForm)
+                {
+                    //click on the add button
+                    ProjectsForm form = (ProjectsForm)ActiveMdiChild;
+                    Button button = form.Controls.Find("projectsAddButton", true).FirstOrDefault() as Button;
+                    if (button != null)
+                    {
+                        button.PerformClick();
+                    }
+                }
+                else
+                {
+                    //Close child
+                    ActiveMdiChild.Close();
+                    //Create new instance of form MasterListForm
+                    projectsForm = new TNG_Database.ProjectsForm(this, true);
+                    //show Master list form and maximize it instantly
+                    projectsForm.Show();
+                    projectsForm.WindowState = FormWindowState.Maximized;
+                }
+            }
+            
+            ResetProgressBar();
+        }
+
+        private void OpenMasterArchiveToAdd()
+        {
+            //close chold of mdi if there is one active
+            if (ActiveMdiChild != null)
+            {
+                if (ActiveMdiChild is MasterListForm)
+                {
+                    //click on the add button
+                    MasterListForm form = (MasterListForm)ActiveMdiChild;
+                    Button button = form.Controls.Find("masterListAddButton", true).FirstOrDefault() as Button;
+                    if (button != null)
+                    {
+                        button.PerformClick();
+                    }
+                }
+                else
+                {
+                    //Close child
+                    ActiveMdiChild.Close();
+                    //Create new instance of form MasterListForm
+                    masterListForm = new TNG_Database.MasterListForm(this, true);
+                    //show Master list form and maximize it instantly
+                    masterListForm.Show();
+                    masterListForm.WindowState = FormWindowState.Maximized;
+                }
+
+            }
+            
+            ResetProgressBar();
+        }
+
+        private void OpenArchiveVideosToAdd()
+        {
+            //close chold of mdi if there is one active
+            if (ActiveMdiChild != null)
+            {
+                if (ActiveMdiChild is MasterArchiveVideosForm)
+                {
+                    //click on the add button
+                    MasterArchiveVideosForm form = (MasterArchiveVideosForm)ActiveMdiChild;
+                    Button button = form.Controls.Find("archiveAddButton", true).FirstOrDefault() as Button;
+                    if (button != null)
+                    {
+                        button.PerformClick();
+                    }
+                }
+                else
+                {
+                    //Close child
+                    ActiveMdiChild.Close();
+
+                    //Create new instance of form MasterListForm
+                    masterArchiveForm = new TNG_Database.MasterArchiveVideosForm(this, true);
+
+                    //show Master list form and maximize it instantly
+                    masterArchiveForm.Show();
+                    masterArchiveForm.WindowState = FormWindowState.Maximized;
+                }
+            }
+
+            ResetProgressBar();
+        }
+
+        private void OpenUsersToAdd()
+        {
+            //close child of mdi if there is one active
+            if (ActiveMdiChild != null)
+            {
+                if (ActiveMdiChild is PeopleForm)
+                {
+                    //click on the add button
+                    PeopleForm form = (PeopleForm)ActiveMdiChild;
+                    Button button = form.Controls.Find("addUserPeopleButton", true).FirstOrDefault() as Button;
+                    if (button != null)
+                    {
+                        button.PerformClick();
+                    }
+                }
+                else
+                {
+                    //Close child
+                    ActiveMdiChild.Close();
+
+                    //create new instance of form
+                    peopleForm = new PeopleForm(this, true);
+
+                    //Show people form and maximize it instantly
+                    peopleForm.Show();
+                    peopleForm.WindowState = FormWindowState.Maximized;
                 }
             }
             
@@ -1558,10 +1687,25 @@ namespace TNG_Database
 
         private void newMasterArchvieToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            OpenMasterArchiveToAdd();
         }
 
+        private void newProjectToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenProjectsToAdd();
+        }
+
+        private void newArchiveVideoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenArchiveVideosToAdd();
+        }
+
+        private void newUserToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenUsersToAdd();
+        }
 
         #endregion
+        
     }
 }

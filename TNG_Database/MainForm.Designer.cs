@@ -79,6 +79,9 @@
             this.archiveRibbonButton = new TNG_Database.RibbonButtons();
             this.searchRibbonButton = new TNG_Database.RibbonButtons();
             this.homeRibbonButton = new TNG_Database.RibbonButtons();
+            this.newUserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.newArchiveVideoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.newProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -159,7 +162,10 @@
             // 
             this.addNewItemsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newTapeEntryToolStripMenuItem,
-            this.newMasterArchvieToolStripMenuItem});
+            this.newProjectToolStripMenuItem,
+            this.newMasterArchvieToolStripMenuItem,
+            this.newArchiveVideoToolStripMenuItem,
+            this.newUserToolStripMenuItem});
             this.addNewItemsToolStripMenuItem.Name = "addNewItemsToolStripMenuItem";
             this.addNewItemsToolStripMenuItem.ShortcutKeyDisplayString = "";
             this.addNewItemsToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
@@ -176,7 +182,7 @@
             // 
             this.newMasterArchvieToolStripMenuItem.Name = "newMasterArchvieToolStripMenuItem";
             this.newMasterArchvieToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.newMasterArchvieToolStripMenuItem.Text = "New Master Archvie";
+            this.newMasterArchvieToolStripMenuItem.Text = "New Archive Master";
             this.newMasterArchvieToolStripMenuItem.Click += new System.EventHandler(this.newMasterArchvieToolStripMenuItem_Click);
             // 
             // importToolStripMenuItem
@@ -513,6 +519,27 @@
             this.homeRibbonButton.Text = "Home";
             this.homeRibbonButton.Click += new System.EventHandler(this.homeRibbonButton_Click);
             // 
+            // newUserToolStripMenuItem
+            // 
+            this.newUserToolStripMenuItem.Name = "newUserToolStripMenuItem";
+            this.newUserToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.newUserToolStripMenuItem.Text = "New User";
+            this.newUserToolStripMenuItem.Click += new System.EventHandler(this.newUserToolStripMenuItem_Click);
+            // 
+            // newArchiveVideoToolStripMenuItem
+            // 
+            this.newArchiveVideoToolStripMenuItem.Name = "newArchiveVideoToolStripMenuItem";
+            this.newArchiveVideoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.newArchiveVideoToolStripMenuItem.Text = "New Archive Video";
+            this.newArchiveVideoToolStripMenuItem.Click += new System.EventHandler(this.newArchiveVideoToolStripMenuItem_Click);
+            // 
+            // newProjectToolStripMenuItem
+            // 
+            this.newProjectToolStripMenuItem.Name = "newProjectToolStripMenuItem";
+            this.newProjectToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.newProjectToolStripMenuItem.Text = "New Project";
+            this.newProjectToolStripMenuItem.Click += new System.EventHandler(this.newProjectToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -593,6 +620,9 @@
         private RibbonButtons backupDatabaseRibbonButton;
         private RibbonButtons ImportProjectsRibbonButton;
         private RibbonButtons settingsRibbonButton;
+        private System.Windows.Forms.ToolStripMenuItem newProjectToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem newArchiveVideoToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem newUserToolStripMenuItem;
     }
 }
 

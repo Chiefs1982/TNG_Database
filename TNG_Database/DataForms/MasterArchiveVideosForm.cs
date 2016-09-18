@@ -38,7 +38,10 @@ namespace TNG_Database
         //Focus values
         FirstFocusValues focusValues = new FirstFocusValues();
 
-        public MasterArchiveVideosForm(TNG_Database.MainForm parent)
+        //bool to check if add button is to be clicked
+        private bool clickAddButton = false;
+
+        public MasterArchiveVideosForm(TNG_Database.MainForm parent, bool addVideo = false)
         {
             InitializeComponent();
             this.MdiParent = parent;
@@ -97,6 +100,9 @@ namespace TNG_Database
             //reset focus values and set colors to default
             focusValues.Reset();
             SetDefaultColors("all");
+
+            //set bool value
+            clickAddButton = addVideo;
         }
         
         private void ArchiveClipNumberTextbox_KeyPress(object sender, KeyPressEventArgs e)
@@ -798,6 +804,12 @@ namespace TNG_Database
             }
         }
 
-
+        private void MasterArchiveVideosForm_Shown(object sender, EventArgs e)
+        {
+            if (clickAddButton)
+            {
+                archiveAddButton.PerformClick();
+            }
+        }
     }
 }

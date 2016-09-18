@@ -35,7 +35,10 @@ namespace TNG_Database
         //Focus values
         FirstFocusValues focusValues = new FirstFocusValues();
 
-        public ProjectsForm(TNG_Database.MainForm parent)
+        //bool to check if add button is to be clicked
+        private bool clickAddButton = false;
+
+        public ProjectsForm(TNG_Database.MainForm parent, bool addProject = false)
         {
             InitializeComponent();
             this.MdiParent = parent;
@@ -77,6 +80,9 @@ namespace TNG_Database
             //Event for sorting each column
             CommonMethods.ListViewItemComparer.SortColumn = -1;
             projectsListView.ColumnClick += new ColumnClickEventHandler(CommonMethods.ListViewItemComparer.SearchListView_ColumnClick);
+
+            //set click add button value
+            clickAddButton = addProject;
         }
 
         
@@ -723,5 +729,12 @@ namespace TNG_Database
 
         #endregion
 
+        private void ProjectsForm_Shown(object sender, EventArgs e)
+        {
+            if (clickAddButton)
+            {
+                projectsAddButton.PerformClick();
+            }
+        }
     }
 }

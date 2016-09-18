@@ -471,6 +471,7 @@
             this.Name = "MasterListForm";
             this.ShowIcon = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+            this.Shown += new System.EventHandler(this.MasterListForm_Shown);
             this.defaultMasterGroupBox.ResumeLayout(false);
             this.defaultMasterGroupBox.PerformLayout();
             this.addMasterListGroupBox.ResumeLayout(false);

@@ -26,7 +26,10 @@ namespace TNG_Database
 
         //focus values
         FirstFocusValues focusValues = new FirstFocusValues();
-        
+
+        //bool to check if add button is to be clicked
+        private bool clickAddButton = false;
+
         //Initialize People Form
         public PeopleForm()
         {
@@ -41,7 +44,7 @@ namespace TNG_Database
         }
 
         //initialize People Form from the MDI Parent
-        public PeopleForm(TNG_Database.MainForm parent)
+        public PeopleForm(TNG_Database.MainForm parent, bool addPerson = false)
         {
             InitializeComponent();
             this.MdiParent = parent;
@@ -68,12 +71,11 @@ namespace TNG_Database
             peopleFormListBox.SelectionMode = SelectionMode.MultiExtended;
 
             focusValues.Reset();
+
+            //set bool value
+            clickAddButton = addPerson;
         }
-
         
-
-        
-
         //------------------------------------------------
         //--------PEOPLEFORM METHODS----------------------
         //------------------------------------------------
@@ -599,6 +601,14 @@ namespace TNG_Database
         private void deleteUserCancelButton_Click(object sender, EventArgs e)
         {
             CloseOpenGroupBox("delete");
+        }
+
+        private void PeopleForm_Shown(object sender, EventArgs e)
+        {
+            if (clickAddButton)
+            {
+                addUserPeopleButton.PerformClick();
+            }
         }
 
         #endregion

@@ -323,6 +323,7 @@
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.Text = "PeopleForm";
+            this.Shown += new System.EventHandler(this.PeopleForm_Shown);
             this.editUserGroupBox.ResumeLayout(false);
             this.editUserGroupBox.PerformLayout();
             this.addUserGroupBox.ResumeLayout(false);
