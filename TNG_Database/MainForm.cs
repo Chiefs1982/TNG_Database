@@ -859,6 +859,8 @@ namespace TNG_Database
 
             if(ofd.ShowDialog() == DialogResult.OK)
             {
+                //Backup DB before import
+                BackupDatabase();
                 //Import file OK clicked
                 Debug.WriteLine("Ready to start import");
                 DataBaseControls.GetTableName(ofd.FileName, this);
@@ -1084,12 +1086,6 @@ namespace TNG_Database
         private void homeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //Goto Search Page
-            OpenSearchPage();
-        }
-
-        //Open Search Tape Database
-        private void searchTapeDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
-        {
             OpenSearchPage();
         }
 
@@ -1354,7 +1350,8 @@ namespace TNG_Database
 
         private void OpenAboutPage()
         {
-
+            AboutForm aboutForm = new AboutForm();
+            aboutForm.Show();
         }
 
         #endregion

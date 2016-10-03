@@ -133,6 +133,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AboutForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AboutForm.Designer.cs">
+      <DependentUpon>AboutForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Values\ComputerInfoValues.cs" />
     <Compile Include="Helpers\ComputerInfo.cs" />
     <Compile Include="DatabaseControls\AddToDatabase.cs" />
@@ -222,6 +228,9 @@
     <Compile Include="DataForms\ViewMasterArchiveForm.Designer.cs">
       <DependentUpon>ViewMasterArchiveForm.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="AboutForm.resx">
+      <DependentUpon>AboutForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="DataForms\DeletedValuesForm.resx">
       <DependentUpon>DeletedValuesForm.cs</DependentUpon>
     </EmbeddedResource>

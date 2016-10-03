@@ -67,7 +67,6 @@
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.deletedDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.searchTapeDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.applicationStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.mainFormProgressBar = new System.Windows.Forms.ToolStripProgressBar();
@@ -381,19 +380,10 @@
             // 
             // aboutToolStripMenuItem
             // 
-            this.aboutToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.searchTapeDatabaseToolStripMenuItem});
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
-            // 
-            // searchTapeDatabaseToolStripMenuItem
-            // 
-            this.searchTapeDatabaseToolStripMenuItem.Name = "searchTapeDatabaseToolStripMenuItem";
-            this.searchTapeDatabaseToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
-            this.searchTapeDatabaseToolStripMenuItem.Text = "Search Tape Database";
-            this.searchTapeDatabaseToolStripMenuItem.Click += new System.EventHandler(this.searchTapeDatabaseToolStripMenuItem_Click);
             // 
             // statusStrip1
             // 
@@ -588,7 +578,6 @@
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         public System.Windows.Forms.ToolStripStatusLabel applicationStatusLabel;
         public System.Windows.Forms.ToolStripProgressBar mainFormProgressBar;
-        private System.Windows.Forms.ToolStripMenuItem searchTapeDatabaseToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem addNewItemsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newTapeEntryToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newMasterArchvieToolStripMenuItem;
