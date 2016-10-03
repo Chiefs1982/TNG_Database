@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SQLite;
 using TNG_Database.Values;
+using System.Diagnostics;
 
 namespace TNG_Database
 {
@@ -321,7 +322,7 @@ namespace TNG_Database
 
                     if (peopleFormListBox.SelectedItems.Count > 1 && peopleValues.Count > 0)
                     {
-                        Console.WriteLine("sending " + peopleValues.Count + " people to delete");
+                        Debug.WriteLine("sending " + peopleValues.Count + " people to delete");
                         updateStatus.UpdateStatusBar(AddToDatabase.DeleteMultiplePeopleSelected(peopleValues) + " people deleted", mainform);
                     }
 

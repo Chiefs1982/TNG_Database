@@ -39,7 +39,10 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.addNewItemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newTapeEntryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.newProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newMasterArchvieToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.newArchiveVideoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.newUserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.textFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.xDCamMasterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -63,7 +66,7 @@
             this.archiveVideosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.deletedDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.windowsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.searchTapeDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.applicationStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
@@ -79,9 +82,6 @@
             this.archiveRibbonButton = new TNG_Database.RibbonButtons();
             this.searchRibbonButton = new TNG_Database.RibbonButtons();
             this.homeRibbonButton = new TNG_Database.RibbonButtons();
-            this.newUserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.newArchiveVideoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.newProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -93,7 +93,7 @@
             this.fileToolStripMenuItem,
             this.editToolStripMenuItem,
             this.dataToolStripMenuItem,
-            this.windowsToolStripMenuItem});
+            this.aboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(846, 24);
@@ -178,12 +178,33 @@
             this.newTapeEntryToolStripMenuItem.Text = "New Tape Entry";
             this.newTapeEntryToolStripMenuItem.Click += new System.EventHandler(this.newTapeEntryToolStripMenuItem_Click);
             // 
+            // newProjectToolStripMenuItem
+            // 
+            this.newProjectToolStripMenuItem.Name = "newProjectToolStripMenuItem";
+            this.newProjectToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.newProjectToolStripMenuItem.Text = "New Project";
+            this.newProjectToolStripMenuItem.Click += new System.EventHandler(this.newProjectToolStripMenuItem_Click);
+            // 
             // newMasterArchvieToolStripMenuItem
             // 
             this.newMasterArchvieToolStripMenuItem.Name = "newMasterArchvieToolStripMenuItem";
             this.newMasterArchvieToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.newMasterArchvieToolStripMenuItem.Text = "New Archive Master";
             this.newMasterArchvieToolStripMenuItem.Click += new System.EventHandler(this.newMasterArchvieToolStripMenuItem_Click);
+            // 
+            // newArchiveVideoToolStripMenuItem
+            // 
+            this.newArchiveVideoToolStripMenuItem.Name = "newArchiveVideoToolStripMenuItem";
+            this.newArchiveVideoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.newArchiveVideoToolStripMenuItem.Text = "New Archive Video";
+            this.newArchiveVideoToolStripMenuItem.Click += new System.EventHandler(this.newArchiveVideoToolStripMenuItem_Click);
+            // 
+            // newUserToolStripMenuItem
+            // 
+            this.newUserToolStripMenuItem.Name = "newUserToolStripMenuItem";
+            this.newUserToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.newUserToolStripMenuItem.Text = "New User";
+            this.newUserToolStripMenuItem.Click += new System.EventHandler(this.newUserToolStripMenuItem_Click);
             // 
             // importToolStripMenuItem
             // 
@@ -358,13 +379,14 @@
             this.deletedDatabaseToolStripMenuItem.Text = "Deleted Database";
             this.deletedDatabaseToolStripMenuItem.Click += new System.EventHandler(this.deletedDatabaseToolStripMenuItem_Click);
             // 
-            // windowsToolStripMenuItem
+            // aboutToolStripMenuItem
             // 
-            this.windowsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.aboutToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.searchTapeDatabaseToolStripMenuItem});
-            this.windowsToolStripMenuItem.Name = "windowsToolStripMenuItem";
-            this.windowsToolStripMenuItem.Size = new System.Drawing.Size(68, 20);
-            this.windowsToolStripMenuItem.Text = "Windows";
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
+            this.aboutToolStripMenuItem.Text = "About";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // searchTapeDatabaseToolStripMenuItem
             // 
@@ -519,27 +541,6 @@
             this.homeRibbonButton.Text = "Home";
             this.homeRibbonButton.Click += new System.EventHandler(this.homeRibbonButton_Click);
             // 
-            // newUserToolStripMenuItem
-            // 
-            this.newUserToolStripMenuItem.Name = "newUserToolStripMenuItem";
-            this.newUserToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.newUserToolStripMenuItem.Text = "New User";
-            this.newUserToolStripMenuItem.Click += new System.EventHandler(this.newUserToolStripMenuItem_Click);
-            // 
-            // newArchiveVideoToolStripMenuItem
-            // 
-            this.newArchiveVideoToolStripMenuItem.Name = "newArchiveVideoToolStripMenuItem";
-            this.newArchiveVideoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.newArchiveVideoToolStripMenuItem.Text = "New Archive Video";
-            this.newArchiveVideoToolStripMenuItem.Click += new System.EventHandler(this.newArchiveVideoToolStripMenuItem_Click);
-            // 
-            // newProjectToolStripMenuItem
-            // 
-            this.newProjectToolStripMenuItem.Name = "newProjectToolStripMenuItem";
-            this.newProjectToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.newProjectToolStripMenuItem.Text = "New Project";
-            this.newProjectToolStripMenuItem.Click += new System.EventHandler(this.newProjectToolStripMenuItem_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -584,7 +585,7 @@
         private System.Windows.Forms.ToolStripMenuItem tapeDatabaseToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem masterArchiveToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem usersToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem windowsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         public System.Windows.Forms.ToolStripStatusLabel applicationStatusLabel;
         public System.Windows.Forms.ToolStripProgressBar mainFormProgressBar;
         private System.Windows.Forms.ToolStripMenuItem searchTapeDatabaseToolStripMenuItem;

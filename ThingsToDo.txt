@@ -86,14 +86,14 @@ DONE
 	* number of archived videos
 * Add a backup feature that backs everything up every month or so
 * Add ability to open form with add new selected - see TapeForm
+* Add import db file functionality
+* Add export and import feature for database file
 
 
 TODO
 - Create an about page
-- Add export and import feature for database file
 - Be able to save the old databases and recall them if needed
 - Add tooltips to everything
-- Add import db file functionality
 
 1541918047
 

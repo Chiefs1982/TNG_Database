@@ -14,6 +14,7 @@ using Spire.Doc;
 using Spire.Doc.Documents;
 using System.Globalization;
 using System.Timers;
+using System.Diagnostics;
 
 namespace TNG_Database
 {
@@ -36,7 +37,7 @@ namespace TNG_Database
         Form currentForm;
 
         //gets database name for db operations
-        private string connect = DataBaseControls.GetDBName();
+        private string connect = DataBaseControls.Database;
         OpenFileDialog ofd;
 
         //Reference to CommonMethods
@@ -173,7 +174,7 @@ namespace TNG_Database
                 {
                     //Log file did not exist
                     Directory.CreateDirectory(@"log");
-                    Console.WriteLine("Log files does not exist");
+                    Debug.WriteLine("Log files does not exist");
                     File.Create(@"log\TNG_Database_Log.txt").Close();
                 }
 
@@ -189,7 +190,7 @@ namespace TNG_Database
             }catch(Exception e)
             {
                 //Error
-                Console.WriteLine(e.ToString());
+                Debug.WriteLine(e.ToString());
             }
         }
 
@@ -282,7 +283,7 @@ namespace TNG_Database
                     }
                 }
             }
-            catch { Console.WriteLine("Error in master gather"); }
+            catch { Debug.WriteLine("Error in master gather"); }
 
             //check if there is a media defined in the name using all combobox items
             try
@@ -294,10 +295,10 @@ namespace TNG_Database
                     //get name of file without extension
                     foreach (string obj in mediaCombo.Items)
                     {
-                        Console.WriteLine("In media for loop");
+                        Debug.WriteLine("In media for loop");
                         if (!obj.ToLower().Equals("other"))
                         {
-                            Console.WriteLine("Does not equal other");
+                            Debug.WriteLine("Does not equal other");
                             //string[] mediaItems = mediaCombo.DataSource.t
                             string nameFile = Path.GetFileNameWithoutExtension(ofd.FileName);
 
@@ -307,7 +308,7 @@ namespace TNG_Database
                             //add name of master tape if not included
                             if (index != -1)
                             {
-                                Console.WriteLine("Does not equal -1");
+                                Debug.WriteLine("Does not equal -1");
                                 mediaCombo.Text = obj;
                                 break;
                             }
@@ -316,7 +317,7 @@ namespace TNG_Database
                     }
                 }
             }
-            catch { Console.WriteLine("Error in media gather"); }
+            catch { Debug.WriteLine("Error in media gather"); }
 
             #endregion
 
@@ -355,7 +356,7 @@ namespace TNG_Database
                         DataBaseControls.AddMasterTapesFromFile(worker, importStream, ofd, masterTapeName, commonMethod.GetCameraNumber(cameraMasterName), true);
                         break;
                     default:
-                        Console.WriteLine("File was not a txt, doc, docx, or csv");
+                        Debug.WriteLine("File was not a txt, doc, docx, or csv");
                         break;
                 }
                 
@@ -432,13 +433,13 @@ namespace TNG_Database
                         //Log file did not exist
                         Directory.CreateDirectory(@"tmp");
                         File.Create(@"" + filename).Close();
-                        Console.WriteLine("File doesn't exist");
+                        Debug.WriteLine("File doesn't exist");
                     }
                     else
                     {
                         //Clear File
                         File.WriteAllText(@"" + filename, string.Empty);
-                        Console.WriteLine("File Cleared");
+                        Debug.WriteLine("File Cleared");
                     }
                     
                     //streamReader to read csv file
@@ -533,7 +534,7 @@ namespace TNG_Database
                         {
                             //Log file did not exist
                             Directory.CreateDirectory(@"outputs");
-                            Console.WriteLine("Log files does not exist");
+                            Debug.WriteLine("Log files does not exist");
                             File.Create(@"outputs\" + Path.GetFileNameWithoutExtension(file.FileName) + "_Fixed.csv").Close();
                         }
 
@@ -576,13 +577,13 @@ namespace TNG_Database
                     //Log file did not exist
                     Directory.CreateDirectory(@"tmp");
                     File.Create(@"" + filename).Close();
-                    Console.WriteLine("File doesn't exist");
+                    Debug.WriteLine("File doesn't exist");
                 }
                 else
                 {
                     //Clear File
                     File.WriteAllText(@"" + filename, string.Empty);
-                    Console.WriteLine("File Cleared");
+                    Debug.WriteLine("File Cleared");
                 }
 
                 //save converted format to new text file
@@ -637,7 +638,7 @@ namespace TNG_Database
                             {
                                 //Log file did not exist
                                 Directory.CreateDirectory(@"outputs");
-                                Console.WriteLine("Log files does not exist");
+                                Debug.WriteLine("Log files does not exist");
                                 File.Create(@"" + newFilename).Close();
                             }
 
@@ -657,7 +658,7 @@ namespace TNG_Database
                     if (File.Exists(Path.GetFullPath(filename)))
                     {
                         File.Delete(Path.GetFullPath(filename));
-                        Console.WriteLine("File Deleted");
+                        Debug.WriteLine("File Deleted");
                     }
                 }
                 catch (Exception error)
@@ -688,7 +689,7 @@ namespace TNG_Database
                 {
                     Properties.TNG_Settings.Default.LastFolder = Path.GetDirectoryName(ofd.FileName);
                     Properties.TNG_Settings.Default.Save();
-                    Console.WriteLine(Properties.TNG_Settings.Default.LastFolder);
+                    Debug.WriteLine(Properties.TNG_Settings.Default.LastFolder);
                     if (backgroundWorker1.IsBusy != true)
                     {
                         mainFormProgressBar.Value = 0;
@@ -717,7 +718,7 @@ namespace TNG_Database
                 {
                     Properties.TNG_Settings.Default.LastFolder = Path.GetDirectoryName(ofd.FileName);
                     Properties.TNG_Settings.Default.Save();
-                    Console.WriteLine(Properties.TNG_Settings.Default.LastFolder);
+                    Debug.WriteLine(Properties.TNG_Settings.Default.LastFolder);
                     if (backgroundWorker1.IsBusy != true)
                     {
                         mainFormProgressBar.Value = 0;
@@ -743,7 +744,7 @@ namespace TNG_Database
                 if (ofd.OpenFile() != null)
                 {
                     Properties.TNG_Settings.Default.LastFolder = Path.GetDirectoryName(ofd.FileName);
-                    Console.WriteLine(Properties.TNG_Settings.Default.LastFolder);
+                    Debug.WriteLine(Properties.TNG_Settings.Default.LastFolder);
                     if (backgroundWorker1.IsBusy != true)
                     {
                         mainFormProgressBar.Value = 0;
@@ -781,7 +782,7 @@ namespace TNG_Database
             }
             catch(Exception e)
             {
-                Console.WriteLine("File Copy: " + e.Message);
+                Debug.WriteLine("File Copy: " + e.Message);
             }
 
             //Delete backup files older than 1 year
@@ -799,7 +800,7 @@ namespace TNG_Database
                 }
             }catch(Exception e)
             {
-                Console.WriteLine("Deleting old files: " + e.Message);
+                Debug.WriteLine("Deleting old files: " + e.Message);
             }
         }
 
@@ -847,6 +848,9 @@ namespace TNG_Database
         {
             OpenFileDialog ofd = new OpenFileDialog();
 
+            //set progress bar to 0
+            progressBar.Value = 0;
+
             //Set up attributes to import file
             ofd.Title = "Select Database File to Import";
             ofd.InitialDirectory = Properties.TNG_Settings.Default.ImportFolder;
@@ -856,6 +860,8 @@ namespace TNG_Database
             if(ofd.ShowDialog() == DialogResult.OK)
             {
                 //Import file OK clicked
+                Debug.WriteLine("Ready to start import");
+                DataBaseControls.GetTableName(ofd.FileName, this);
             }
         }
 
@@ -1100,7 +1106,7 @@ namespace TNG_Database
             {
                 if(ActiveMdiChild is SearchTapeForm)
                 {
-                    Console.WriteLine("Page Already open...do nothing");
+                    Debug.WriteLine("Page Already open...do nothing");
                 }else
                 {
                     ActiveMdiChild.Close();
@@ -1346,6 +1352,11 @@ namespace TNG_Database
             ResetProgressBar();
         }
 
+        private void OpenAboutPage()
+        {
+
+        }
+
         #endregion
 
         /// <summary>
@@ -1411,7 +1422,7 @@ namespace TNG_Database
 
                     if ((importStream = ofd.OpenFile()) != null)
                     {
-                        Console.WriteLine(Path.GetExtension(ofd.FileName).ToString().Replace(".",""));
+                        Debug.WriteLine(Path.GetExtension(ofd.FileName).ToString().Replace(".",""));
                     }
                     break;
             }
@@ -1660,7 +1671,6 @@ namespace TNG_Database
                 if (ofd.OpenFile() != null)
                 {
                     Properties.TNG_Settings.Default.LastFolder = Path.GetDirectoryName(ofd.FileName);
-                    Console.WriteLine(Properties.TNG_Settings.Default.LastFolder);
                     if (backgroundWorker1.IsBusy != true)
                     {
                         mainFormProgressBar.Value = 0;
@@ -1705,7 +1715,11 @@ namespace TNG_Database
             OpenUsersToAdd();
         }
 
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenAboutPage();
+        }
+
         #endregion
-        
     }
 }

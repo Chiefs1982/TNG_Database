@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Data.SQLite;
 using System.ComponentModel;
 using TNG_Database.Values;
+using System.Diagnostics;
 
 namespace TNG_Database
 {
@@ -16,7 +17,7 @@ namespace TNG_Database
 
         //private string tngDatabaseConnectString = "Data Source=TNG_TapeDatabase.sqlite;Version=3;";
         //gets string for database connection from DatabaseControls
-        private string tngDatabaseConnectString = DataBaseControls.GetDBName();
+        private string tngDatabaseConnectString = DataBaseControls.Database;
         private static string staticDatabase = DataBaseControls.Database;
         //-------------------------------------------------
         /// <summary>
@@ -116,7 +117,7 @@ namespace TNG_Database
                 else
                 {
                     //There is already an entry
-                    Console.WriteLine("Tape DB entry already taken");
+                    Debug.WriteLine("Tape DB entry already taken");
                     if (tapeDBConnection != null) { tapeDBConnection.Close(); }
                     return false;
                 }
@@ -176,14 +177,14 @@ namespace TNG_Database
                         if (command.ExecuteNonQuery() == 1)
                         {
                             //row was deleted
-                            Console.WriteLine("TapeDatabase Row was deleted");
+                            Debug.WriteLine("TapeDatabase Row was deleted");
                             CloseConnections(command, tapeDBConnection);
                             return true;
                         }
                         else
                         {
                             //row was not deleted
-                            Console.WriteLine("TapeDatabase Row was not deleted");
+                            Debug.WriteLine("TapeDatabase Row was not deleted");
                             CloseConnections(command, tapeDBConnection);
                             return false;
                         }
@@ -191,7 +192,7 @@ namespace TNG_Database
                     else
                     {
                         //There is no entry to delete
-                        Console.WriteLine("No Entry to delete");
+                        Debug.WriteLine("No Entry to delete");
                         CloseConnections(command, tapeDBConnection);
                         return false;
                     }
@@ -256,14 +257,14 @@ namespace TNG_Database
                     if (command.ExecuteNonQuery() == 1)
                     {
                         //Row was updated
-                        Console.WriteLine("Row update was a success");
+                        Debug.WriteLine("Row update was a success");
                         CloseConnections(command, tapeDBConnection);
                         return true;
                     }
                     else
                     {
                         //Row was not updated
-                        Console.WriteLine("Row update was not a success");
+                        Debug.WriteLine("Row update was not a success");
                         CloseConnections(command, tapeDBConnection);
                         return false;
                     }
@@ -271,7 +272,7 @@ namespace TNG_Database
                 else
                 {
                     //No entry was returned to be updated
-                    Console.WriteLine("No Entry to update");
+                    Debug.WriteLine("No Entry to update");
                     CloseConnections(command, tapeDBConnection);
                     return false;
                 }
@@ -381,14 +382,14 @@ namespace TNG_Database
                                 //Deleted from deleted db failure
                             }
                         }
-                        Console.WriteLine("Master list inserted correctly");
+                        Debug.WriteLine("Master list inserted correctly");
                         CloseConnections(command, masterConnection);
                         return true;
                     }
                     else
                     {
                         //Entry was not added to database
-                        Console.WriteLine("Master List entry not added correctly");
+                        Debug.WriteLine("Master List entry not added correctly");
                         CloseConnections(command, masterConnection);
                         return false;
                     }
@@ -444,14 +445,14 @@ namespace TNG_Database
                         if (command.ExecuteNonQuery() == 1)
                         {
                             //Entry deleted
-                            Console.WriteLine("Entry deleted successfully");
+                            Debug.WriteLine("Entry deleted successfully");
                             CloseConnections(command, masterConnection);
                             return true;
                         }
                         else
                         {
                             //Entry was not deleted
-                            Console.WriteLine("Entry was not deleted successfully");
+                            Debug.WriteLine("Entry was not deleted successfully");
                             CloseConnections(command, masterConnection);
                             return false;
                         }
@@ -459,7 +460,7 @@ namespace TNG_Database
                     else
                     {
                         //There is no entry for the selected item to delete
-                        Console.WriteLine("No Entry that matches name to be deleted");
+                        Debug.WriteLine("No Entry that matches name to be deleted");
                         CloseConnections(command, masterConnection);
                         return false;
                     }
@@ -467,7 +468,7 @@ namespace TNG_Database
                 else
                 {
                     //Could not insert into Delete DB
-                    Console.WriteLine("No Entry that matches name to be deleted");
+                    Debug.WriteLine("No Entry that matches name to be deleted");
                     CloseConnections(command, masterConnection);
                     return false;
                 }
@@ -513,14 +514,14 @@ namespace TNG_Database
                     if (command.ExecuteNonQuery() == 1)
                     {
                         //Row updated
-                        Console.WriteLine("Row updated");
+                        Debug.WriteLine("Row updated");
                         CloseConnections(command, masterConnection);
                         return true;
                     }
                     else
                     {
                         //Row not updated
-                        Console.WriteLine("Row not updated");
+                        Debug.WriteLine("Row not updated");
                         CloseConnections(command, masterConnection);
                         return false;
                     }
@@ -528,7 +529,7 @@ namespace TNG_Database
                 else
                 {
                     //There was nothing to update
-                    Console.WriteLine("Nothing to update");
+                    Debug.WriteLine("Nothing to update");
                     CloseConnections(command, masterConnection);
                     return false;
                 }
@@ -1060,11 +1061,11 @@ namespace TNG_Database
                 if(command.ExecuteNonQuery() == 1)
                 {
                     //new Master Tape added successfully
-                    Console.WriteLine("Added master list success");
+                    Debug.WriteLine("Added master list success");
                 }else
                 {
                     //new Master Tape added failure
-                    Console.WriteLine("Added master list did not happen");
+                    Debug.WriteLine("Added master list did not happen");
                 }
 
                 //create sqlite query to check to see if name is already in database
@@ -1278,6 +1279,70 @@ namespace TNG_Database
             }
 
             return deleted;
+        }
+
+        #endregion
+        //--------------------------------------------------------
+        //----COMPUTER INFO VIDEO ADD, DELETE, UPDATE DATABASE----
+        //--------------------------------------------------------
+        #region ComputerInfo Database
+
+        /// <summary>
+        /// Adds entry to the computer information database.
+        /// </summary>
+        /// <param name="computerInfo">Computer information values.</param>
+        /// <returns></returns>
+        public bool AddComputerInfo(ComputerInfoValues computerInfo)
+        {
+            try
+            {
+                SQLiteConnection projectsConnection = new SQLiteConnection(tngDatabaseConnectString);
+                projectsConnection.Open();
+
+                SQLiteCommand command = new SQLiteCommand(projectsConnection);
+
+                //create sqlite query to check to see if name is already in database
+                command.CommandText = "select count(*) from ComputerInfo where computer_name = @c_name and computer_hash = @c_hash and computer_user = @c_user";
+                command.Parameters.AddWithValue("@c_name", computerInfo.ComputerName);
+                command.Parameters.AddWithValue("@c_hash", computerInfo.UniqueHash);
+                command.Parameters.AddWithValue("@c_user", computerInfo.ComputerUser);
+                Int32 check = Convert.ToInt32(command.ExecuteScalar());
+
+                if (check == 0)
+                {
+                    //No matches, add entry to DB
+                    command.Parameters.Clear();
+                    command.CommandText = "insert into ComputerInfo(computer_name, computer_hash, computer_user) values(@c_name, @c_hash, @c_user)";
+                    command.Parameters.AddWithValue("@c_name", computerInfo.ComputerName);
+                    command.Parameters.AddWithValue("@c_hash", computerInfo.UniqueHash);
+                    command.Parameters.AddWithValue("@c_user", computerInfo.ComputerUser);
+
+                    if (command.ExecuteNonQuery() == 1)
+                    {
+                        //insert successful
+                        
+                        CloseConnections(command, projectsConnection);
+                        return true;
+                    }
+                    else
+                    {
+                        //insert failed
+                        CloseConnections(command, projectsConnection);
+                        return false;
+                    }
+                }
+                else
+                {
+                    //Already an entry, abort
+                    CloseConnections(command, projectsConnection);
+                    return false;
+                }
+            }
+            catch (SQLiteException e)
+            {
+                MainForm.LogFile("SQLite Error: " + e.Message);
+                return false;
+            }
         }
 
         #endregion

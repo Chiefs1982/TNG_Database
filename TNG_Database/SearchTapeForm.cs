@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -168,7 +169,7 @@ namespace TNG_Database
             {
                 //No entries returned
                 updateStatus.UpdateStatusBar("No Items Matched Search, Try Again", mainForm);
-                Console.WriteLine("Nothing found");
+                Debug.WriteLine("Nothing found");
             }
             else
             {
@@ -178,7 +179,7 @@ namespace TNG_Database
                     searchListView.Items.Add(new ListViewItem(new string[] { values.ProjectID, values.ProjectName, values.TapeName, values.TapeNumber, values.Camera, values.TapeTags, values.DateShot, values.MasterArchive, values.Person, values.ClipNumber })).Tag = Convert.ToInt32(values.ID);
                 }
                 updateStatus.UpdateStatusBar(searchList.Count + " item entries found", mainForm);
-                Console.WriteLine(searchList.Count + " item entries found");
+                Debug.WriteLine(searchList.Count + " item entries found");
             }
             //set entries returned number
             if (searchList.Count != 1)

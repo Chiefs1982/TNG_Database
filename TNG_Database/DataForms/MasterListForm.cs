@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -400,7 +401,7 @@ namespace TNG_Database
 
                     if (masterListListBox.SelectedItems.Count > 1 && masterListValues.Count > 0)
                     {
-                        Console.WriteLine("sending " + masterListValues.Count + " people to delete");
+                        Debug.WriteLine("sending " + masterListValues.Count + " people to delete");
                         updateStatus.UpdateStatusBar(AddToDatabase.DeleteMultipleMasterListselected(masterListValues) + " lists deleted", mainform);
                     }
 
@@ -635,7 +636,7 @@ namespace TNG_Database
             if (deleteMessage == DialogResult.Yes)
             {
                 //Yes Pressed, delete user from DB
-                Console.WriteLine("Yes Pressed for deletion");
+                Debug.WriteLine("Yes Pressed for deletion");
 
                 AddToDatabase deleteDB = new AddToDatabase();
 

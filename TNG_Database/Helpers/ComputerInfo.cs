@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Text;
@@ -40,10 +41,10 @@ namespace TNG_Database
 
             ComputerUser = DataBaseControls.CheckComputerInfo(computerName, uniqueHash);
 
-            Console.WriteLine("This is the computer info instance");
-            Console.WriteLine("Computer Name: " + ComputerName);
-            Console.WriteLine("Computer Hash: " + UniqueHash);
-            Console.WriteLine("Computer User: " + ComputerUser);
+            Debug.WriteLine("This is the computer info instance");
+            Debug.WriteLine("Computer Name: " + ComputerName);
+            Debug.WriteLine("Computer Hash: " + UniqueHash);
+            Debug.WriteLine("Computer User: " + ComputerUser);
             
             return instance;
         }

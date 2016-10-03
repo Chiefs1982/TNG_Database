@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -150,7 +151,7 @@ namespace TNG_Database
             else
             {
                 //Success
-                Console.WriteLine("Update success and finished");
+                Debug.WriteLine("Update success and finished");
                 statusList.Clear();
             }
         }

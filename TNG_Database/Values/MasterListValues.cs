@@ -24,6 +24,13 @@ namespace TNG_Database.Values
             master_media = _masterMedia;
         }
 
+        public void Clear()
+        {
+            id = 0;
+            master_archive = "";
+            master_media = 0;
+        }
+
         //------------------------------------
         //------ACCESSOR METHODS--------------
         //------------------------------------

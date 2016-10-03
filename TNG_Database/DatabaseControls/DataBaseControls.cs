@@ -10,6 +10,8 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using TNG_Database.Values;
 using System.Collections;
+using System.Data;
+using System.Diagnostics;
 
 namespace TNG_Database
 {
@@ -20,15 +22,28 @@ namespace TNG_Database
 
         //Reference to CommonMethods
         static CommonMethods commonMethod = CommonMethods.Instance();
+        static UpdateStatus updateStatus = UpdateStatus.Instance();
+        static ComputerInfo computerInfo = ComputerInfo.Instance();
 
-        public static string GetDBName()
+        private static string[] tngTables = {
+            "TapeDatabase","MasterList","People","DeleteTapeDatabase","DeleteMasterList",
+            "DeletePeople","DeleteMasterArchiveVideos","MasterArchiveVideos","Projects",
+            "DeleteProjects","ComputerInfo"
+        };
+
+        public static string[] TNGTables
         {
-            return database;
+            get { return tngTables; }
         }
-
+        
         public static string Database
         {
             get { return database; }
+        }
+
+        private static void UpdateProgess(float progress, TNG_Database.MainForm mainForm)
+        {
+            updateStatus.UpdateProgressBar(Convert.ToInt32(progress), mainForm);
         }
 
         /// <summary>
@@ -58,7 +73,7 @@ namespace TNG_Database
                     if (File.Exists(Path.GetFullPath(ofd.FileName)))
                     {
                         File.Delete(Path.GetFullPath(ofd.FileName));
-                        Console.WriteLine("File Deleted");
+                        Debug.WriteLine("File Deleted");
                     }
                 }
             }catch(Exception e)
@@ -163,7 +178,7 @@ namespace TNG_Database
                 }
                 
             }
-            catch(SQLiteException e) { Console.WriteLine("Error getting master from db: " + e.Message); }
+            catch(SQLiteException e) { Debug.WriteLine("Error getting master from db: " + e.Message); }
             
             return String.Join(",", list);
         }
@@ -615,16 +630,16 @@ namespace TNG_Database
 
                         //set up the regex part of the query
                         preQuery += String.Format(" project_id like {0} or project_name like {0} or tape_name like {0} or tape_tags like {0} or date_shot like {0} or master_archive like {0}", value);
-                        Console.WriteLine(input[i].ToLower());
+                        Debug.WriteLine(input[i].ToLower());
                     }
                 }
                 preQuery += " order by project_id asc";
-                Console.WriteLine(preQuery);
+                Debug.WriteLine(preQuery);
 
                 //Set assembled query to final query
                 query = preQuery;
                 command.CommandText = query;
-                Console.WriteLine("Command Text: " + command.CommandText);
+                Debug.WriteLine("Command Text: " + command.CommandText);
 
                 using (SQLiteDataReader reader = command.ExecuteReader())
                 {
@@ -674,16 +689,16 @@ namespace TNG_Database
 
                         //set up the regex part of the query
                         preQuery += String.Format(" project_id like {0} or project_name like {0}", value);
-                        Console.WriteLine(input[i].ToLower());
+                        Debug.WriteLine(input[i].ToLower());
                     }
                 }
                 preQuery += " order by project_id asc";
-                Console.WriteLine(preQuery);
+                Debug.WriteLine(preQuery);
 
                 //Set assembled query to final query
                 query = preQuery;
                 command.CommandText = query;
-                Console.WriteLine("Command Text: " + command.CommandText);
+                Debug.WriteLine("Command Text: " + command.CommandText);
 
                 using (SQLiteDataReader reader = command.ExecuteReader())
                 {
@@ -727,16 +742,16 @@ namespace TNG_Database
 
                         //set up the regex part of the query
                         preQuery += String.Format(" project_id like {0} or video_name like {0} or master_tape like {0}", value);
-                        Console.WriteLine(input[i].ToLower());
+                        Debug.WriteLine(input[i].ToLower());
                     }
                 }
                 preQuery += " order by project_id asc";
-                Console.WriteLine(preQuery);
+                Debug.WriteLine(preQuery);
 
                 //Set assembled query to final query
                 query = preQuery;
                 command.CommandText = query;
-                Console.WriteLine("Command Text: " + command.CommandText);
+                Debug.WriteLine("Command Text: " + command.CommandText);
 
                 using (SQLiteDataReader reader = command.ExecuteReader())
                 {
@@ -846,10 +861,10 @@ namespace TNG_Database
 
                 if(command.ExecuteNonQuery() == 1)
                 {
-                    Console.WriteLine("Master List insert Success");
+                    Debug.WriteLine("Master List insert Success");
                 }else
                 {
-                    Console.WriteLine("Master List insert Failed");
+                    Debug.WriteLine("Master List insert Failed");
                 }
 
                 //iterate over each entry and insert it into the DB
@@ -876,7 +891,7 @@ namespace TNG_Database
                             progressCounter = 0;
                             //update the progess bar
                             worker.ReportProgress(Convert.ToInt32(progress));
-                            Console.WriteLine("Added: " + master.ProjectID);
+                            Debug.WriteLine("Added: " + master.ProjectID);
                         }
                     }
                     else
@@ -887,7 +902,7 @@ namespace TNG_Database
 
                 if (counter > 0)
                 {
-                    Console.WriteLine(counter + " items added to database");
+                    Debug.WriteLine(counter + " items added to database");
                     MainForm.LogFile(counter + " master archive(s) added to database");
                     masterConnection.Close();
                     DeleteFile(tmp, ofd, importStream);
@@ -896,7 +911,7 @@ namespace TNG_Database
                 else
                 {
                     //No entries found
-                    Console.WriteLine("No master archive(s) added to database");
+                    Debug.WriteLine("No master archive(s) added to database");
                     masterConnection.Close();
                     DeleteFile(tmp, ofd, importStream);
                     return false;
@@ -988,7 +1003,7 @@ namespace TNG_Database
                             progress += (queryCounter * progressCounter);
                             progressCounter = 0;
                             worker.ReportProgress(Convert.ToInt32(progress));
-                            Console.WriteLine("Added: " + value.ProjectID + ", Progress = " + progress);
+                            Debug.WriteLine("Added: " + value.ProjectID + ", Progress = " + progress);
                         }
                     }
                     else
@@ -999,14 +1014,14 @@ namespace TNG_Database
 
                 if (counter > 0)
                 {
-                    Console.WriteLine(counter + " items added to database");
+                    Debug.WriteLine(counter + " items added to database");
                     MainForm.LogFile(counter + " projects added to database");
                     projectConnection.Close();
                     return true;
                 }
                 else
                 {
-                    Console.WriteLine("No projects added to database");
+                    Debug.WriteLine("No projects added to database");
                     projectConnection.Close();
                     return false;
                 }
@@ -1153,7 +1168,7 @@ namespace TNG_Database
                             progress += (queryCounter * progressCounter);
                             progressCounter = 0;
                             worker.ReportProgress(Convert.ToInt32(progress));
-                            Console.WriteLine("Added: " + value.ProjectId + ", Progress = " + progress);
+                            Debug.WriteLine("Added: " + value.ProjectId + ", Progress = " + progress);
                         }
                     }
                     else
@@ -1165,14 +1180,14 @@ namespace TNG_Database
 
                 if (counter > 0)
                 {
-                    Console.WriteLine(counter + " items added to database");
+                    Debug.WriteLine(counter + " items added to database");
                     MainForm.LogFile(counter + " tapes added to database");
                     projectConnection.Close();
                     return true;
                 }
                 else
                 {
-                    Console.WriteLine("No Tapes added to database");
+                    Debug.WriteLine("No Tapes added to database");
                     projectConnection.Close();
                     return false;
                 }
@@ -1430,7 +1445,7 @@ namespace TNG_Database
             try
             {
                 //connect to database
-                using (SQLiteConnection createConnection = new SQLiteConnection(DataBaseControls.GetDBName()))
+                using (SQLiteConnection createConnection = new SQLiteConnection(Database))
                 {
                     createConnection.Open();
 
@@ -1598,6 +1613,492 @@ namespace TNG_Database
             }
 
             return allEntries;
+        }
+
+        /// <summary>
+        /// Gets all tables from imported database and inserts the information into the default database
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <param name="mainForm">The main form.</param>
+        public static void GetTableName(string file, TNG_Database.MainForm mainForm)
+        {
+            List<string> allTables = new List<string>();
+
+            Debug.WriteLine("Starting to import");
+
+            //new database filename
+            string fileDatabase = "Data Source=" + file + ";Version=3;";
+
+            Debug.WriteLine(fileDatabase);
+
+            //progressbar status for each table
+            int everyTable = 0;
+            int progress = 0;
+
+            try
+            {
+                //command to get all tables in database
+                const string GET_TABLES_QUERY = "select name from sqlite_master where type='table'";
+                
+                SQLiteConnection connection = new SQLiteConnection(fileDatabase);
+                connection.Open();
+
+                SQLiteCommand command = new SQLiteCommand(GET_TABLES_QUERY, connection);
+
+                using (SQLiteDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        Debug.WriteLine("import has tables");
+                        while (reader.Read())
+                        {
+                            if (TNGTables.Contains(reader.GetString(0)))
+                            {
+                                allTables.Add(reader.GetString(0));
+                            }
+                        }
+                    }
+                }
+
+                //close connection
+                connection.Close();
+            }catch(SQLiteException e)
+            {
+                MainForm.LogFile("SQLite Error: " + e.Message);
+                Debug.WriteLine("SQLite Error: " + e.Message);
+            }
+
+            try
+            {
+                //check to see if there are any tables returned
+                if (!allTables.Count.Equals(0))
+                {
+                    //set progressbar status to division on count of tables
+                    everyTable = 100 / allTables.Count;
+                    Debug.WriteLine("Table Number #: " + everyTable);
+
+                    AddToDatabase addDB = new AddToDatabase();
+
+                    foreach (string table in allTables)
+                    {
+                        //connection for new database
+                        SQLiteConnection connect = new SQLiteConnection(fileDatabase);
+                        connect.Open();
+
+                        SQLiteCommand command = new SQLiteCommand(connect);
+                        command.CommandText = "Select * from " + table;
+
+                        switch (table)
+                        {
+                            case "TapeDatabase":
+                            case "DeleteTapeDatabase":
+                                //create values object
+                                List<TapeDatabaseValues> tapeList = new List<TapeDatabaseValues>();
+                                TapeDatabaseValues tapeValues = new TapeDatabaseValues();
+                                
+                                //execute query
+                                using (SQLiteDataReader reader = command.ExecuteReader())
+                                {
+                                    if (reader.HasRows)
+                                    {
+                                        while (reader.Read())
+                                        {
+                                            tapeValues.Clear();
+                                            tapeValues.ProjectId = reader["project_id"].ToString();
+                                            tapeValues.ProjectName = reader["project_name"].ToString();
+                                            tapeValues.TapeName = reader["tape_name"].ToString();
+                                            tapeValues.TapeNumber = reader["tape_number"].ToString();
+                                            tapeValues.Camera = Convert.ToInt32(reader["camera"]);
+                                            tapeValues.TapeTags = reader["tape_tags"].ToString();
+                                            tapeValues.DateShot = reader["date_shot"].ToString();
+                                            tapeValues.MasterArchive = reader["master_archive"].ToString();
+                                            tapeValues.PersonEntered = reader["person_entered"].ToString();
+
+                                            //add values to list
+                                            tapeList.Add(tapeValues);
+                                        }
+                                    }
+                                }
+
+                                //Close import connection
+                                connect.Close();
+                                
+                                //iterate over values to add to database
+                                foreach (TapeDatabaseValues values in tapeList)
+                                {
+                                    if (table == "TapeDatabase")
+                                    {
+                                        //add value to database
+                                        addDB.AddTapeDatabase(values);
+                                    }
+                                    else if(table == "DeleteTapeDatabase")
+                                    {
+                                        //Open up new connection
+                                        SQLiteConnection deleteConnect = new SQLiteConnection(database);
+                                        deleteConnect.Open();
+                                        command.Connection = deleteConnect;
+
+                                        command.CommandText = "select count(*) from DeleteTapeDatabase where lower(project_name) = @projectName and project_id = @projectID";
+                                        command.Parameters.Clear();
+                                        command.Parameters.AddWithValue("@projectID", values.ProjectId);
+                                        command.Parameters.AddWithValue("@projectName", values.ProjectName.ToLower());
+                                        Int32 check = Convert.ToInt32(command.ExecuteScalar());
+
+                                        //Make sure that entry doesn't exist already
+                                        if (check < 1)
+                                        {
+                                            //add value to deleted database
+                                            //There is not an entry go ahead and insert new row
+                                            command.CommandText = "insert into DeleteTapeDatabase (tape_name, tape_number, project_id, project_name, camera, tape_tags, date_shot, master_archive, person_entered) values (@tapeName, @tapeNumber, @projectID, @projectName, @camera, @tapeTags, @dateShot, @masterArchive, @personEntered)";
+                                            command.Parameters.Clear();
+                                            command.Parameters.AddWithValue("@tapeName", values.TapeName);
+                                            command.Parameters.AddWithValue("@tapeNumber", values.TapeNumber);
+                                            command.Parameters.AddWithValue("@projectID", values.ProjectId);
+                                            command.Parameters.AddWithValue("@projectName", values.ProjectName);
+                                            command.Parameters.AddWithValue("@camera", values.Camera);
+                                            command.Parameters.AddWithValue("@tapeTags", values.TapeTags);
+                                            command.Parameters.AddWithValue("@dateShot", values.DateShot);
+                                            command.Parameters.AddWithValue("@masterArchive", values.MasterArchive);
+                                            command.Parameters.AddWithValue("@personEntered", values.PersonEntered);
+
+                                            command.ExecuteNonQuery();
+                                        }
+                                        
+                                        deleteConnect.Close();
+                                    }
+                                }
+
+                                UpdateProgess(everyTable, mainForm);
+                                progress += everyTable;
+
+                                break;
+                            case "Projects":
+                            case "DeleteProjects":
+                                //create values object
+                                List<ProjectValues> projectList = new List<ProjectValues>();
+                                ProjectValues projectValues = new ProjectValues();
+                                
+                                //execute query
+                                using (SQLiteDataReader reader = command.ExecuteReader())
+                                {
+                                    if (reader.HasRows)
+                                    {
+
+                                        while (reader.Read())
+                                        {
+                                            projectValues.Clear();
+                                            projectValues.ProjectID = reader["project_id"].ToString();
+                                            projectValues.Projectname = reader["project_name"].ToString();
+
+                                            //add values to list
+                                            projectList.Add(projectValues);
+                                        }
+                                    }
+                                }
+                                
+                                //Close import connection
+                                connect.Close();
+
+                                //iterate over values to add to database
+                                foreach (ProjectValues values in projectList)
+                                {
+                                    if (table == "Projects")
+                                    {
+                                        //add value to database
+                                        addDB.AddProjects(values);
+                                    }
+                                    else if (table == "DeleteProjects")
+                                    {
+                                        //Open up new connection
+                                        SQLiteConnection deleteConnect = new SQLiteConnection(database);
+                                        deleteConnect.Open();
+                                        command.Connection = deleteConnect;
+
+                                        command.CommandText = "select count(*) from DeleteProjects where lower(project_name) = @projectName and project_id = @projectID";
+                                        command.Parameters.Clear();
+                                        command.Parameters.AddWithValue("@projectID", values.ProjectID);
+                                        command.Parameters.AddWithValue("@projectName", values.Projectname.ToLower());
+                                        Int32 check = Convert.ToInt32(command.ExecuteScalar());
+
+                                        //Make sure that entry doesn't exist already
+                                        if (check < 1)
+                                        {
+                                            //add value to deleted database
+                                            //There is not an entry go ahead and insert new row
+                                            command.CommandText = "insert into DeleteProjects (project_id, project_name) values (@projectID, @projectName)";
+                                            command.Parameters.Clear();
+                                            command.Parameters.AddWithValue("@projectID", values.ProjectID);
+                                            command.Parameters.AddWithValue("@projectName", values.Projectname);
+
+                                            command.ExecuteNonQuery();
+                                        }
+                                        
+                                        deleteConnect.Close();
+                                    }
+                                }
+
+                                UpdateProgess(everyTable, mainForm);
+                                progress += everyTable;
+
+                                break;
+                            case "People":
+                            case "DeletePeople":
+                                //create values object
+                                List<PeopleValues> peopleList = new List<PeopleValues>();
+                                PeopleValues peopleValues = new PeopleValues();
+                                
+                                //execute query
+                                using (SQLiteDataReader reader = command.ExecuteReader())
+                                {
+                                    if (reader.HasRows)
+                                    {
+                                        while (reader.Read())
+                                        {
+                                            peopleValues.Clear();
+                                            peopleValues.PersonName = reader["person_name"].ToString();
+
+                                            //add values to list
+                                            peopleList.Add(peopleValues);
+                                        }
+                                    }
+                                }
+
+                                //Close import connection
+                                connect.Close();
+
+                                //iterate over values to add to database
+                                foreach (PeopleValues values in peopleList)
+                                {
+                                    if (table == "People")
+                                    {
+                                        //add value to database
+                                        addDB.AddPerson(values);
+                                    }
+                                    else if (table == "DeletePeople")
+                                    {
+                                        //Open up new connection
+                                        SQLiteConnection deleteConnect = new SQLiteConnection(database);
+                                        deleteConnect.Open();
+                                        command.Connection = deleteConnect;
+
+                                        command.CommandText = "select count(*) from DeletePeople where lower(person_name) = @personName";
+                                        command.Parameters.Clear();
+                                        command.Parameters.AddWithValue("@personName", values.PersonName.ToLower());
+                                        Int32 check = Convert.ToInt32(command.ExecuteScalar());
+
+                                        //Make sure that entry doesn't exist already
+                                        if (check < 1)
+                                        {
+                                            //add value to deleted database
+                                            //There is not an entry go ahead and insert new row
+                                            command.CommandText = "insert into DeletePeole (person_name) values (@personName)";
+                                            command.Parameters.Clear();
+                                            command.Parameters.AddWithValue("@personName", values.PersonName);
+
+                                            command.ExecuteNonQuery();
+                                        }
+                                        
+                                        deleteConnect.Close();
+                                    }
+                                }
+
+                                UpdateProgess(everyTable, mainForm);
+                                progress += everyTable;
+
+                                break;
+                            case "MasterList":
+                            case "DeleteMasterList":
+                                //create values object
+                                List<MasterListValues> masterTapeList = new List<MasterListValues>();
+                                MasterListValues masterTapeValues = new MasterListValues();
+                                
+                                //execute query
+                                using (SQLiteDataReader reader = command.ExecuteReader())
+                                {
+                                    if (reader.HasRows)
+                                    {
+                                        while (reader.Read())
+                                        {
+                                            masterTapeValues.Clear();
+                                            masterTapeValues.MasterArchive = reader["master_archive"].ToString();
+                                            masterTapeValues.MasterMedia = Convert.ToInt32(reader["master_media"]);
+
+                                            //add values to list
+                                            masterTapeList.Add(masterTapeValues);
+                                        }
+                                    }
+                                }
+
+                                //Close import connection
+                                connect.Close();
+
+                                //iterate over values to add to database
+                                foreach (MasterListValues values in masterTapeList)
+                                {
+                                    if (table == "MasterList")
+                                    {
+                                        //add value to database
+                                        addDB.AddMasterList(values);
+                                    }
+                                    else if (table == "DeleteMasterList")
+                                    {
+                                        //Open up new connection
+                                        SQLiteConnection deleteConnect = new SQLiteConnection(database);
+                                        deleteConnect.Open();
+                                        command.Connection = deleteConnect;
+
+                                        command.CommandText = "select count(*) from DeleteMasterList where lower(master_archive) = @masterArchive and master_media = @masterMedia";
+                                        command.Parameters.Clear();
+                                        command.Parameters.AddWithValue("@masterArchive", values.MasterArchive.ToLower());
+                                        command.Parameters.AddWithValue("@masterMedia", values.MasterMedia);
+                                        Int32 check = Convert.ToInt32(command.ExecuteScalar());
+
+                                        //Make sure that entry doesn't exist already
+                                        if (check < 1)
+                                        {
+                                            //add value to deleted database
+                                            //There is not an entry go ahead and insert new row
+                                            command.CommandText = "insert into DeleteMasterList (master_archive, master_media) values (@masterArchive, @masterMedia)";
+                                            command.Parameters.Clear();
+                                            command.Parameters.AddWithValue("@masterArchive", values.MasterArchive);
+                                            command.Parameters.AddWithValue("@masterMedia", values.MasterMedia);
+
+                                            command.ExecuteNonQuery();
+                                        }
+                                        
+                                        deleteConnect.Close();
+                                    }
+                                }
+
+                                UpdateProgess(everyTable, mainForm);
+                                progress += everyTable;
+
+                                break;
+                            case "MasterArchiveVideos":
+                            case "DeleteMasterArchiveVideos":
+                                //create values object
+                                List<MasterArchiveVideoValues> masterArchiveVideoList = new List<MasterArchiveVideoValues>();
+                                MasterArchiveVideoValues MasterArchiveVideoValues = new MasterArchiveVideoValues();
+                                
+                                //execute query
+                                using (SQLiteDataReader reader = command.ExecuteReader())
+                                {
+                                    if (reader.HasRows)
+                                    {
+                                        while (reader.Read())
+                                        {
+                                            MasterArchiveVideoValues.Clear();
+                                            MasterArchiveVideoValues.ProjectId = reader["project_id"].ToString();
+                                            MasterArchiveVideoValues.VideoName = reader["video_name"].ToString();
+                                            MasterArchiveVideoValues.MasterTape = reader["master_tape"].ToString();
+                                            MasterArchiveVideoValues.ClipNumber = reader["clip_number"].ToString();
+
+                                            //add values to list
+                                            masterArchiveVideoList.Add(MasterArchiveVideoValues);
+                                        }
+                                    }
+                                }
+
+                                //Close import connection
+                                connect.Close();
+
+                                //iterate over values to add to database
+                                foreach (MasterArchiveVideoValues values in masterArchiveVideoList)
+                                {
+                                    if (table == "MasterArchiveVideos")
+                                    {
+                                        //add value to database
+                                        addDB.AddMasterArchiveVideo(values);
+                                    }
+                                    else if (table == "DeleteMasterArchiveVideos")
+                                    {
+                                        //Open up new connection
+                                        SQLiteConnection deleteConnect = new SQLiteConnection(database);
+                                        deleteConnect.Open();
+                                        command.Connection = deleteConnect;
+
+                                        command.CommandText = "select count(*) from DeleteMasterArchiveVideos where project_id = @projectID and video_name = @videoName and clip_number = @clipNumber and master_tape = @masterTape";
+                                        command.Parameters.Clear();
+                                        command.Parameters.AddWithValue("@projectID", values.ProjectId);
+                                        command.Parameters.AddWithValue("@videoName", values.VideoName);
+                                        command.Parameters.AddWithValue("@masterTape", values.MasterTape);
+                                        command.Parameters.AddWithValue("@clipNumber", values.ClipNumber);
+                                        Int32 check = Convert.ToInt32(command.ExecuteScalar());
+
+                                        //Make sure that entry doesn't exist already
+                                        if (check < 1)
+                                        {
+                                            //add value to deleted database
+                                            //There is not an entry go ahead and insert new row
+                                            command.CommandText = "insert into DeleteMasterArchiveVideos (project_id, video_name, master_tape, clip_number) values (@projectID, @videoName, @masterTape, @clipNumber)";
+                                            command.Parameters.Clear();
+                                            command.Parameters.AddWithValue("@projectID", values.ProjectId);
+                                            command.Parameters.AddWithValue("@videoName", values.VideoName);
+                                            command.Parameters.AddWithValue("@masterTape", values.MasterTape);
+                                            command.Parameters.AddWithValue("@clipNumber", values.ClipNumber);
+
+                                            command.ExecuteNonQuery();
+                                        }
+                                        
+                                        deleteConnect.Close();
+                                    }
+                                }
+
+                                UpdateProgess(everyTable, mainForm);
+                                progress += everyTable;
+
+                                break;
+                            case "ComputerInfo":
+                                //create values object
+                                List<ComputerInfoValues> computerInfoList = new List<ComputerInfoValues>();
+                                ComputerInfoValues computerInfoValues = new ComputerInfoValues();
+                                
+                                //execute query
+                                using (SQLiteDataReader reader = command.ExecuteReader())
+                                {
+                                    if (reader.HasRows)
+                                    {
+                                        while (reader.Read())
+                                        {
+                                            computerInfoValues.Clear();
+                                            computerInfoValues.UniqueHash = reader["computer_hash"].ToString();
+                                            computerInfoValues.ComputerName = reader["computer_name"].ToString();
+                                            computerInfoValues.ComputerUser = reader["computer_user"].ToString();
+
+                                            //add values to list
+                                            computerInfoList.Add(computerInfoValues);
+                                        }
+                                    }
+                                }
+
+                                //Close import connection
+                                connect.Close();
+
+                                //iterate over values to add to database
+                                foreach (ComputerInfoValues values in computerInfoList)
+                                {
+                                    //add value to database
+                                    addDB.AddComputerInfo(values);
+                                }
+
+                                UpdateProgess(everyTable, mainForm);
+                                progress += everyTable;
+
+                                break;
+                        }
+                    }
+                }
+            }catch(SQLiteException e)
+            {
+                MainForm.LogFile("SQLite Error: " + e.Message);
+                Debug.WriteLine("SQLite Table Error: " + e.Message);
+
+            }
+            
+            if((100 - progress) > 0)
+            {
+                UpdateProgess((100-progress), mainForm);
+            }
         }
     }
 }

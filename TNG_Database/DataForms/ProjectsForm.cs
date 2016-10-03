@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -397,7 +398,7 @@ namespace TNG_Database
 
                     if (projectsListView.SelectedItems.Count > 1 && tapesToDelete.Count > 0)
                     {
-                        Console.WriteLine("sending " + tapesToDelete.Count + " items to delete");
+                        Debug.WriteLine("sending " + tapesToDelete.Count + " items to delete");
                         updateStatus.UpdateStatusBar(AddToDatabase.DeleteMultipleProjectSelected(tapesToDelete) + " items deleted", mainform);
                     }
 
@@ -566,7 +567,7 @@ namespace TNG_Database
             if (deleteMessage == DialogResult.Yes)
             {
                 //Yes Pressed, delete user from DB
-                Console.WriteLine("Yes Pressed for deletion");
+                Debug.WriteLine("Yes Pressed for deletion");
 
                 AddToDatabase deleteDB = new AddToDatabase();
                 
