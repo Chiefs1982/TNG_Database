@@ -54,8 +54,7 @@ namespace TNG_Database
         {
             //Clear list view
             viewMasterListView.Items.Clear();
-
-            //TODO Create method in DB Controls to get all items in MasterArchiveVideos that match selected Master Tape
+            
             List<MasterArchiveVideoValues> videosList = DataBaseControls.GetAllMasterListValues(selected);
 
             if (videosList.Count > 0)

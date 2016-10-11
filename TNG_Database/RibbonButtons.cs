@@ -21,6 +21,9 @@ namespace TNG_Database
         //Imagesize variable
         private int imageSize = 24;
 
+        //Image of the button
+        private Image fileName;
+        
         //Default Size
         Size controlSize = new Size(60, 36);
 
@@ -28,6 +31,7 @@ namespace TNG_Database
         {
             InitializeComponent();
         }
+        
 
         //Enum for the selected look of the button
         public enum ImageForButton
@@ -40,7 +44,8 @@ namespace TNG_Database
             ImportTapes,
             ImportProjects,
             DatabaseBackup,
-            Preferences
+            Preferences,
+            Reload
         }
 
         //To keep track of selected value for the button
@@ -185,6 +190,16 @@ namespace TNG_Database
                 Pressed = true;
             }
 
+            if (imageType == ImageForButton.Reload)
+            {
+                Debug.WriteLine("Ribbon Reload Button Pressed");
+                if (fileName != null)
+                {
+                    Debug.WriteLine("Button image is not null");
+                    //turn the Bitmap into a Graphics object
+                }
+            }
+
             //base.OnMouseDown(e);
         }
 
@@ -205,7 +220,7 @@ namespace TNG_Database
 
             Graphics gfx = pe.Graphics;
             Rectangle rc = ClientRectangle;
-            Image fileName;
+            
 
             Color pressedColor;
             if (Pressed)
@@ -282,6 +297,10 @@ namespace TNG_Database
                 {
                     fileName = Properties.Resources.PreferencesIcon;
                     Text = "Settings";
+                }else if (imageType == ImageForButton.Reload)
+                {
+                    fileName = Properties.Resources.ReloadIcon;
+                    Text = "Refresh";
                 }
                 else
                 {
@@ -293,8 +312,7 @@ namespace TNG_Database
 
                 //Bitmap file = (Bitmap)Image.FromFile(@"icons\xout.png");
                 //plusShort_myNumbers.png
-
-
+                
                 gfx.DrawImage(fileName, xPosition, 1, ImageSize, ImageSize);
                 
                 //(file, 10, 10, rc, GraphicsUnit.Pixel);

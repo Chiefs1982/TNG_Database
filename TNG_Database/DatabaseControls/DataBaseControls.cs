@@ -25,6 +25,12 @@ namespace TNG_Database
         static UpdateStatus updateStatus = UpdateStatus.Instance();
         static ComputerInfo computerInfo = ComputerInfo.Instance();
 
+        //allow access to the full database path
+        public static string FullDatabaseName
+        {
+            get { return @"database/TNG_TapeDatabase.sqlite"; }
+        }
+
         private static string[] tngTables = {
             "TapeDatabase","MasterList","People","DeleteTapeDatabase","DeleteMasterList",
             "DeletePeople","DeleteMasterArchiveVideos","MasterArchiveVideos","Projects",

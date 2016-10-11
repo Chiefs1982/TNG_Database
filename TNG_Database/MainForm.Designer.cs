@@ -49,7 +49,6 @@
             this.tapesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.convertToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tocsvToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.wordTestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.preferencesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -66,6 +65,7 @@
             this.archiveVideosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.deletedDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.databaseBackupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.applicationStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
@@ -239,8 +239,7 @@
             // convertToolStripMenuItem
             // 
             this.convertToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tocsvToolStripMenuItem,
-            this.wordTestToolStripMenuItem});
+            this.tocsvToolStripMenuItem});
             this.convertToolStripMenuItem.Name = "convertToolStripMenuItem";
             this.convertToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.convertToolStripMenuItem.Text = "Convert";
@@ -248,16 +247,9 @@
             // tocsvToolStripMenuItem
             // 
             this.tocsvToolStripMenuItem.Name = "tocsvToolStripMenuItem";
-            this.tocsvToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
+            this.tocsvToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.tocsvToolStripMenuItem.Text = "txt -> csv";
             this.tocsvToolStripMenuItem.Click += new System.EventHandler(this.tocsvToolStripMenuItem_Click);
-            // 
-            // wordTestToolStripMenuItem
-            // 
-            this.wordTestToolStripMenuItem.Name = "wordTestToolStripMenuItem";
-            this.wordTestToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
-            this.wordTestToolStripMenuItem.Text = "Word Test";
-            this.wordTestToolStripMenuItem.Click += new System.EventHandler(this.wordTestToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
             // 
@@ -321,7 +313,8 @@
             this.projectsToolStripMenuItem,
             this.archiveVideosToolStripMenuItem,
             this.toolStripSeparator4,
-            this.deletedDatabaseToolStripMenuItem});
+            this.deletedDatabaseToolStripMenuItem,
+            this.databaseBackupToolStripMenuItem});
             this.dataToolStripMenuItem.Name = "dataToolStripMenuItem";
             this.dataToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
             this.dataToolStripMenuItem.Text = "Data";
@@ -377,6 +370,13 @@
             this.deletedDatabaseToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.deletedDatabaseToolStripMenuItem.Text = "Deleted Database";
             this.deletedDatabaseToolStripMenuItem.Click += new System.EventHandler(this.deletedDatabaseToolStripMenuItem_Click);
+            // 
+            // databaseBackupToolStripMenuItem
+            // 
+            this.databaseBackupToolStripMenuItem.Name = "databaseBackupToolStripMenuItem";
+            this.databaseBackupToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.databaseBackupToolStripMenuItem.Text = "Database Backup";
+            this.databaseBackupToolStripMenuItem.Click += new System.EventHandler(this.databaseBackupToolStripMenuItem_Click);
             // 
             // aboutToolStripMenuItem
             // 
@@ -596,7 +596,6 @@
         private System.Windows.Forms.ToolStripMenuItem tapesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem convertToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem tocsvToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem wordTestToolStripMenuItem;
         private System.Windows.Forms.ToolStripDropDownButton personStatusDropdown;
         private System.Windows.Forms.ToolStripMenuItem homeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem archiveListsToolStripMenuItem;
@@ -613,6 +612,7 @@
         private System.Windows.Forms.ToolStripMenuItem newProjectToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newArchiveVideoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newUserToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem databaseBackupToolStripMenuItem;
     }
 }
 

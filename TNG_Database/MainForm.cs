@@ -20,8 +20,6 @@ namespace TNG_Database
 {
     public partial class MainForm : Form
     {
-        //TODO delete WORK TEST toolstrip item
-
         //Form references to open each form
         public TNG_Database.SearchTapeForm searchTapeForm;
         public TNG_Database.PeopleForm peopleForm;
@@ -32,6 +30,7 @@ namespace TNG_Database
         public TNG_Database.DeletedValuesForm deletedValuesForm;
         public TNG_Database.ViewMasterArchiveForm viewMasterArchiveForm;
         public TNG_Database.PreferencesForm preferencesForm;
+        public TNG_Database.DatabaseForm databaseForm;
 
         //the current form
         Form currentForm;
@@ -665,7 +664,6 @@ namespace TNG_Database
                 {
                     MainForm.LogFile(error.Message);
                 }
-                //TODO add to own function and add to master import
             }
             return newFilename;
         }
@@ -757,7 +755,7 @@ namespace TNG_Database
         /// <summary>
         /// Backup the database.
         /// </summary>
-        private void BackupDatabase()
+        public void BackupDatabase()
         {
             string timestamp = DateTime.UtcNow.ToString("yyyy-MM-dd_HH-mm-ss-fff",
                                             CultureInfo.InvariantCulture);
@@ -1348,11 +1346,39 @@ namespace TNG_Database
             ResetProgressBar();
         }
 
+        private void OpenDatabaseBackupPage()
+        {
+            //create new instance of form
+            databaseForm = new DatabaseForm(this);
+
+            //close child of mdi if there is one active
+            if (ActiveMdiChild != null)
+            {
+                if (ActiveMdiChild is DatabaseForm)
+                {
+                    //Do Nothing
+                }
+                else
+                {
+                    //Close child
+                    ActiveMdiChild.Close();
+                }
+            }
+
+            //Show people form and maximize it instantly
+            databaseForm.Show();
+            databaseForm.WindowState = FormWindowState.Maximized;
+
+            ResetProgressBar();
+        }
+
         private void OpenAboutPage()
         {
             AboutForm aboutForm = new AboutForm();
             aboutForm.Show();
         }
+
+        
 
         #endregion
 
@@ -1412,15 +1438,6 @@ namespace TNG_Database
                     break;
                 case "tocsv":
                     ConvertTextToCSVFile(worker, ofd);
-                    break;
-                case "check":
-                    //TODO delete this before release
-                    Stream importStream = null;
-
-                    if ((importStream = ofd.OpenFile()) != null)
-                    {
-                        Debug.WriteLine(Path.GetExtension(ofd.FileName).ToString().Replace(".",""));
-                    }
                     break;
             }
         }
@@ -1715,6 +1732,11 @@ namespace TNG_Database
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenAboutPage();
+        }
+
+        private void databaseBackupToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenDatabaseBackupPage();
         }
 
         #endregion
